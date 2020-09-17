@@ -3,7 +3,6 @@
 <c:import url="../layout/app.jsp">
     <c:param name="content">
         <h2>アカウント 新規登録ページ</h2>
-        <p>※グループ番号・パスワードは入力しなくても良い。</p>
 
         <form method="POST" action="<c:url value='/persons/create'/>">
             <c:import url="_form.jsp"/>

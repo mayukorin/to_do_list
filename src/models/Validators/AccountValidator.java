@@ -15,7 +15,7 @@ public class AccountValidator {
 
 
 
-    public static List<String> validate(Account a, String group_code, Boolean code_duplicate_check_flag, Boolean password_check_flag) {
+    public static List<String> validate(Account a, String group_code, Boolean name_check,Boolean code_duplicate_check_flag, Boolean password_check_flag) {
 
         List<String> errors = new ArrayList<String>();
 
@@ -24,7 +24,7 @@ public class AccountValidator {
             errors.add(code_error);
         }
 
-        String name_error = _validateName(a.getName());
+        String name_error = _validateName(a.getName(),name_check);
         if(!name_error.equals("")) {
             errors.add(name_error);
         }
@@ -38,12 +38,7 @@ public class AccountValidator {
 
 
 
-            //もしPersonクラスだったら、管理者フラッグが入力されているか、チェックする。
-            String flag_error = _validateFlag(((Person)a).getAdmin_flag());
-
-            if (!flag_error.equals("")) {
-                errors.add(flag_error);
-            }
+            //もしPersonクラスだったら、登録した所属グループが存在しているかなどを調べる。
 
             String group_error = _validateGroup(group_code,(Person)a);
 
@@ -80,8 +75,9 @@ public class AccountValidator {
         }
 
      // アカウント名の必須入力チェック
-        private static String _validateName(String name) {
-            if(name == null || name.equals("")) {
+        private static String _validateName(String name,Boolean name_check) {
+
+            if(name_check &&name == null || name.equals("")) {
                 return "アカウント名を入力してください。";
             }
 
@@ -97,14 +93,6 @@ public class AccountValidator {
             return "";
         }
 
-        // 管理者必須入力チェック
-        private static String _validateFlag(Integer flag) {
-            if (flag == null) {
-                return "管理者かどうか選択してください。";
-            }
-
-            return "";
-        }
 
         private static String _validateGroup(String code,Person p) {
             if (code != null && !code.equals("")) {

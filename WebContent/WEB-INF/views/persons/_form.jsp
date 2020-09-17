@@ -9,7 +9,7 @@
     </div>
 </c:if>
 <label for="code">アカウント番号</label><br/>
-<input type="text" name="name" value="${person.code}"/>
+<input type="text" name="code" value="${person.code}"/>
 <br/><br/>
 
 <label for="name">名前</label><br/>
@@ -20,20 +20,7 @@
 <input type="password" name="password"/>
 <br/><br/>
 
-<label for="admin_flag">権限</label><br/>
-<select name="admin_flag">
-    <option value="0"<c:if test="${person.admin_flag == 0}">selected</c:if>>一般</option>
-    <option value="1"<c:if test="${person.admin_flag == 1}">selected</c:if>>管理者</option>
-</select>
-<br/><br/>
 
-<label for="group_code">グループ番号</label><br/>
-<input type="text" name="group_code" value="${group.code}"/>
-<br/><br/>
-
-<label for="group_password">グループパスワード</label><br/>
-<input type="text" name="group_password" value="${group.password}"/>
-<br/><br/>
 
 <input type="hidden" name="_token" value="${_token}"/>
 <button type="submit">投稿</button>

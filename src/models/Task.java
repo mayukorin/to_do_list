@@ -42,8 +42,8 @@ public class Task {
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
 
-    @Column(name="group_id")//どのグループに公開するか（非公開の場合はnull)
-    private Group group;
+
+
 
     public Integer getId() {
         return id;
@@ -101,13 +101,6 @@ public class Task {
         this.updated_at = updated_at;
     }
 
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setShow_flag(Group group) {
-        this.group = group;
-    }
 
 
 
