@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery (
             name = "getGroupBelong",
-            query = "select b from Belong as b where b.person = :person"
+            query = "select b from Belong as b where b.person = :person and b.group = :group"
             ),
 })
 @Entity

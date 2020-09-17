@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import models.Account;
+import models.Belong;
 import models.Group;
 import models.Person;
 import utils.DBUtil;
@@ -44,7 +45,7 @@ public class AccountValidator {
                 errors.add(flag_error);
             }
 
-            String group_error = _validateGroup(group_code);
+            String group_error = _validateGroup(group_code,(Person)a);
 
             if (!group_error.equals("")) {
                 errors.add(group_error);
@@ -105,14 +106,21 @@ public class AccountValidator {
             return "";
         }
 
-        private static String _validateGroup(String code) {
+        private static String _validateGroup(String code,Person p) {
             if (code != null && !code.equals("")) {
                 //新しく所属するグループを入力した場合、そのグループが存在するかを調べる
                 EntityManager em = DBUtil.createEntityManager();
                 Group group = em.createNamedQuery("getGroup",Group.class).setParameter("code",code).getSingleResult();
 
+
                 if (group == null) {
                     return "入力したグループは存在しません。";
+                } else {
+                    //そのグループがすでに所属しているか確認する。
+                    Belong b = em.createNamedQuery("getGroupBelong",Belong.class).setParameter("person",p).setParameter("group",group).getSingleResult();
+                    if (b != null) {
+                        return "そのグループにはすでに所属しています。";
+                    }
                 }
             }
 
