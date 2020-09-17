@@ -5,8 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
+@Table(name="accounts")
 @Entity
+@NamedQueries ({
+    @NamedQuery (
+
+            name = "checkRegisteredCode",
+            query = "SELECT COUNT(a) FROM Account AS a WHERE a.code = :code"
+     )
+})
 public abstract class Account {
 
     @Id
@@ -18,7 +29,10 @@ public abstract class Account {
     private String name;
 
     @Column(name = "password",length = 64,nullable = false)
-    private String pasword;
+    private String password;
+
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
 
     public Integer getId() {
         return id;
@@ -36,12 +50,20 @@ public abstract class Account {
         this.name = name;
     }
 
-    public String getPasword() {
-        return pasword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasword(String pasword) {
-        this.pasword = pasword;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

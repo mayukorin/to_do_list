@@ -9,8 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Table(name="tasks")
 @Entity
 public class Task {
 
@@ -22,6 +25,7 @@ public class Task {
     @Column(name = "title")
     private String title;
 
+    @Lob
     @Column(name="memo")
     private String memo;
 
@@ -38,8 +42,8 @@ public class Task {
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
 
-    @Column(name="show_flag",nullable = false)
-    private Integer show_flag;
+    @Column(name="group_id")//どのグループに公開するか（非公開の場合はnull)
+    private Group group;
 
     public Integer getId() {
         return id;
@@ -97,12 +101,12 @@ public class Task {
         this.updated_at = updated_at;
     }
 
-    public Integer getShow_flag() {
-        return show_flag;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setShow_flag(Integer show_flag) {
-        this.show_flag = show_flag;
+    public void setShow_flag(Group group) {
+        this.group = group;
     }
 
 

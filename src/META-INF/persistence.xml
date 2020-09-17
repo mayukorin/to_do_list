@@ -7,6 +7,7 @@
 		<class>models.Person</class>
 		<class>models.Task</class>
 		<class>models.Like</class>
+		<class>models.Belong</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/Todo_list?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf8"/>
