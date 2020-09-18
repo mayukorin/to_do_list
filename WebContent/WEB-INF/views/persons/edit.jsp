@@ -8,5 +8,6 @@
                     <c:import url="_form.jsp" />
                 </form>
         <p><a href="<c:url value='/persons/show' />">アカウント情報詳細に戻る</a></p>
+        <p><a href="<c:url value='/index.html'/>">トップページに戻る</a></p>
     </c:param>
 </c:import>
