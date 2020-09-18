@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://rawgit.com/jquery/jquery-ui/master/ui/i18n/datepicker-ja.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.full.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/jquery.datetimepicker.css">
+<script type="text/javascript"></script>
 <c:if test="${errors != null}">
     <div id="flush_error">
         入力内容にエラーがあります。<br/>
@@ -18,7 +20,7 @@
 <br/><br/>
 
 <label for="deadline">締め切り</label><br/>
-<input id="datepicker" type="text" name="deadline"  value="${task.deadline}"/>
+<input id="datetimepicker" type="text" name="deadline"  value="${task.deadline}"/>
 <br/><br/>
 
 <label for="memo">内容</label><br />
@@ -36,5 +38,7 @@
 <input type="hidden" name="_token" value="${_token}"/>
 <button type="submit">投稿</button>
 <script>
-   $('#datepicker').datepicker();
+   $('#datetimepicker').datetimepicker({
+       step:1
+   });
 </script>

@@ -35,12 +35,10 @@ public class GroupCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         String _token = (String)request.getParameter("_token");
-        if (_token != null) {
-            System.out.println("あいう");
-        }
+
         if(_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
-            System.out.println("かきく");
+
             Person p = (Person)request.getSession().getAttribute("login_person");
 
             ///groupの新規登録///////////////////
@@ -61,6 +59,7 @@ public class GroupCreateServlet extends HttpServlet {
             em.persist(b);
             em.getTransaction().commit();
             //////////////////////////////////////
+
             em.close();
             String message = "新しく"+g.getName()+"を作成しました。";
 

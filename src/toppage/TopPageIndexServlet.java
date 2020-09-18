@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class TopPageIndexServlet
  */
-@WebServlet("/index.html")
+@WebServlet("/toppage/index")
 public class TopPageIndexServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -32,10 +32,13 @@ public class TopPageIndexServlet extends HttpServlet {
         if (request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
             request.getSession().removeAttribute("flush");
-
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
-            rd.forward(request, response);
         }
+
+
+
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
+        rd.forward(request, response);
+
     }
 
 }

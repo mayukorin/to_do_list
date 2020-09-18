@@ -1,5 +1,6 @@
 package models;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name =  "show")
+@Table(name="shows")
 @Entity
 public class Show {
 
@@ -25,6 +26,22 @@ public class Show {
     @ManyToOne
     @JoinColumn(name="task_id")
     private Task task;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 
     public Task getTask() {
         return task;

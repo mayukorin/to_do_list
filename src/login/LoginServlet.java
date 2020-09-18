@@ -59,9 +59,10 @@ public class LoginServlet extends HttpServlet {
         String plain_pass = request.getParameter("password");
 
         Person p = null;
+        EntityManager em = DBUtil.createEntityManager();
 
         if(code != null && !code.equals("") && plain_pass != null && !plain_pass.equals("")) {
-            EntityManager em = DBUtil.createEntityManager();
+
 
             String password = EncryptUtil.getPasswordEncrypt(
                     plain_pass,
@@ -76,7 +77,7 @@ public class LoginServlet extends HttpServlet {
                       .getSingleResult();
             } catch(NoResultException ex) {}
 
-            em.close();
+
 
             if(p != null) {
                 check_result = true;
@@ -85,6 +86,7 @@ public class LoginServlet extends HttpServlet {
 
         if(!check_result) {
             // 認証できなかったらログイン画面に戻る
+            em.close();
             request.setAttribute("_token", request.getSession().getId());
             request.setAttribute("hasError", true);
             request.setAttribute("code", code);
@@ -95,8 +97,10 @@ public class LoginServlet extends HttpServlet {
             // 認証できたらログイン状態にしてトップページへリダイレクト
             request.getSession().setAttribute("login_person", p);
 
+
+            em.close();
             request.getSession().setAttribute("flush", "ログインしました。");
-            response.sendRedirect(request.getContextPath() + "/");
+            response.sendRedirect(request.getContextPath() + "/toppage/index");
         }
     }
 

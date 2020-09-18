@@ -89,6 +89,7 @@ public class BelongCreateServlet extends HttpServlet {
                     em.persist(b);
                     em.getTransaction().commit();
                     //////////////////////////////////////
+
                     em.close();
                     String message = "新しく"+g.getName()+"へ所属しました。";
                     request.getSession().setAttribute("flush", message);
