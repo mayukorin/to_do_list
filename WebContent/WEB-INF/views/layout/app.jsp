@@ -11,7 +11,15 @@
     <body>
         <div id="wrapper">
             <div id="header">
-                <h1>Todoアプリ</h1>
+                <div id="header_menu">
+                    <h1><a href="<c:url value='/' />">Todoアプリ</a></h1>&nbsp;&nbsp;&nbsp;
+                </div>
+                <c:if test="${sessionScope.login_person != null}">
+                    <div id="person_name">
+                        <c:out value="${sessionScope.login_person.name}" />&nbsp;さん&nbsp;&nbsp;&nbsp;
+                        <a href="<c:url value='/logout' />">ログアウト</a>
+                    </div>
+                </c:if>
             </div>
             <div id="content">
                 ${param.content}
