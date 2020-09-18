@@ -8,5 +8,6 @@
             </div>
         </c:if>
         <p><a href="<c:url value='/persons/show'/>">アカウント情報詳細を見る</a></p>
+        <p><a href="<c:url value='/tasks/new'/>">Taskを新規追加する</a></p>
     </c:param>
 </c:import>
