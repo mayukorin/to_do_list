@@ -27,5 +27,7 @@
             </tbody>
         </table>
         <p><a href="<c:url value='/persons/edit'/>">アカウント情報を編集する</a></p>
+        <p><a href="<c:url value='/belongs/new'/>">所属グループを追加する</a>
+        <p><a href="<c:url value='/index.html'/>">トップページに戻る</a></p>
     </c:param>
 </c:import>
