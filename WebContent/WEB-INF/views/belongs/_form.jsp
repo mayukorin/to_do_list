@@ -8,19 +8,21 @@
         </c:forEach>
     </div>
 </c:if>
-<label for="code">グループ番号</label><br/>
-<input type="text" name="code" value="${belong.group.code}"/>
+<label for="code">アカウント番号</label><br/>
+<input type="text" name="code" value="${group.code}"/>
 <br/><br/>
 
 <label for="name">グループ名</label><br/>
-<input type="text" name="name"  value="${belong.group.name}"/>
+<input type="text" name="name"  value="${group.name}"/>
 <br/><br/>
 
 <label for="password">パスワード</label><br/>
 <input type="password" name="password"/>
 <br/><br/>
 
-
+<label for="position">ポジション</label><br/>
+<input type="text" name="position"/>
+<br/><br/>
 
 <input type="hidden" name="_token" value="${_token}"/>
 <button type="submit">登録</button>
