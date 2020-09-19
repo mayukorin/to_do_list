@@ -39,14 +39,14 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
         EntityManager em = DBUtil.createEntityManager();
 
 
+
         Account a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
 
         Group g = (Group) em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
-        System.out.println("冷たい"+g.getName());
 
 
-        List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",a).getResultList();//今見ようとしている人のTask
 
+        List<Task> tasks = em.createNamedQuery("openGroupTask",Task.class).setParameter("account",a).setParameter("group",g).getResultList();//今見ようとしている人の、そのgroupで公開されているTask
 
         request.setAttribute("tasks", tasks);
         request.setAttribute("account", a);

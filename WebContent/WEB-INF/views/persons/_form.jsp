@@ -9,11 +9,11 @@
     </div>
 </c:if>
 <label for="code">アカウント番号</label><br/>
-<input type="text" name="code" value="${person.code}"/>
+<input type="text" name="code" value="${account.code}"/>
 <br/><br/>
 
 <label for="name">名前</label><br/>
-<input type="text" name="name"  value="${person.name}"/>
+<input type="text" name="name"  value="${account.name}"/>
 <br/><br/>
 
 <label for="password">パスワード</label><br/>
@@ -22,5 +22,3 @@
 
 
 
-<input type="hidden" name="_token" value="${_token}"/>
-<button type="submit">投稿</button>

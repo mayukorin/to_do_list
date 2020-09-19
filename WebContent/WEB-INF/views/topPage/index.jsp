@@ -10,7 +10,7 @@
         </c:if>
         <h2>タスク一覧</h2>
         <c:import url="../layout/tasksIndex.jsp" />
-        <p><a href="<c:url value='/persons/show'/>">アカウント情報詳細を見る</a></p>
+        <p><a href="<c:url value='/persons/show?id=${sessionScope.login_person.id}'/>">アカウント情報詳細を見る</a></p>
         <p><a href="<c:url value='/tasks/new'/>">Taskを新規追加する</a></p>
         <div>
             <c:if test="${groups != null}">

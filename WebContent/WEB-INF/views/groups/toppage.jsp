@@ -20,7 +20,7 @@
                 </c:forEach>
             </tbody>
         </table>
-        <p><a href="<c:url value='/groups/show'/>">グループメンバー一覧を見る</a></p>
+        <p><a href="<c:url value='/groups/show'/>">メンバー一覧を見る</a>
         <p><a href="<c:url value='/tasks/new'/>">Taskを新規追加する</a></p>
         <p><a href="<c:url value='/toppage/index'/>">ホーム画面に戻る</a></p>
         <div>

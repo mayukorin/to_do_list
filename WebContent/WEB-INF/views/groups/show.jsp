@@ -14,7 +14,7 @@
             <tr>
                 <td><c:out value="${group.code}"/></td>
                 <td><c:out value="${group.name}"/></td>
-                <td><a href="<c:url value='/groups/member?id = ${group.id }'/>">詳細を見る</a></td>
+                <td><a href="<c:url value='/groups/member?id=${group.id}'/>">詳細を見る</a></td>
             </tr>
             <c:forEach var="person" items = "${persons}">
             <tr>
