@@ -94,7 +94,7 @@ public class BelongCreateServlet extends HttpServlet {
                     String message = "新しく"+g.getName()+"へ所属しました。";
                     request.getSession().setAttribute("flush", message);
 
-                    response.sendRedirect(request.getContextPath()+"/index.html");//ホーム画面に戻る
+                    response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
 
 
                 } else if (group_error.get(0).equals("そのグループにはすでに所属しています。")) {

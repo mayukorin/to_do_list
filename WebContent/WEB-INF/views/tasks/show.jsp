@@ -19,13 +19,24 @@
                         </tr>
                         <tr>
                         <th>締め切り</th>
-                        <td><c:out value="${task.deadline}"/></td>
+                        <td><fmt:formatDate value="${task.deadline}" pattern="yyyy-MM-dd HH:mm" /></td>
                         </tr>
                         <tr>
                         <th>内容</th>
                         <td>
                             <pre><c:out value="${task.memo}"/></pre>
                         </td>
+                        </tr>
+                        <tr>
+                        <th>公開しているグループ</th>
+                        <td>
+                        <ul>
+                            <c:forEach var="group" items = "${shows_group}">
+                                <li><c:out value="${group.name}"></c:out></li>
+                            </c:forEach>
+                        </ul>
+                    </td>
+                        <td></td>
                         </tr>
                     </tbody>
                 </table>

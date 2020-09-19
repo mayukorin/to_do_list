@@ -1,6 +1,7 @@
 package controllers.tasks;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Group;
 import models.Person;
 import models.Task;
 import utils.DBUtil;
@@ -38,17 +40,31 @@ public class TaskEditServlet extends HttpServlet {
 
         Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));//編集しようとしているtask
 
-        em.close();
+
 
         Person p = (Person)request.getSession().getAttribute("login_person");
+      //ログインしている人が所属しているグループ
+        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+        //その仕事を公開しているグループ
+        List<Group> shows_group = em.createNamedQuery("getGroupShow",Group.class).setParameter("task",t).getResultList();
+
+        groups.removeAll(shows_group);//所属しているグループから、公開しているグループを引く
+
+        System.out.println("らららららららr"+groups.size());
+        System.out.println("らららら"+shows_group.size());
+
 
         if (t!= null && p.getId() == t.getAccount().getId()) {
 
             request.setAttribute("task", t);
+            request.setAttribute("groups", groups);
+            request.setAttribute("shows_group", shows_group);
             request.setAttribute("_token", request.getSession().getId());
             request.getSession().setAttribute("task_id", t.getId());
 
         }
+
+        em.close();
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/edit.jsp");
         rd.forward(request, response);

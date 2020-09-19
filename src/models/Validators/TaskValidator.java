@@ -44,7 +44,7 @@ public class TaskValidator {
 
             t.setDeadline(deadline);//締め切りを保存する。
         } catch (ParseException e) {
-            return "締め切りを入力してください。";
+            return "カレンダーをクリックしてください。";
         }
 
         return "";

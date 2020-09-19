@@ -1,6 +1,7 @@
 package controllers.tasks;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Group;
 import models.Task;
 import utils.DBUtil;
 
@@ -36,12 +38,15 @@ public class TaskShowServlet extends HttpServlet {
 
         EntityManager em = DBUtil.createEntityManager();
 
-        System.out.println("あいうあいう"+request.getParameter("id"));
+
         Task task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
+
+        List<Group> shows_group = em.createNamedQuery("getGroupShow",Group.class).setParameter("task",task).getResultList();
 
         em.close();
 
         request.setAttribute("task", task);
+        request.setAttribute("shows_group", shows_group);
         request.setAttribute("_token", request.getSession().getId());
 
 

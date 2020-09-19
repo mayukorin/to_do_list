@@ -30,7 +30,12 @@
 <p>公開範囲</p>
 <c:if test="${groups != null }">
     <c:forEach var="group" items="${groups}">
-        <input type="checkbox" name="${group.id}" value="${group.id}">${group.name}
+        <input type="checkbox" name="${group.id}" value="${group.id}"  >${group.name}
+    </c:forEach>
+</c:if>
+<c:if test="${shows_group != null }">
+    <c:forEach var="group" items = "${shows_group}">
+        <input type="checkbox" name="${group.id}" value="${group.id}" checked>${group.name}
     </c:forEach>
 </c:if>
 <br/><br/>

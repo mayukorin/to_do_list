@@ -65,7 +65,7 @@ public class GroupCreateServlet extends HttpServlet {
 
             request.getSession().setAttribute("flush", message);
 
-            response.sendRedirect(request.getContextPath()+"/index.html");//ホーム画面に戻る
+            response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
 
         }
     }
