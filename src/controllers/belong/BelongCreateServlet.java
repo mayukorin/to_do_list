@@ -74,12 +74,14 @@ public class BelongCreateServlet extends HttpServlet {
                 Person p = (Person) request.getSession().getAttribute("login_person");
                 List<String> group_error = AccountValidator.validate(p, g, false, false, false);
 
-                if (group_error.get(0) == null) {
+                if (group_error.size() == 0) {
                     //何もエラーがない（すでに存在しているグループに新しく所属するとき）
+
+                    Group group = em.createNamedQuery("Group",Group.class).setParameter("code",g.getCode()).setParameter("pass",g.getPassword()).getSingleResult();
 
                 ////belongの新規登録////////////////////
                     Belong b = new Belong();
-                    b.setGroup(g);
+                    b.setGroup(group);
                     b.setPerson(p);
                     if (request.getParameter("position") != null && !request.getParameter("position").equals("")) {
                         b.setPosition(request.getParameter("position"));

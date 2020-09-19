@@ -17,14 +17,16 @@
                 <td><a href="<c:url value='/groups/member?id = ${group.id }'/>">詳細を見る</a></td>
             </tr>
             <c:forEach var="person" items = "${persons}">
+            <tr>
                 <td><c:out value="${person.code}"/></td>
                 <td><c:out value="${person.name}"/></td>
-                <td><a href="<c:url value='/groups/member?id=${group.id }'/>">詳細を見る</a></td>
+                <td><a href="<c:url value='/groups/member?id=${person.id }'/>">詳細を見る</a></td>
+            </tr>
             </c:forEach>
         </tbody>
 
     </table>
-    <p><a href="<c:url value='/groups/toppage'/>">${group.name}のメンバーのTask一覧に戻る</a></p>
+    <p><a href="<c:url value='/groups/toppage?id=${group.id}'/>">${group.name}のメンバーのTask一覧に戻る</a></p>
     </c:param>
 
 </c:import>

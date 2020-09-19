@@ -101,7 +101,10 @@ public class AccountValidator {
             return "入力したグループは存在しません。";
         } else {
             //そのグループにすでに所属しているか確認する。
-            long b_count = em.createNamedQuery("getGroupBelong",Long.class).setParameter("person",p).setParameter("group",g).getSingleResult();
+            Group group = em.createNamedQuery("Group",Group.class).setParameter("code",g.getCode()).setParameter("pass",g.getPassword()).getSingleResult();
+
+            long b_count = em.createNamedQuery("getGroupBelong",Long.class).setParameter("person",p).setParameter("group",group).getSingleResult();
+
             if (b_count != 0) {
                 return "そのグループにはすでに所属しています。";
             }

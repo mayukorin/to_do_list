@@ -11,7 +11,10 @@ import javax.persistence.Table;
 @NamedQueries ({
     @NamedQuery  (
             name = "getGroup",
-            query = "select count(g) from Group as g where g.code = :code and g.password = :pass")
+            query = "select count(g) from Group as g where g.code = :code and g.password = :pass"),
+    @NamedQuery  (
+            name = "Group",
+            query = "select g from Group as g where g.code = :code and g.password = :pass")
 })
 @Entity
 public class Group extends Account {
