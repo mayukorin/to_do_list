@@ -50,8 +50,6 @@ public class TaskEditServlet extends HttpServlet {
 
         groups.removeAll(shows_group);//所属しているグループから、公開しているグループを引く
 
-        System.out.println("らららららららr"+groups.size());
-        System.out.println("らららら"+shows_group.size());
 
 
         if (t!= null && p.getId() == t.getAccount().getId()) {

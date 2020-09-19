@@ -1,4 +1,4 @@
-package toppage;
+package controllers.group;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,21 +12,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Group;
-import models.Person;
-import models.Task;
+import models.Show;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class TopPageIndexServlet
+ * Servlet implementation class GroupToppageServlet
  */
-@WebServlet("/toppage/index")
-public class TopPageIndexServlet extends HttpServlet {
+@WebServlet("/groups/toppage")
+public class GroupToppageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TopPageIndexServlet() {
+    public GroupToppageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,27 +40,19 @@ public class TopPageIndexServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
-        if (request.getSession().getAttribute("group_id") != null) {
-            //groupのtask一覧から戻ってきた時
-            request.getSession().removeAttribute("group_id");
-        }
-
         EntityManager em = DBUtil.createEntityManager();
 
-        Person p = (Person) request.getSession().getAttribute("login_person");//ログインしている人
+        Group group = em.find(Group.class, Integer.parseInt(request.getParameter("id")));
 
-        List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();//ログインしている人のTask
+        List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
 
-      //ログインしている人が所属しているグループ
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+        request.setAttribute("shows", shows);
+        request.getSession().setAttribute("group_id",group.getId());
+        request.setAttribute("group", group);
 
-        em.close();
-
-        request.setAttribute("tasks", tasks);
-        request.setAttribute("groups", groups);
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
         rd.forward(request, response);
+
 
     }
 

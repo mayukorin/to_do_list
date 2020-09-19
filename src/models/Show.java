@@ -19,7 +19,10 @@ import javax.persistence.Table;
                 query = "select s from Show as s where s.group = :group and s.task = :task"),
         @NamedQuery(
                 name = "getGroupShow",
-                query = "select s.group from Show as s where s.task = :task")
+                query = "select s.group from Show as s where s.task = :task"),
+        @NamedQuery(
+                name = "getShows",
+                query = "select s from Show as s where s.group = :group" )
 })
 @Entity
 public class Show {
