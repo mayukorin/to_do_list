@@ -108,7 +108,7 @@ public class TaskCreateServlet extends HttpServlet {
 
                 request.getSession().setAttribute("flush", "taskの登録が完了しました。");
 
-                response.sendRedirect(request.getContextPath()+"/index.html");//ホーム画面に戻る
+                response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
 
             }
 

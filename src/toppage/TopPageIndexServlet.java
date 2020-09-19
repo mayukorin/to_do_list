@@ -1,13 +1,19 @@
 package toppage;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import models.Person;
+import models.Task;
+import utils.DBUtil;
 
 /**
  * Servlet implementation class TopPageIndexServlet
@@ -34,7 +40,13 @@ public class TopPageIndexServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
+        EntityManager em = DBUtil.createEntityManager();
 
+        Person p = (Person) request.getSession().getAttribute("login_person");//ログインしている人
+
+        List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();//ログインしている人のTask
+
+        request.setAttribute("tasks", tasks);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
         rd.forward(request, response);
