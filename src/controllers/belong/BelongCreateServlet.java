@@ -117,10 +117,26 @@ public class BelongCreateServlet extends HttpServlet {
                     //入力したグループが存在しないとき
                     em.close();
 
-                    request.setAttribute("_token", request.getSession().getId());
-                    request.getSession().setAttribute("new_group",g);//新しく登録しようとしているグループ
-                    request.setAttribute("new_flag", "new_group");//新しいグループを登録しようとしているフラッグ
-                    request.setAttribute("group", g);
+                    //入力したグループのcodeが違っているのか、codeも新しいのかを確認
+                    List<String> code_error = AccountValidator.validate(g, null, false, true, false,null);
+                    if (code_error.size() == 0) {
+                        //入力したaccount番号のgroupが存在しない時は、新規作成
+                        request.setAttribute("_token", request.getSession().getId());
+                        request.getSession().setAttribute("new_group",g);//新しく登録しようとしているグループ
+                        request.setAttribute("new_flag", "new_group");//新しいグループを登録しようとしているフラッグ
+                        request.setAttribute("group", g);
+                    } else {
+                        //入力したaccount番号のgroupが存在している時
+
+                        request.setAttribute("_token", request.getSession().getId());
+                        request.setAttribute("group", g);
+                        code_error.set(0,"パスワードが間違っています。"+"\n"+"または、新しくgroupを作成しようとしている場合は、今入力したアカウント番号のgroupがすでに存在しているため、違うアカウント番号を入力してください。");
+
+                        request.setAttribute("errors", code_error);
+
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/belongs/new.jsp");
+                        rd.forward(request, response);
+                    }
 
                     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/belongs/new.jsp");
                     rd.forward(request, response);

@@ -3,6 +3,7 @@
 <c:import url="../layout/app.jsp">
     <c:param name="content">
         <h2>グループ 新規参加ページ</h2>
+        <p>（名前は、新規グループを作成する時のみ入力してください。）</p>
         <form method="POST" action="<c:url value='/groups/create' />">
                     <input type="hidden" name="_token" value="${_token}" />
         </form>
@@ -12,7 +13,7 @@
             <c:import url="_form.jsp" />
         </form>
 
-        <p><a href="<c:url value='/persons/show' />">アカウント詳細ページに戻る</a></p>
+        <p><a href="<c:url value='/toppage/index' />">ホームページに戻る</a></p>
          <c:if test="${new_flag != null }">
 
             <script>
