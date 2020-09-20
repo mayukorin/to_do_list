@@ -37,13 +37,13 @@ public class GroupShowServlet extends HttpServlet {
         // TODO Auto-generated method stub
         EntityManager em = DBUtil.createEntityManager();
 
-        Group group = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));//今見ようとしているgroup情報
+        Group group = (Group)request.getSession().getAttribute("group");//今見ようとしているgroup情報
         List<Person> persons = em.createNamedQuery("getPersons",Person.class).setParameter("group",group).getResultList();//そのgroupに属している人
 
         em.close();
 
         request.setAttribute("persons", persons);
-        request.setAttribute("group", group);
+
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/show.jsp");
         rd.forward(request, response);

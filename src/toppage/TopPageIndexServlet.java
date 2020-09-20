@@ -41,9 +41,9 @@ public class TopPageIndexServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
-        if (request.getSession().getAttribute("group_id") != null) {
+        if (request.getSession().getAttribute("group") != null) {
             //groupのtask一覧から戻ってきた時
-            request.getSession().removeAttribute("group_id");
+            request.getSession().removeAttribute("group");
         }
 
         EntityManager em = DBUtil.createEntityManager();

@@ -9,5 +9,8 @@
         </form>
 
         <p><a href="<c:url value='/toppage/index'/>">ホーム画面に戻る</a></p>
+        <c:if test="${sessionScope.group!= null}">
+            <p><a href="<c:url value='/groups/toppage'/>">${sessionScope.group.name}のメンバーのtask一覧に戻る</a>
+        </c:if>
     </c:param>
 </c:import>

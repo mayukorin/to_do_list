@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Account;
 import models.Group;
 import models.Person;
 import utils.DBUtil;
@@ -41,10 +42,18 @@ public class TaskNewServlet extends HttpServlet {
 
         Person p = (Person)request.getSession().getAttribute("login_person");
 
-        //ログインしている人が所属しているグループ
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+        Account a =em.find(Account.class, Integer.parseInt(request.getParameter("id")));
 
-        request.setAttribute("groups", groups);
+        //ログインしている人が所属しているグループ
+        if (a instanceof Person) {
+            //もし、自分のtaskを追加しようとしていたら
+            List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+            request.setAttribute("groups", groups);
+        }
+
+        request.getSession().setAttribute("a", a);
+
+
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/new.jsp");
         rd.forward(request, response);

@@ -52,36 +52,31 @@ public class GroupToppageServlet extends HttpServlet {
 
             Belong b = em.createNamedQuery("getGroupB",Belong.class).setParameter("person",p).setParameter("group",group).getSingleResult();
 
-            System.out.println("ええええ"+b.getUpdated_at());
-            System.out.println("ああああ"+group.getUpdated_at());
 
             if (b.getUpdated_at().before(group.getUpdated_at())) {
                 //groupが後に更新されていたら、グループのログインページにリダイレクト
                 String message = group.getName()+"の情報が変更されています。グループへのログインをし直してください";
                 request.getSession().setAttribute("flush", message);
+                request.getSession().setAttribute("group",group);
                 response.sendRedirect(request.getContextPath() + "/groups/login");
             } else {
                 //groupのログインからきている時
                 List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
                 request.setAttribute("tasks", tasks);
-
-                request.setAttribute("group", group);
-
+                request.getSession().setAttribute("group",group);
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
                 rd.forward(request, response);
 
             }
 
-            request.getSession().setAttribute("group_id",group.getId());
+
         } else {
             //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)・group詳細ページから戻ってきた時
-            group = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
-
+            group = (Group)request.getSession().getAttribute("group");
             List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
 
             request.setAttribute("tasks", tasks);
 
-            request.setAttribute("group", group);
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
             rd.forward(request, response);

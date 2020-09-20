@@ -8,7 +8,7 @@
                 <c:out value="${flush}"></c:out>
             </div>
         </c:if>
-        <h2>${group.name}のメンバーのタスク一覧</h2>
+        <h2>${sessionScope.group.name}のメンバーのタスク一覧</h2>
         <table id = "task_list">
             <tbody>
                 <c:forEach var="task" items = "${tasks}">
@@ -21,12 +21,11 @@
             </tbody>
         </table>
         <p><a href="<c:url value='/groups/show'/>">メンバー一覧を見る</a>
-        <p><a href="<c:url value='/tasks/new'/>">Taskを新規追加する</a></p>
         <p><a href="<c:url value='/toppage/index'/>">ホーム画面に戻る</a></p>
         <div>
             <c:if test="${groups != null}">
-                <c:forEach var="group" items="${groups}">
-                    <p><a href="<c:url value='/groups/toppage?id=${group.name}'/>">${group.name}</a></p>
+                <c:forEach var="g" items="${groups}">
+                    <p><a href="<c:url value='/groups/toppage?id=${g.id}'/>">${g.name}</a></p>
                 </c:forEach>
             </c:if>
         </div>

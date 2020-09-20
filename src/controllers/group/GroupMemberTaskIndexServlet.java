@@ -42,7 +42,7 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
 
         Account a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
 
-        Group g = (Group) em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
+        Group g = (Group) request.getSession().getAttribute("group");
 
 
 
@@ -50,7 +50,7 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
 
         request.setAttribute("tasks", tasks);
         request.setAttribute("account", a);
-        request.setAttribute("g", g);
+
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/taskIndex.jsp");
         rd.forward(request, response);

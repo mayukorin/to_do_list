@@ -114,7 +114,7 @@ public class GroupLoginServlet extends HttpServlet {
                     em.getTransaction().begin();
                     em.getTransaction().commit();
 
-                    request.getSession().setAttribute("group_id",group.getId());
+                    request.getSession().setAttribute("group",group);
 
                     String message = group.getName()+"にログインし直しました";
                     request.getSession().setAttribute("flush", message);

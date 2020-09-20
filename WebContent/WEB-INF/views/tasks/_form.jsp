@@ -27,8 +27,9 @@
 <textarea name="memo" rows="10" cols="50">${task.memo}</textarea>
 <br /><br />
 
-<p>公開範囲</p>
+
 <c:if test="${groups != null }">
+<p>公開範囲</p>
     <c:forEach var="group" items="${groups}">
         <input type="checkbox" name="${group.id}" value="${group.id}"  >${group.name}
     </c:forEach>

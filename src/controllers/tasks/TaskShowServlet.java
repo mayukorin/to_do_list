@@ -50,10 +50,7 @@ public class TaskShowServlet extends HttpServlet {
 
         }
 
-        if (request.getSession().getAttribute("group_id") != null) {
-            Group group = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
-            request.setAttribute("g", group);
-        }
+
 
         em.close();
 

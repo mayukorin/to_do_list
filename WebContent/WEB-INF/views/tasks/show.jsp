@@ -41,7 +41,7 @@
                         </c:if>
                     </tbody>
                 </table>
-                <c:if test="${sessionScope.login_person.id == task.account.id||sessionScope.group_id == task.account.id}">
+                <c:if test="${sessionScope.login_person.id == task.account.id||sessionScope.group.id == task.account.id}">
                     <p><a href="<c:url value='/tasks/edit?id=${task.id}'/>">このTaskを編集する</a></p>
                 </c:if>
             </c:when>
@@ -50,11 +50,11 @@
             </c:otherwise>
         </c:choose>
         <c:choose>
-        <c:when test="${sessionScope.group_id  == null}">
+        <c:when test="${sessionScope.group == null}">
         <p><a href="<c:url value="/toppage/index"/>">ホーム画面に戻る</a></p>
         </c:when>
         <c:otherwise>
-        <p><a href="<c:url value="/groups/toppage"/>">${g.name}のメンバーのtask一覧画面に戻る</a></p>
+        <p><a href="<c:url value="/groups/toppage"/>">${sessionScope.group.name}のメンバーのtask一覧画面に戻る</a></p>
         </c:otherwise>
         </c:choose>
     </c:param>
