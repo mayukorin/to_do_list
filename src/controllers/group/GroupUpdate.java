@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Group;
-import models.Validators.AccountValidator;
+import models.Validators.GroupValidator;
 import utils.DBUtil;
 import utils.EncryptUtil;
 
@@ -46,13 +46,13 @@ public class GroupUpdate extends HttpServlet {
 
             List<String> errors;
 
-            Group g = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
+            Group g = em.find(Group.class, ((Group)request.getSession().getAttribute("group")).getId());
 
           //現在の値と異なるアカウント番号が入力されていたら
             //重複チェックを行う指定をする
-            Boolean code_duplicate_check = true;
+            Boolean code_duplicate_check_flag = true;
             if (g.getCode().equals(request.getParameter("code"))) {
-                code_duplicate_check = false;
+                code_duplicate_check_flag = false;
             } else {
                 g.setCode(request.getParameter("code"));
             }
@@ -72,22 +72,25 @@ public class GroupUpdate extends HttpServlet {
                         );
             }
 
-            Boolean name_check = true;
-            Boolean group_check = false;//groupが存在しているか、所属しているかをチェックする
-            Boolean leader_code = true;//groupの新leaderについてチェックする
+
             g.setName(request.getParameter("name"));
+
+            Boolean leader_check_flag=true;
+
 
 
 
             if (!g.getLeader().getCode().equals(request.getParameter("leader"))) {
-              //そのgroupのleaderについてチェック
+              //そのgroupのleaderについてもチェック
 
-                errors = AccountValidator.validate(g, g,request.getParameter("leader"), group_check,name_check,code_duplicate_check, password_check_flag,leader_code);
+                String leader_code = request.getParameter("leader");
+
+                errors = GroupValidator.validate(g, leader_code, code_duplicate_check_flag, password_check_flag, leader_check_flag);
 
             } else {
-                //groupのleaderは変わってないので、leaderについてチェックする必要なし
-                leader_code = false;
-                errors = AccountValidator.validate(g, g,null,group_check, name_check,code_duplicate_check, password_check_flag,leader_code);
+                //groupのleaderは変わってないので、leaderについてはチェックする必要なし
+                leader_check_flag=false;
+                errors = GroupValidator.validate(g, null, code_duplicate_check_flag, password_check_flag, leader_check_flag);
 
             }
 
