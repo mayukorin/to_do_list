@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import models.Belong;
 import models.Group;
 import models.Person;
-import models.Show;
+import models.Task;
 import utils.DBUtil;
 
 /**
@@ -62,9 +62,8 @@ public class GroupToppageServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/groups/login");
             } else {
                 //groupのログインからきている時
-                List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
-
-                request.setAttribute("shows", shows);
+                List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
+                request.setAttribute("tasks", tasks);
 
                 request.setAttribute("group", group);
 
@@ -78,9 +77,9 @@ public class GroupToppageServlet extends HttpServlet {
             //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)・group詳細ページから戻ってきた時
             group = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
 
-            List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
+            List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
 
-            request.setAttribute("shows", shows);
+            request.setAttribute("tasks", tasks);
 
             request.setAttribute("group", group);
 

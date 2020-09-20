@@ -78,6 +78,10 @@ public class TaskCreateServlet extends HttpServlet {
             } else {
                 //エラーがないとき
 
+                t.setNew_flag(1);//このtaskは新しい
+                t.setUpdate_person_id(p);//今loginしている人がこのtaskを作った
+
+
                 //taskを保存する。
                 em.getTransaction().begin();
                 em.persist(t);
