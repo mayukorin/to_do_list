@@ -14,37 +14,43 @@ public class AccountValidator {
 
 
 
-    public static List<String> validate(Account a, Group group, Boolean name_check,Boolean code_duplicate_check_flag, Boolean password_check_flag,String leader_code) {
+    public static List<String> validate(Account a, Group group,String leader_code,Boolean group_check, Boolean name_check,Boolean code_duplicate_check_flag, Boolean password_check_flag,Boolean leader_check) {
 
         List<String> errors = new ArrayList<String>();
 
-        String code_error = _validateCode(a.getCode(), code_duplicate_check_flag);
-        if(!code_error.equals("")) {
-            errors.add(code_error);
+        if (a != null) {
+            String code_error = _validateCode(a.getCode(), code_duplicate_check_flag);
+            if(!code_error.equals("")) {
+                errors.add(code_error);
+            }
         }
 
-        String name_error = _validateName(a,name_check);
-        if(!name_error.equals("")) {
-            errors.add(name_error);
+        if (a!= null) {
+            String name_error = _validateName(a,name_check);
+            if(!name_error.equals("")) {
+                errors.add(name_error);
+            }
         }
 
-        String password_error = _validatePassword(a.getPassword(), password_check_flag);
-        if(!password_error.equals("")) {
-            errors.add(password_error);
+        if (a!= null) {
+            String password_error = _validatePassword(a.getPassword(), password_check_flag);
+            if(!password_error.equals("")) {
+                errors.add(password_error);
+            }
         }
 
-        if (group != null) {
 
-            String group_error = _validateGroup(group,(Person)a);
+
+            String group_error = _validateGroup(group,a,group_check);
 
             if (!group_error.equals("")) {
                 errors.add(group_error);
             }
 
 
-        }
 
-        String leader_error = _validateLeader(leader_code);
+
+        String leader_error = _validateLeader(group,leader_code,leader_check);
 
         if (!leader_error.equals("")) {
             errors.add(leader_error);
@@ -95,24 +101,26 @@ public class AccountValidator {
     }
 
 
-    private static String _validateGroup(Group g,Person p) {
+    private static String _validateGroup(Group g,Account p,Boolean group_check) {
         //グループが存在するか、すでに所属しているか、調べる
 
+        if (group_check == true) {
 
-        EntityManager em = DBUtil.createEntityManager();
-        long group_count = em.createNamedQuery("getGroup",Long.class).setParameter("code",g.getCode()).setParameter("pass",g.getPassword()).getSingleResult();
+            EntityManager em = DBUtil.createEntityManager();
+            long group_count = em.createNamedQuery("getGroup",Long.class).setParameter("code",g.getCode()).setParameter("pass",g.getPassword()).getSingleResult();
 
 
-        if (group_count == 0) {
-            return "入力したグループは存在しません。";
-        } else {
-            //そのグループにすでに所属しているか確認する。
-            Group group = em.createNamedQuery("Group",Group.class).setParameter("code",g.getCode()).setParameter("pass",g.getPassword()).getSingleResult();
+            if (group_count == 0) {
+                return "入力したグループは存在しません。";
+            } else {
+                //そのグループにすでに所属しているか確認する。
+                Group group = em.createNamedQuery("Group",Group.class).setParameter("code",g.getCode()).setParameter("pass",g.getPassword()).getSingleResult();
 
-            long b_count = em.createNamedQuery("getGroupBelong",Long.class).setParameter("person",p).setParameter("group",group).getSingleResult();
+                long b_count = em.createNamedQuery("getGroupBelong",Long.class).setParameter("person",(Person)p).setParameter("group",group).getSingleResult();
 
-            if (b_count != 0) {
-                return "そのグループにはすでに所属しています。";
+                if (b_count != 0) {
+                    return "そのグループにはすでに所属しています。";
+                }
             }
         }
 
@@ -121,22 +129,33 @@ public class AccountValidator {
 
     }
 
-    private static String _validateLeader(String leader_code) {
+    private static String _validateLeader(Group g,String leader_code,Boolean leader_check) {
 
-        if (leader_code != null) {
-            EntityManager em = DBUtil.createEntityManager();
-            long leader_count = em.createNamedQuery("checkRegisteredCode",Long.class).setParameter("code",leader_code).getSingleResult();
+        if (leader_check == true) {
+            if (leader_code == null || leader_code.equals("")) {
+                return "アカウント番号を入力してください";
 
-            if (leader_count != 1) {
-                //入力したコードのpersonが存在しない時
-                return "そのアカウント番号の情報は存在しません。";
             } else {
-                //新しいleaderの候補
-                Account a = em.createNamedQuery("getAccount",Account.class).setParameter("code", leader_code).getSingleResult();
+                EntityManager em = DBUtil.createEntityManager();
+                long leader_count = em.createNamedQuery("checkRegisteredCode",Long.class).setParameter("code",leader_code).getSingleResult();
 
-                if (a instanceof Group) {
-                    //もし新しいleaderがgroupだったら
-                    return "Groupをリーダーにすることはできません。";
+                if (leader_count != 1) {
+                    //入力したコードのpersonが存在しない時
+                    return "そのアカウント番号の情報は存在しません。";
+                } else {
+                    //新しいleaderの候補
+                    Account a = em.createNamedQuery("getAccount",Account.class).setParameter("code", leader_code).getSingleResult();
+
+                    if (a instanceof Group) {
+                        //もし新しいleaderがgroupだったら
+                        return "Groupをリーダーにすることはできません。";
+                    } else {
+                        //そのleaderがGroupに属しているかどうか
+                        long belong_count = em.createNamedQuery("getGroupBelong",Long.class).setParameter("person",(Person)a).setParameter("group",g).getSingleResult();
+                        if (belong_count == 0) {
+                            return "そのアカウント番号の人物は、同じgroupに属していません。";
+                        }
+                    }
                 }
             }
         }

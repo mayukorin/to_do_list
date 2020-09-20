@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Person;
-import models.Validators.AccountValidator;
+import models.Validators.PersonValidator;
 import utils.DBUtil;
 import utils.EncryptUtil;
 
@@ -44,9 +44,9 @@ public class PersonUpdate extends HttpServlet {
 
             //現在の値と異なるアカウント番号が入力されていたら
             //重複チェックを行う指定をする
-            Boolean code_duplicate_check = true;
+            Boolean code_duplicate_check_flag = true;
             if (p.getCode().equals(request.getParameter("code"))) {
-                code_duplicate_check = false;
+                code_duplicate_check_flag = false;
             } else {
                 p.setCode(request.getParameter("code"));
             }
@@ -66,10 +66,11 @@ public class PersonUpdate extends HttpServlet {
                         );
             }
 
-            Boolean name_check = true;
+
             p.setName(request.getParameter("name"));
 
-            List<String> errors = AccountValidator.validate(p, null, name_check,code_duplicate_check, password_check_flag,null);
+
+            List<String> errors = PersonValidator.validate(p, code_duplicate_check_flag, password_check_flag);
             if (errors.size() > 0) {
                 em.close();
 

@@ -73,16 +73,21 @@ public class GroupUpdate extends HttpServlet {
             }
 
             Boolean name_check = true;
+            Boolean group_check = false;//groupが存在しているか、所属しているかをチェックする
+            Boolean leader_code = true;//groupの新leaderについてチェックする
             g.setName(request.getParameter("name"));
 
-            //そのgroupのleaderについてチェック
+
 
             if (!g.getLeader().getCode().equals(request.getParameter("leader"))) {
+              //そのgroupのleaderについてチェック
 
-                errors = AccountValidator.validate(g, null, name_check,code_duplicate_check, password_check_flag,request.getParameter("leader"));
+                errors = AccountValidator.validate(g, g,request.getParameter("leader"), group_check,name_check,code_duplicate_check, password_check_flag,leader_code);
 
             } else {
-                errors = AccountValidator.validate(g, null, name_check,code_duplicate_check, password_check_flag,null);
+                //groupのleaderは変わってないので、leaderについてチェックする必要なし
+                leader_code = false;
+                errors = AccountValidator.validate(g, g,null,group_check, name_check,code_duplicate_check, password_check_flag,leader_code);
 
             }
 

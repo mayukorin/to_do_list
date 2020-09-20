@@ -60,10 +60,15 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name="update_person_id")
-    private Person update_person_id;
+    private Person update_person;
 
-    @Column(name="origin_task_id")
-    private Integer origin_task_id;
+    @ManyToOne
+    @JoinColumn(name="origin_task_id")
+    private Task origin_task;
+
+    @ManyToOne
+    @JoinColumn(name="task_leader_id")
+    private Person task_leader;
 
 
 
@@ -134,20 +139,32 @@ public class Task {
 
 
 
-    public Integer getOrigin_task_id() {
-        return origin_task_id;
+    public Task getOrigin_task() {
+        return origin_task;
     }
 
-    public void setOrigin_task_id(Integer origin_task_id) {
-        this.origin_task_id = origin_task_id;
+    public void setOrigin_task_id(Task origin_task) {
+        this.origin_task = origin_task;
     }
 
-    public Person getUpdate_person_id() {
-        return update_person_id;
+    public Person getUpdate_person() {
+        return update_person;
     }
 
-    public void setUpdate_person_id(Person update_person_id) {
-        this.update_person_id = update_person_id;
+    public void setUpdate_person(Person update_person) {
+        this.update_person = update_person;
+    }
+
+    public Person getTask_leader() {
+        return task_leader;
+    }
+
+    public void setTask_leader(Person task_leader) {
+        this.task_leader = task_leader;
+    }
+
+    public void setOrigin_task(Task origin_task) {
+        this.origin_task = origin_task;
     }
 
 

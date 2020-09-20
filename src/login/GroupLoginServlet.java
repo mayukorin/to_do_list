@@ -73,7 +73,7 @@ public class GroupLoginServlet extends HttpServlet {
 
 
             //まずは、アカウント番号・パスワードが全て入力されているかチェックする。
-            List<String> error_input = AccountValidator.validate(g, null, false, false, true,null);
+            List<String> error_input = AccountValidator.validate(g, null,null, false,false, false, true,false);
 
             if (error_input.size() > 0) {
                 //アカウント番号・パスワードが全て入力されていない時
@@ -88,7 +88,7 @@ public class GroupLoginServlet extends HttpServlet {
             } else {
               //アカウント番号・パスワードが全て入力されている時
                 Person p = (Person) request.getSession().getAttribute("login_person");
-                List<String> group_error = AccountValidator.validate(p, g, false, false, false,null);
+                List<String> group_error = AccountValidator.validate(p, g,null,true, false, false, false,false);
 
                 if (group_error.get(0).equals("入力したグループは存在しません。")) {
                     //アカウント番号・パスワードが間違っている時

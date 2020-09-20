@@ -50,15 +50,11 @@ public class TaskShowServlet extends HttpServlet {
 
         }
 
-
-
         em.close();
 
         request.setAttribute("task", task);
 
         request.setAttribute("_token", request.getSession().getId());
-
-
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/show.jsp");
         rd.forward(request, response);

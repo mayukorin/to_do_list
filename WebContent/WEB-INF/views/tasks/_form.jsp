@@ -27,18 +27,23 @@
 <textarea name="memo" rows="10" cols="50">${task.memo}</textarea>
 <br /><br />
 
-
-<c:if test="${groups != null }">
+<c:choose>
+<c:when test="${groups != null }">
 <p>公開範囲</p>
     <c:forEach var="group" items="${groups}">
         <input type="checkbox" name="${group.id}" value="${group.id}"  >${group.name}
     </c:forEach>
-</c:if>
 <c:if test="${shows_group != null }">
     <c:forEach var="group" items = "${shows_group}">
         <input type="checkbox" name="${group.id}" value="${group.id}" checked>${group.name}
     </c:forEach>
 </c:if>
+</c:when>
+<c:otherwise>
+<label for="task_leader">タスクリーダー</label><br/>
+<input type="text" name="task_leader" value="${task.task_leader}"/>
+</c:otherwise>
+</c:choose>
 <br/><br/>
 
 <input type="hidden" name="_token" value="${_token}"/>

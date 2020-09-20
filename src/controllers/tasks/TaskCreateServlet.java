@@ -45,6 +45,7 @@ public class TaskCreateServlet extends HttpServlet {
         if (_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
             List<Group> groups;
+            Person task_leader;
 
             Account a = (Account)request.getSession().getAttribute("a");
 
@@ -62,7 +63,21 @@ public class TaskCreateServlet extends HttpServlet {
 
             String date = request.getParameter("deadline");
 
-            List<String> errors = TaskValidator.validate(t,date);//入力内容にエラーがあるか確認
+            List<String> errors = TaskValidator.validate(t,date,null,null);//入力内容にエラーがあるか確認
+
+            if (a instanceof Group) {
+
+                    String task_leader_code = request.getParameter("task_leader");
+
+
+                    //taskのleaderのアカウントが存在するかどうか
+
+                    List<String> task_leader_error = TaskValidator.validate(null, null, (Group)a, task_leader_code);
+                    if (task_leader_error.size() > 0) {
+                        errors.addAll(task_leader_error);
+                    }
+
+            }
 
 
             if (errors.size() > 0) {
@@ -86,22 +101,22 @@ public class TaskCreateServlet extends HttpServlet {
                 t.setNew_flag(1);//このtaskは新しい
                 Person p = (Person)request.getSession().getAttribute("login_person");
 
-                t.setUpdate_person_id(p);//今loginしている人がこのtaskを作った
-
-
-                //taskを保存する。
-                em.getTransaction().begin();
-                em.persist(t);
-                em.getTransaction().commit();
+                t.setUpdate_person(p);//今loginしている人がこのtaskを作った
 
                 if (a instanceof Person) {
-                    //ログインしている人自身のtaskを作成しようとしている時、taskの公開範囲を設定
+                    //ログインしている人自身のtaskを作成しようとしている時
+                    t.setTask_leader(p);//自分自身がTask_leader
+                    //taskを保存する。
+                    em.getTransaction().begin();
+                    em.persist(t);
+                    em.getTransaction().commit();
+
+                    //taskの公開範囲を設定
                     groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", (Person)a).getResultList();
                     for(Group group:groups) {
                         String id = (group.getId()).toString();
 
 
-                        System.out.println(request.getParameter(id));
                         if (request.getParameter(id)!= null) {
                             //チェックボックスにチェックがついている時、そのgroupとtaskに関するshowを登録する。
                             Show show = new Show();
@@ -115,7 +130,16 @@ public class TaskCreateServlet extends HttpServlet {
                         }
                     }
                 } else {
+
+                    task_leader = em.createNamedQuery("getAccount",Person.class).setParameter("code",request.getParameter("task_leader")).getSingleResult();
+                    t.setTask_leader(task_leader);
+                    //taskを保存する。
+                    em.getTransaction().begin();
+                    em.persist(t);
+                    em.getTransaction().commit();
                     //groupのtaskを作成しようとしている時は、groupに公開するために、Showを設定
+
+
                     Show show = new Show();
                     show.setTask(t);
                     show.setGroup((Group)a);
@@ -123,7 +147,12 @@ public class TaskCreateServlet extends HttpServlet {
                     em.getTransaction().begin();
                     em.persist(show);
                     em.getTransaction().commit();
+
+
                 }
+
+
+
                 em.close();
 
                 request.getSession().setAttribute("flush", "taskの登録が完了しました。");

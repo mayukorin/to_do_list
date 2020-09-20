@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Person;
-import models.Validators.AccountValidator;
+import models.Validators.PersonValidator;
 import utils.DBUtil;
 import utils.EncryptUtil;
 
@@ -50,8 +50,10 @@ public class PersonCreateServlet extends HttpServlet {
                             request.getParameter("password"),
                             (String)this.getServletContext().getAttribute("pepper")));
 
+            Boolean code_duplicate_check_flag = true;
+            Boolean password_check_flag = true;
 
-            List<String> errors = AccountValidator.validate(p, null, true,true, true,null);
+            List<String> errors = PersonValidator.validate(p, code_duplicate_check_flag, password_check_flag);
 
 
             if (errors.size() > 0) {

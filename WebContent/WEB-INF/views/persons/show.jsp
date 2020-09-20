@@ -55,7 +55,8 @@
             <p><a href="<c:url value='/persons/edit?id=${account.id}'/>">アカウント情報を編集する</a></p>
         </c:if>
         <c:if test="${account.id == sessionScope.login_person.id}">
-            <p><a href="<c:url value='/belongs/new'/>">所属グループを追加する</a>
+            <p><a href="<c:url value='/belongs/new'/>">新しいグループに参加する</a>
+            <p><a href="<c:url value='/groups/new'/>">新しくグループを作成する</a>
         </c:if>
         <c:choose>
         <c:when test="${sessionScope.group_id == null}">

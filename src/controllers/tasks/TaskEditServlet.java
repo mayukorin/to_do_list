@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Account;
 import models.Group;
 import models.Person;
 import models.Task;
@@ -38,8 +39,10 @@ public class TaskEditServlet extends HttpServlet {
         // TODO Auto-generated method stub
         EntityManager em = DBUtil.createEntityManager();
 
-        Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));//編集しようとしているtask
 
+
+
+        Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));//編集しようとしているtask
 
 
         Person p = (Person)request.getSession().getAttribute("login_person");
@@ -52,13 +55,19 @@ public class TaskEditServlet extends HttpServlet {
 
 
 
-        if (t!= null && p.getId() == t.getAccount().getId()) {
-
+        if (t!= null) {
             request.setAttribute("task", t);
-            request.setAttribute("groups", groups);
-            request.setAttribute("shows_group", shows_group);
-            request.setAttribute("_token", request.getSession().getId());
             request.getSession().setAttribute("task_id", t.getId());
+            Account a = t.getAccount();
+            request.getSession().setAttribute("account", a);
+            if (p.getId() == t.getAccount().getId()) {
+              //編集しようとしているのがpersonの仕事の時
+
+                request.setAttribute("groups", groups);
+                request.setAttribute("shows_group", shows_group);
+                request.setAttribute("_token", request.getSession().getId());
+            }
+
 
         }
 

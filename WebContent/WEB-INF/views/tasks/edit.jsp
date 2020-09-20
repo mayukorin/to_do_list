@@ -15,7 +15,12 @@
         </c:choose>
 
         <p><a href="<c:url value='/toppage/index' />">ホーム画面に戻る</a></p>
-        <p><a href="#" onclick="confirmDestroy();">このメッセージを削除する</a></p>
+        <c:if test="${sessionScope.group!= null}">
+            <p><a href="<c:url value='/groups/toppage'/>">${sessionScope.group.name}のメンバーのtask一覧に戻る</a>
+        </c:if>
+        <c:if test="${task.origin_task == null  && task.update_person.id == sessionScope.login_person.id ||task.origin_task.account.id = sessionScope.login_person.id }">
+            <p><a href="#" onclick="confirmDestroy();">このTaskを削除する</a></p>
+        </c:if>
         <form method="POST" action="${pageContext.request.contextPath}/destroy">
             <input type="hidden" name="_token" value="${_token}" />
         </form>

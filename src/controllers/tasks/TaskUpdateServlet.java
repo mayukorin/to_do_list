@@ -62,7 +62,7 @@ public class TaskUpdateServlet extends HttpServlet {
 
             String date = request.getParameter("deadline");
 
-            List<String> errors = TaskValidator.validate(t,date);//入力内容にエラーがあるか確認
+            List<String> errors = TaskValidator.validate(t,date,null,null);//入力内容にエラーがあるか確認
             System.out.println("ゲラにちゃ"+errors.size());
 
             if (errors.size() > 0) {
