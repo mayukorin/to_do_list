@@ -90,7 +90,7 @@ public class TaskCreateServlet extends HttpServlet {
                     System.out.println(id);
 
                     System.out.println(request.getParameter(id));
-                    if (request.getParameter(id).equals(id)) {
+                    if (request.getParameter(id)!= null) {
                         //チェックボックスにチェックがついている時、そのgroupとtaskに関するshowを登録する。
                         Show show = new Show();
                         show.setTask(t);

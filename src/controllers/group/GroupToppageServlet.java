@@ -75,7 +75,7 @@ public class GroupToppageServlet extends HttpServlet {
 
             request.getSession().setAttribute("group_id",group.getId());
         } else {
-            //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)
+            //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)・group詳細ページから戻ってきた時
             group = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
 
             List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す

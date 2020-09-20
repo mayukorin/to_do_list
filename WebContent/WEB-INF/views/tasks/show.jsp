@@ -27,20 +27,21 @@
                             <pre><c:out value="${task.memo}"/></pre>
                         </td>
                         </tr>
-                        <tr>
-                        <th>公開しているグループ</th>
-                        <td>
-                        <ul>
-                            <c:forEach var="group" items = "${shows_group}">
-                                <li><c:out value="${group.name}"></c:out></li>
-                            </c:forEach>
-                        </ul>
-                    </td>
-                        <td></td>
-                        </tr>
+                        <c:if test="${shows_group != null}">
+                            <tr>
+                            <th>公開しているグループ</th>
+                            <td>
+                            <ul>
+                                <c:forEach var="group" items = "${shows_group}">
+                                    <li><c:out value="${group.name}"></c:out></li>
+                                </c:forEach>
+                            </ul>
+                            </td>
+                            </tr>
+                        </c:if>
                     </tbody>
                 </table>
-                <c:if test="${sessionScope.login_person.id == task.account.id}">
+                <c:if test="${sessionScope.login_person.id == task.account.id||sessionScope.group_id == task.account.id}">
                     <p><a href="<c:url value='/tasks/edit?id=${task.id}'/>">このTaskを編集する</a></p>
                 </c:if>
             </c:when>
@@ -48,6 +49,13 @@
                 <h2>お探しのデータは見つかりませんでした。</h2>
             </c:otherwise>
         </c:choose>
+        <c:choose>
+        <c:when test="${sessionScope.group_id  == null}">
         <p><a href="<c:url value="/toppage/index"/>">ホーム画面に戻る</a></p>
+        </c:when>
+        <c:otherwise>
+        <p><a href="<c:url value="/groups/toppage"/>">${g.name}のメンバーのtask一覧画面に戻る</a></p>
+        </c:otherwise>
+        </c:choose>
     </c:param>
 </c:import>

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Group;
+import models.Person;
 import models.Task;
 import utils.DBUtil;
 
@@ -37,16 +38,27 @@ public class TaskShowServlet extends HttpServlet {
         // TODO Auto-generated method stub
 
         EntityManager em = DBUtil.createEntityManager();
+        Person p = (Person) request.getSession().getAttribute("login_person");//ログインしている人
 
 
         Task task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
 
-        List<Group> shows_group = em.createNamedQuery("getGroupShow",Group.class).setParameter("task",task).getResultList();
+        if ( task.getAccount().getId() == p.getId()) {
+            //自分のtaskを見ている時のみ、公開しているgroupを表示する
+            List<Group> shows_group = em.createNamedQuery("getGroupShow",Group.class).setParameter("task",task).getResultList();
+            request.setAttribute("shows_group", shows_group);
+
+        }
+
+        if (request.getSession().getAttribute("group_id") != null) {
+            Group group = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
+            request.setAttribute("g", group);
+        }
 
         em.close();
 
         request.setAttribute("task", task);
-        request.setAttribute("shows_group", shows_group);
+
         request.setAttribute("_token", request.getSession().getId());
 
 
