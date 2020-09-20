@@ -20,6 +20,10 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "checkLoginCodeAndPassword",
             query = "SELECT a FROM Account AS a WHERE  a.code = :code AND a.password = :pass"
+            ),
+    @NamedQuery(
+            name = "getAccount",
+            query = "SELECT a FROM Account AS a WHERE  a.code = :code"
             )
 })
 public abstract class Account {

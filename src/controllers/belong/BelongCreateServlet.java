@@ -55,7 +55,7 @@ public class BelongCreateServlet extends HttpServlet {
 
 
             //まずは、アカウント番号・グループ名・パスワードが全て入力されているかチェックする。
-            List<String> error_input = AccountValidator.validate(g, null, true, false, true);
+            List<String> error_input = AccountValidator.validate(g, null, true, false, true,null);
 
             if (error_input.size() > 0) {
                 //アカウント番号・グループ名・パスワードが全て入力されていない時
@@ -72,7 +72,7 @@ public class BelongCreateServlet extends HttpServlet {
               //アカウント番号・グループ名・パスワードが全て入力されていた時
 
                 Person p = (Person) request.getSession().getAttribute("login_person");
-                List<String> group_error = AccountValidator.validate(p, g, false, false, false);
+                List<String> group_error = AccountValidator.validate(p, g, false, false, false,null);
 
                 if (group_error.size() == 0) {
                     //何もエラーがない（すでに存在しているグループに新しく所属するとき）

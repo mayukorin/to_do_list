@@ -14,7 +14,7 @@ public class AccountValidator {
 
 
 
-    public static List<String> validate(Account a, Group group, Boolean name_check,Boolean code_duplicate_check_flag, Boolean password_check_flag) {
+    public static List<String> validate(Account a, Group group, Boolean name_check,Boolean code_duplicate_check_flag, Boolean password_check_flag,String leader_code) {
 
         List<String> errors = new ArrayList<String>();
 
@@ -42,6 +42,12 @@ public class AccountValidator {
             }
 
 
+        }
+
+        String leader_error = _validateLeader(leader_code);
+
+        if (!leader_error.equals("")) {
+            errors.add(leader_error);
         }
         return errors;
     }
@@ -113,6 +119,28 @@ public class AccountValidator {
 
         return "";
 
+    }
+
+    private static String _validateLeader(String leader_code) {
+
+        if (leader_code != null) {
+            EntityManager em = DBUtil.createEntityManager();
+            long leader_count = em.createNamedQuery("checkRegisteredCode",Long.class).setParameter("code",leader_code).getSingleResult();
+
+            if (leader_count != 1) {
+                //入力したコードのpersonが存在しない時
+                return "そのアカウント番号の情報は存在しません。";
+            } else {
+                //新しいleaderの候補
+                Account a = em.createNamedQuery("getAccount",Account.class).setParameter("code", leader_code).getSingleResult();
+
+                if (a instanceof Group) {
+                    //もし新しいleaderがgroupだったら
+                    return "Groupをリーダーにすることはできません。";
+                }
+            }
+        }
+        return "";
     }
 
 
