@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Belong;
 import models.Group;
+import models.Person;
 import models.Show;
 import utils.DBUtil;
 
@@ -41,20 +43,53 @@ public class GroupToppageServlet extends HttpServlet {
         }
 
         EntityManager em = DBUtil.createEntityManager();
+        Group group;
 
-        System.out.println("蜜しか"+request.getParameter("id"));
+        if (request.getParameter("id") != null) {
+            //groupのログインから来ていない時
+            group = em.find(Group.class, Integer.parseInt(request.getParameter("id")));
+            Person p = (Person) request.getSession().getAttribute("login_person");
 
-        Group group = em.find(Group.class, Integer.parseInt(request.getParameter("id")));
-        request.getSession().setAttribute("group_id",group.getId());
+            Belong b = em.createNamedQuery("getGroupB",Belong.class).setParameter("person",p).setParameter("group",group).getSingleResult();
 
-        List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
+            System.out.println("ええええ"+b.getUpdated_at());
+            System.out.println("ああああ"+group.getUpdated_at());
 
-        request.setAttribute("shows", shows);
+            if (b.getUpdated_at().before(group.getUpdated_at())) {
+                //groupが後に更新されていたら、グループのログインページにリダイレクト
+                String message = group.getName()+"の情報が変更されています。グループへのログインをし直してください";
+                request.getSession().setAttribute("flush", message);
+                response.sendRedirect(request.getContextPath() + "/groups/login");
+            } else {
+                //groupのログインからきている時
+                List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
 
-        request.setAttribute("group", group);
+                request.setAttribute("shows", shows);
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
-        rd.forward(request, response);
+                request.setAttribute("group", group);
+
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
+                rd.forward(request, response);
+
+            }
+
+            request.getSession().setAttribute("group_id",group.getId());
+        } else {
+            //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)
+            group = em.find(Group.class, (Integer)request.getSession().getAttribute("group_id"));
+
+            List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
+
+            request.setAttribute("shows", shows);
+
+            request.setAttribute("group", group);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
+            rd.forward(request, response);
+
+        }
+
+
 
 
     }

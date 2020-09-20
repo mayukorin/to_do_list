@@ -3,10 +3,9 @@
 <c:import url="../layout/app.jsp">
     <c:param name="content">
         <h2>ログイン</h2>
-        <form method="POST" action="<c:url value='/login'/>">
+        <form method="POST" action="<c:url value='/groups/login'/>">
              <c:import url="login_form.jsp" />
         </form>
-        <p><a href="<c:url value='/person/new'/>">アカウントを作成する</a></p>
 
     </c:param>
 </c:import>

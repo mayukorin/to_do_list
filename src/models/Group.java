@@ -1,5 +1,8 @@
 package models;
 
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,12 +26,24 @@ public class Group extends Account {
     @JoinColumn(name="leader")
     private Person leader;//そのグループのリーダー
 
+    @Column(name = "updated_at")
+    private Timestamp updated_at;
+
+
     public Person getLeader() {
         return leader;
     }
 
     public void setLeader(Person leader) {
         this.leader = leader;
+    }
+
+    public Timestamp getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Timestamp updated_at) {
+        this.updated_at = updated_at;
     }
 
 

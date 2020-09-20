@@ -1,6 +1,7 @@
 package controllers.group;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -95,6 +96,9 @@ public class GroupUpdate extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/edit.jsp");
                 rd.forward(request, response);
             } else {
+                Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+                g.setUpdated_at(currentTime);
+
                 em.getTransaction().begin();
                 em.getTransaction().commit();
                 em.close();

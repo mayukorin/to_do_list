@@ -23,7 +23,7 @@ public class AccountValidator {
             errors.add(code_error);
         }
 
-        String name_error = _validateName(a.getName(),name_check);
+        String name_error = _validateName(a,name_check);
         if(!name_error.equals("")) {
             errors.add(name_error);
         }
@@ -76,9 +76,9 @@ public class AccountValidator {
     }
 
     // アカウント名の必須入力チェック
-    private static String _validateName(String name,Boolean name_check) {
+    private static String _validateName(Account a,Boolean name_check) {
 
-        if(name_check &&name == null || name.equals("")) {
+        if(name_check && (a.getName() == null || a.getName().equals(""))) {
             return "アカウント名を入力してください。";
         }
 

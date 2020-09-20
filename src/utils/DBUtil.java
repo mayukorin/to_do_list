@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class DBUtil {
-    private static final String PERSISTENCE_UNIT_NAME = "to_do_list";
+    private static final String PERSISTENCE_UNIT_NAME = "Todo_list";
     private static EntityManagerFactory emf;
 
     public static EntityManager createEntityManager() {

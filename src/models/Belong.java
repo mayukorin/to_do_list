@@ -1,5 +1,7 @@
 package models;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,10 @@ import javax.persistence.Table;
     @NamedQuery (
             name = "getGroupBelong",
             query = "select count(b) from Belong as b where b.person = :person and b.group = :group"
+            ),
+    @NamedQuery (
+            name = "getGroupB",
+            query = "select b from Belong as b where b.person = :person and b.group = :group"
             ),
     @NamedQuery (
             name = "getGroupsBelong",
@@ -43,6 +49,10 @@ public class Belong {
 
     @Column(name="position")
     private String position;
+
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updated_at;
+
 
     public Integer getId() {
         return id;
@@ -74,6 +84,14 @@ public class Belong {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public Timestamp getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Timestamp updated_at) {
+        this.updated_at = updated_at;
     }
 
 

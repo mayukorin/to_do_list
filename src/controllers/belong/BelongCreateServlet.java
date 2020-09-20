@@ -1,6 +1,7 @@
 package controllers.belong;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -86,6 +87,9 @@ public class BelongCreateServlet extends HttpServlet {
                     if (request.getParameter("position") != null && !request.getParameter("position").equals("")) {
                         b.setPosition(request.getParameter("position"));
                     }
+
+                    Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+                    b.setUpdated_at(currentTime);
 
                     em.getTransaction().begin();
                     em.persist(b);

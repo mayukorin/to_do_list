@@ -1,6 +1,7 @@
 package controllers.group;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -44,6 +45,9 @@ public class GroupCreateServlet extends HttpServlet {
             ///groupの新規登録///////////////////
             Group g = (Group) request.getSession().getAttribute("new_group");//BelongCreateから持ってきた、new.jspで入力されていたgroup
 
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+            g.setUpdated_at(currentTime);
+
             g.setLeader(p);//新しく作るgroupのリーダーをloginしてる人（groupを新規作成した人）にする。
             em.getTransaction().begin();
             em.persist(g);
@@ -54,6 +58,8 @@ public class GroupCreateServlet extends HttpServlet {
             b.setGroup(g);
             b.setPerson(p);
             b.setPosition("リーダー");
+
+            b.setUpdated_at(currentTime);
 
             em.getTransaction().begin();
             em.persist(b);

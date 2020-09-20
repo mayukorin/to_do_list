@@ -6,7 +6,10 @@
 
         <form method="POST" action="<c:url value='/persons/create'/>">
             <c:import url="_form.jsp"/>
+            <input type="hidden" name="_token" value="${_token}"/>
+            <button type="submit">投稿</button>
         </form>
+
 
         <p><a href="<c:url value='/login'/>">ログイン画面に戻る</a></p>
     </c:param>
