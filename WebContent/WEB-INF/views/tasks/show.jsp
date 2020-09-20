@@ -41,6 +41,9 @@
                         </c:if>
                     </tbody>
                 </table>
+                <c:if test="${tasks_history != null }">
+                あいう
+                </c:if>
                 <c:if test="${sessionScope.login_person.id == task.account.id||sessionScope.group.id == task.account.id}">
                     <p><a href="<c:url value='/tasks/edit?id=${task.id}'/>">このTaskを編集する</a></p>
                 </c:if>

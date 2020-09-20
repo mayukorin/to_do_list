@@ -43,9 +43,9 @@ public class TaskEditServlet extends HttpServlet {
 
 
         Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));//編集しようとしているtask
-
-
         Person p = (Person)request.getSession().getAttribute("login_person");
+
+
       //ログインしている人が所属しているグループ
         List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
         //その仕事を公開しているグループ

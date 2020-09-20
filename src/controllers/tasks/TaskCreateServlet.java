@@ -98,7 +98,7 @@ public class TaskCreateServlet extends HttpServlet {
             } else {
                 //エラーがないとき
 
-                t.setNew_flag(1);//このtaskは新しい
+
                 Person p = (Person)request.getSession().getAttribute("login_person");
 
                 t.setUpdate_person(p);//今loginしている人がこのtaskを作った

@@ -50,6 +50,14 @@ public class TaskShowServlet extends HttpServlet {
 
         }
 
+        if (task.getOrigin_task() != null) {
+            //Groupのtaskかつ過去に更新してきているtaskの時
+            //過去のtaskを全てとってくる
+            List<Task> tasks_history = em.createNamedQuery("GetTaskHistroy",Task.class).setParameter("task",task.getOrigin_task()).getResultList();
+            tasks_history.remove(tasks_history.size()-1);//最新のtaskだけ省く（最新のtaskは変数taskに格納ずみ）
+            request.setAttribute("tasks_history", tasks_history);
+        }
+
         em.close();
 
         request.setAttribute("task", task);

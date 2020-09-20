@@ -22,10 +22,13 @@ import javax.persistence.Table;
             query = "select t from Task as t where t.account = :account"),
     @NamedQuery(
             name = "openGroupTask",
-            query = "select t from Task as t,Show as s where t.account = :account and t = s.task and s.group = :group and t.new_flag = 1"),
+            query = "select t from Task as t,Show as s where t.account = :account and t = s.task and s.group = :group"),
     @NamedQuery(
             name = "GroupMemberAllTask",
-            query = "select t from Task as t,Show as s  where t = s.task and s.group = :group and t.new_flag = 1")
+            query = "select t from Task as t,Show as s  where t = s.task and s.group = :group"),
+    @NamedQuery(
+            name = "GetTaskHistroy",
+            query = "select t from Task as t where t.origin_task = :task")
 })
 @Entity
 public class Task {
@@ -55,8 +58,6 @@ public class Task {
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
 
-    @Column(name="new_flag",nullable = false)
-    private Integer new_flag;
 
     @ManyToOne
     @JoinColumn(name="update_person_id")
@@ -128,15 +129,6 @@ public class Task {
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
     }
-
-    public Integer getNew_flag() {
-        return new_flag;
-    }
-
-    public void setNew_flag(Integer new_flag) {
-        this.new_flag = new_flag;
-    }
-
 
 
     public Task getOrigin_task() {
