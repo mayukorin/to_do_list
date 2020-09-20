@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Account;
 import models.Group;
+import models.Person;
 import models.Validators.GroupValidator;
 import utils.DBUtil;
 import utils.EncryptUtil;
@@ -106,6 +108,12 @@ public class GroupUpdate extends HttpServlet {
             } else {
                 Timestamp currentTime = new Timestamp(System.currentTimeMillis());
                 g.setUpdated_at(currentTime);
+
+                if (leader_check_flag == true) {
+                    //leaderが新しく変わった
+                    Person leader = (Person) em.createNamedQuery("getAccount",Account.class).setParameter("code",request.getParameter("leader")).getSingleResult();
+                    g.setLeader(leader);
+                }
 
                 em.getTransaction().begin();
                 em.getTransaction().commit();

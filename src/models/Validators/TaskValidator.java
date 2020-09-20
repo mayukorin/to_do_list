@@ -17,26 +17,26 @@ import utils.DBUtil;
 public class TaskValidator {
 
 
-    public static List<String> validate(Task t,String date,Group group,String leader_code) {
+    public static List<String> validate(Task t,String date,Group group,String leader_code,Boolean leader_check_flag) {
         List<String> errors = new ArrayList<String>();
 
-        if (t != null) {
-            String title_error = _validateTitle(t.getTitle());
-            if(!title_error.equals("")) {
-                errors.add(title_error);
-            }
+
+        String title_error = _validateTitle(t.getTitle());
+        if(!title_error.equals("")) {
+            errors.add(title_error);
         }
 
-        if (t != null) {
 
-            String date_error = _validateDate(t,date);
 
-            if (!date_error.equals("")) {
-                errors.add(date_error);
-            }
+
+        String date_error = _validateDate(t,date);
+
+        if (!date_error.equals("")) {
+            errors.add(date_error);
         }
 
-        String leader_error = _validateLeader(group,leader_code);
+
+        String leader_error = _validateLeader(group,leader_code,leader_check_flag);
 
         if (!leader_error.equals("")) {
             errors.add(leader_error);
@@ -48,7 +48,7 @@ public class TaskValidator {
     private static String _validateTitle(String title) {
         if(title == null || title.equals("")) {
             return "Task名を入力してください。";
-            }
+        }
 
         return "";
     }
@@ -67,8 +67,8 @@ public class TaskValidator {
         return "";
     }
 
-    private static String _validateLeader(Group group,String leader_code) {
-        if (group != null) {
+    private static String _validateLeader(Group group,String leader_code,Boolean leader_check_flag) {
+        if (leader_check_flag == true) {
             if (leader_code == null || leader_code.equals("")) {
                 return "アカウント番号を入力してください";
 
@@ -85,18 +85,19 @@ public class TaskValidator {
 
                     if (a instanceof Group) {
                         //もし新しいleaderがgroupだったら
-                        return "Groupをリーダーにすることはできません。";
+                        return "同じgroup内にそのアカウントの人物は存在しません";
                     } else {
                         //そのleaderがGroupに属しているかどうか
                         long belong_count = em.createNamedQuery("getGroupBelong",Long.class).setParameter("person",(Person)a).setParameter("group",group).getSingleResult();
                         if (belong_count == 0) {
-                            return "そのアカウント番号の人物は、同じgroupに属していません。";
+                            return "同じgroup内にそのアカウントの人物は存在しません";
                         }
                     }
                 }
             }
-
         }
+
+
         return "";
     }
 

@@ -47,7 +47,7 @@ public class TaskCreateServlet extends HttpServlet {
             List<Group> groups;
             Person task_leader;
 
-            Account a = (Account)request.getSession().getAttribute("a");
+            Account a = (Account)request.getSession().getAttribute("a");//作成しようとしているtaskのaccount
 
             Task t = new Task();
 
@@ -63,20 +63,20 @@ public class TaskCreateServlet extends HttpServlet {
 
             String date = request.getParameter("deadline");
 
-            List<String> errors = TaskValidator.validate(t,date,null,null);//入力内容にエラーがあるか確認
+            Boolean leader_check_flag = true;
+            List<String> errors;
 
             if (a instanceof Group) {
+                //groupのtaskを作成しようとしている時
 
                     String task_leader_code = request.getParameter("task_leader");
+                    errors = TaskValidator.validate(t, date, (Group)a, task_leader_code, leader_check_flag);
 
 
-                    //taskのleaderのアカウントが存在するかどうか
-
-                    List<String> task_leader_error = TaskValidator.validate(null, null, (Group)a, task_leader_code);
-                    if (task_leader_error.size() > 0) {
-                        errors.addAll(task_leader_error);
-                    }
-
+            } else {
+                //person（自分自身）のtaskを作成しようとしている時
+                leader_check_flag = false;
+                errors = TaskValidator.validate(t, date, null, null, leader_check_flag);
             }
 
 
@@ -104,7 +104,7 @@ public class TaskCreateServlet extends HttpServlet {
                 t.setUpdate_person(p);//今loginしている人がこのtaskを作った
 
                 if (a instanceof Person) {
-                    //ログインしている人自身のtaskを作成しようとしている時
+                  //person（自分自身）のtaskを作成しようとしている時
                     t.setTask_leader(p);//自分自身がTask_leader
                     //taskを保存する。
                     em.getTransaction().begin();
@@ -130,14 +130,14 @@ public class TaskCreateServlet extends HttpServlet {
                         }
                     }
                 } else {
-
-                    task_leader = em.createNamedQuery("getAccount",Person.class).setParameter("code",request.getParameter("task_leader")).getSingleResult();
+                  //groupのtaskを作成しようとしている時
+                    task_leader = (Person) em.createNamedQuery("getAccount",Account.class).setParameter("code",request.getParameter("task_leader")).getSingleResult();
                     t.setTask_leader(task_leader);
                     //taskを保存する。
                     em.getTransaction().begin();
                     em.persist(t);
                     em.getTransaction().commit();
-                    //groupのtaskを作成しようとしている時は、groupに公開するために、Showを設定
+                    //groupのメンバー全員にtaskをに公開するために、Showを設定
 
 
                     Show show = new Show();
