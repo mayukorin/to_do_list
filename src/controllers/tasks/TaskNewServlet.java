@@ -42,7 +42,7 @@ public class TaskNewServlet extends HttpServlet {
 
         Person p = (Person)request.getSession().getAttribute("login_person");
 
-        Account a =em.find(Account.class, Integer.parseInt(request.getParameter("id")));
+        Account a =em.find(Account.class, Integer.parseInt(request.getParameter("id")));//新しく作るtaskのaccount_idにしようとしているaccount
 
         //ログインしている人が所属しているグループ
         if (a instanceof Person) {

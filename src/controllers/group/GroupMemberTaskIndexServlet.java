@@ -37,10 +37,18 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         EntityManager em = DBUtil.createEntityManager();
+        Account a;
 
 
 
-        Account a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
+        if (request.getParameter("id") != null) {
+            a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
+
+        } else {
+            //taskをcreateしてからここに戻ってきた時
+            a = (Account) request.getSession().getAttribute("a");
+            request.getSession().removeAttribute("a");
+        }
 
         Group g = (Group) request.getSession().getAttribute("group");
 
