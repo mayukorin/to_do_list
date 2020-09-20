@@ -2,9 +2,9 @@ package login;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Account;
 import models.Belong;
 import models.Group;
 import models.Person;
-import models.Validators.AccountValidator;
 import utils.DBUtil;
 import utils.EncryptUtil;
 
@@ -59,68 +59,66 @@ public class GroupLoginServlet extends HttpServlet {
 
         String _token = (String)request.getParameter("_token");
         if(_token != null && _token.equals(request.getSession().getId())) {
+            Boolean check_result = false;
+
+            String code = request.getParameter("code");
+            String plain_pass = request.getParameter("password");
+
+            Group g = null;
             EntityManager em = DBUtil.createEntityManager();
 
-            Group g = new Group();
+            if(code != null && !code.equals("") && plain_pass != null && !plain_pass.equals("")) {
 
 
-            g.setName(request.getParameter("name"));
-            g.setCode(request.getParameter("code"));
-            g.setPassword(
-                    EncryptUtil.getPasswordEncrypt(
-                            request.getParameter("password"),
-                            (String)this.getServletContext().getAttribute("pepper")));
+                String password = EncryptUtil.getPasswordEncrypt(
+                        plain_pass,
+                        (String)this.getServletContext().getAttribute("pepper")
+                        );
+
+                // アカウント番号とパスワードが正しいかチェックする
+                try {
+                    g = (Group) em.createNamedQuery("checkLoginCodeAndPassword", Account.class)
+                          .setParameter("code", code)
+                          .setParameter("pass", password)
+                          .getSingleResult();
+                } catch(NoResultException ex) {}
 
 
-            //まずは、アカウント番号・パスワードが全て入力されているかチェックする。
-            List<String> error_input = AccountValidator.validate(g, null,null, false,false, false, true,false);
 
-            if (error_input.size() > 0) {
-                //アカウント番号・パスワードが全て入力されていない時
+                if(g != null) {
+                    check_result = true;
+                }
+            }
 
+            if(!check_result) {
+                // 認証できなかったらgroupログイン画面に戻る
                 em.close();
-
                 request.setAttribute("_token", request.getSession().getId());
-                request.setAttribute("hasError", error_input);
+                request.setAttribute("hasError", true);
+                request.setAttribute("code", code);
+
 
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/login.jsp");
                 rd.forward(request, response);
             } else {
-              //アカウント番号・パスワードが全て入力されている時
+                //認証に成功した時
+
                 Person p = (Person) request.getSession().getAttribute("login_person");
-                List<String> group_error = AccountValidator.validate(p, g,null,true, false, false, false,false);
 
-                if (group_error.get(0).equals("入力したグループは存在しません。")) {
-                    //アカウント番号・パスワードが間違っている時
+                Belong b = em.createNamedQuery("getGroupB",Belong.class).setParameter("person",p).setParameter("group",g).getSingleResult();
 
-                    em.close();
+                Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+                b.setUpdated_at(currentTime);//belongの時間を更新
 
-                    request.setAttribute("_token", request.getSession().getId());
-                    request.setAttribute("hasError", true);
+                //belongを保存
+                em.getTransaction().begin();
+                em.getTransaction().commit();
 
-                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/login/group_login.jsp");
-                    rd.forward(request, response);
-                } else if (group_error.get(0).equals("そのグループにはすでに所属しています。"))  {
-                    //ログインに成功した時
+                request.getSession().setAttribute("group",g);
 
-                    Group group = em.createNamedQuery("Group",Group.class).setParameter("code",g.getCode()).setParameter("pass",g.getPassword()).getSingleResult();
-
-                    Belong b = em.createNamedQuery("getGroupB",Belong.class).setParameter("person",p).setParameter("group",group).getSingleResult();
-
-                    Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-                    b.setUpdated_at(currentTime);//belongの時間を更新
-
-                    //belongを保存
-                    em.getTransaction().begin();
-                    em.getTransaction().commit();
-
-                    request.getSession().setAttribute("group",group);
-
-                    String message = group.getName()+"にログインし直しました";
-                    request.getSession().setAttribute("flush", message);
-                    response.sendRedirect(request.getContextPath() + "/groups/toppage");
-
-                }
+                String message = g.getName()+"にログインし直しました";
+                request.getSession().setAttribute("flush", message);
+                response.sendRedirect(request.getContextPath() + "/groups/toppage");
             }
         }
     }
