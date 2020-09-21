@@ -41,7 +41,7 @@
 </c:when>
 <c:otherwise>
 <label for="task_leader">タスクリーダー</label><br/>
-<input type="text" name="task_leader" value="${task.task_leader}"/>
+<input type="text" name="task_leader" value="${task.task_leader.code}"/>
 </c:otherwise>
 </c:choose>
 <br/><br/>

@@ -59,6 +59,8 @@ public class TaskValidator {
             SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
             Date deadline = sdFormat.parse(date);
 
+            System.out.println(deadline);
+
             t.setDeadline(deadline);//締め切りを保存する。
         } catch (ParseException e) {
             return "カレンダーをクリックしてください。";

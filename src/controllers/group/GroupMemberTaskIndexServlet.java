@@ -46,14 +46,15 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
 
         } else {
             //taskをcreateしてからここに戻ってきた時
-            a = (Account) request.getSession().getAttribute("a");
-            request.getSession().removeAttribute("a");
+            a = (Account) request.getSession().getAttribute("account");
+            request.getSession().removeAttribute("account");
         }
 
         Group g = (Group) request.getSession().getAttribute("group");
 
 
-
+        System.out.println("account_name:"+a.getName());
+        System.out.println("group_name:"+g.getName());
         List<Task> tasks = em.createNamedQuery("openGroupTask",Task.class).setParameter("account",a).setParameter("group",g).getResultList();//今見ようとしている人の、そのgroupで公開されているTask
 
         request.setAttribute("tasks", tasks);

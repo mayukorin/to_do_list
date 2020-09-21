@@ -47,7 +47,7 @@ public class TaskCreateServlet extends HttpServlet {
             List<Group> groups;
             Person task_leader;
 
-            Account a = (Account)request.getSession().getAttribute("a");//作成しようとしているtaskのaccount
+            Account a = (Account)request.getSession().getAttribute("account");//作成しようとしているtaskのaccount
 
             Task t = new Task();
 

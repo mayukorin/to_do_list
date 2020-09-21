@@ -58,6 +58,8 @@ public class TaskEditServlet extends HttpServlet {
         if (t!= null) {
             request.setAttribute("task", t);
             request.getSession().setAttribute("task_id", t.getId());
+            request.setAttribute("_token", request.getSession().getId());
+
             Account a = t.getAccount();
             request.getSession().setAttribute("account", a);
             if (p.getId() == t.getAccount().getId()) {
@@ -65,9 +67,8 @@ public class TaskEditServlet extends HttpServlet {
 
                 request.setAttribute("groups", groups);
                 request.setAttribute("shows_group", shows_group);
-                request.setAttribute("_token", request.getSession().getId());
-            }
 
+            }
 
         }
 

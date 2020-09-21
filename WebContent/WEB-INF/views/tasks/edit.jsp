@@ -18,7 +18,8 @@
         <c:if test="${sessionScope.group!= null}">
             <p><a href="<c:url value='/groups/toppage'/>">${sessionScope.group.name}のメンバーのtask一覧に戻る</a>
         </c:if>
-        <c:if test="${task.origin_task == null  && task.update_person.id == sessionScope.login_person.id ||task.origin_task.account.id = sessionScope.login_person.id }">
+
+        <c:if test="${task.task_leader.id == sessionScope.login_person.id }">
             <p><a href="#" onclick="confirmDestroy();">このTaskを削除する</a></p>
         </c:if>
         <form method="POST" action="${pageContext.request.contextPath}/destroy">

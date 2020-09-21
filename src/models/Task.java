@@ -28,7 +28,7 @@ import javax.persistence.Table;
             query = "select t from Task as t,Show as s  where t = s.task and s.group = :group"),
     @NamedQuery(
             name = "GetTaskHistroy",
-            query = "select t from Task as t where t.origin_task = :task")
+            query = "select t from Task as t where t.origin_task_id = :origin_task_id")
 })
 @Entity
 public class Task {
@@ -63,9 +63,9 @@ public class Task {
     @JoinColumn(name="update_person_id")
     private Person update_person;
 
-    @ManyToOne
-    @JoinColumn(name="origin_task_id")
-    private Task origin_task;
+
+    @Column(name="origin_task_id")
+    private Integer origin_task_id;
 
     @ManyToOne
     @JoinColumn(name="task_leader_id")
@@ -131,13 +131,10 @@ public class Task {
     }
 
 
-    public Task getOrigin_task() {
-        return origin_task;
+    public Integer getOrigin_task_id() {
+        return origin_task_id;
     }
 
-    public void setOrigin_task_id(Task origin_task) {
-        this.origin_task = origin_task;
-    }
 
     public Person getUpdate_person() {
         return update_person;
@@ -155,8 +152,8 @@ public class Task {
         this.task_leader = task_leader;
     }
 
-    public void setOrigin_task(Task origin_task) {
-        this.origin_task = origin_task;
+    public void setOrigin_task_id(Integer origin_task_id) {
+        this.origin_task_id = origin_task_id;
     }
 
 
