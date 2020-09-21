@@ -56,7 +56,7 @@ public class PersonShowServlet extends HttpServlet {
             //Groupインスタンスのアカウント詳細を見ようとしている時
 
 
-            List<Person> persons = em.createNamedQuery("getPersons",Person.class).setParameter("group",(Group)a).getResultList();//そのgroupに属している人
+            List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",(Group)a).getResultList();//そのgroupに属している人
             request.setAttribute("persons", persons);
 
             if (((Group)a).getLeader().getId() == ((Person)request.getSession().getAttribute("login_person")).getId()) {

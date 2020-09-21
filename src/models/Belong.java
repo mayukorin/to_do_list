@@ -27,7 +27,7 @@ import javax.persistence.Table;
             name = "getGroupsBelong",
             query = "select b.group from Belong as b where b.person = :person"),
     @NamedQuery(
-            name = "getPersons",
+            name = "getMembers",
             query = "select b.person from Belong as b where b.group = :group")
 })
 @Entity

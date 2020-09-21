@@ -39,7 +39,7 @@ public class GroupMemberIndexServlet extends HttpServlet {
 
 
         Group group = (Group)request.getSession().getAttribute("group");//今見ようとしているgroup情報
-        List<Person> persons = em.createNamedQuery("getPersons",Person.class).setParameter("group",group).getResultList();//そのgroupに属している人
+        List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",group).getResultList();//そのgroupに属している人
 
         if (request.getSession().getAttribute("account") != null) {
             request.getSession().removeAttribute("account");

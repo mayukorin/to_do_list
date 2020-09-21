@@ -67,7 +67,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
                 response.sendRedirect(request.getContextPath() + "/groups/login");
             } else {
-                //groupがbelongの更新より前の時、⑪の画面へ
+                //belongの更新がgroupの更新より後の時、⑪の画面へ
 
                 //そのgroupで公開されているメンバー全員のtask
                 List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();
