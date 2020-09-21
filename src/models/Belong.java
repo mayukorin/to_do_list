@@ -20,7 +20,7 @@ import javax.persistence.Table;
             query = "select count(b) from Belong as b where b.person = :person and b.group = :group"
             ),
     @NamedQuery (
-            name = "getGroupB",
+            name = "getGroupPersonBelong",
             query = "select b from Belong as b where b.person = :person and b.group = :group"
             ),
     @NamedQuery (

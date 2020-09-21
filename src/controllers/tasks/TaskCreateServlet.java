@@ -81,7 +81,7 @@ public class TaskCreateServlet extends HttpServlet {
 
 
             if (errors.size() > 0) {
-                em.close();
+
 
                 request.setAttribute("task", t);
                 request.setAttribute("_token", request.getSession().getId());
@@ -92,7 +92,7 @@ public class TaskCreateServlet extends HttpServlet {
                     groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", (Person)a).getResultList();
                     request.setAttribute("groups", groups);
                 }
-
+                em.close();
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/new.jsp");
                 rd.forward(request, response);
             } else {
@@ -129,6 +129,12 @@ public class TaskCreateServlet extends HttpServlet {
 
                         }
                     }
+
+                    request.getSession().removeAttribute("account");
+                    em.close();
+                    request.getSession().setAttribute("flush", "taskの登録が完了しました。");
+
+                    response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
                 } else {
                   //groupのtaskを作成しようとしている時
                     task_leader = (Person) em.createNamedQuery("getAccount",Account.class).setParameter("code",request.getParameter("task_leader")).getSingleResult();
@@ -148,21 +154,13 @@ public class TaskCreateServlet extends HttpServlet {
                     em.persist(show);
                     em.getTransaction().commit();
 
+                    em.close();
 
-                }
+                    request.getSession().setAttribute("flush", "taskの登録が完了しました。");
+                    response.sendRedirect(request.getContextPath()+"/groups/member");//Groupのtask一覧画面に戻る
 
 
 
-                em.close();
-
-                request.getSession().setAttribute("flush", "taskの登録が完了しました。");
-
-                if (request.getSession().getAttribute("group") == null) {
-                    //グループ画面からtaskを追加していない時
-                    response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
-                } else {
-                    //グループ画面からtaskを追加した時
-                    response.sendRedirect(request.getContextPath()+"/groups/member");//taskを追加したメンバーのtask一覧画面に戻る
 
                 }
 

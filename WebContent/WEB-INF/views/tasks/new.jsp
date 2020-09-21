@@ -8,9 +8,14 @@
             <c:import url="_form.jsp"/>
         </form>
 
-        <p><a href="<c:url value='/toppage/index'/>">ホーム画面に戻る</a></p>
-        <c:if test="${sessionScope.group!= null}">
-            <p><a href="<c:url value='/groups/toppage'/>">${sessionScope.group.name}のメンバーのtask一覧に戻る</a>
-        </c:if>
+
+        <c:choose>
+        <c:when test="${sessionScope.group!= null}">
+            <p><a href="<c:url value='/groups/member'/>">${sessionScope.account.name}のtask一覧に戻る</a>
+        </c:when>
+        <c:otherwise>
+            <p><a href="<c:url value='/toppage/index'/>">task一覧に戻る</a></p>
+        </c:otherwise>
+        </c:choose>
     </c:param>
 </c:import>

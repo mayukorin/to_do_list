@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
-        <h2>アカウント情報 詳細ページ</h2>
+        <h2>${account.name}のアカウント情報 詳細ページ</h2>
         <table>
             <tbody>
                 <tr>
@@ -52,18 +52,25 @@
 
 
         <c:if test="${leader_flag == 1|| account.id == sessionScope.login_person.id}">
-            <p><a href="<c:url value='/persons/edit?id=${account.id}'/>">アカウント情報を編集する</a></p>
+            <c:choose>
+                <c:when test="${account.id == sessionScope.login_person.id}">
+                    <p><a href="<c:url value='/persons/edit?id=${account.id}'/>">アカウント情報を編集する</a></p>
+                </c:when>
+                <c:otherwise>
+                    <p><a href="<c:url value='/groups/edit?id=${account.id}'/>">アカウント情報を編集する</a></p>
+                </c:otherwise>
+            </c:choose>
         </c:if>
         <c:if test="${account.id == sessionScope.login_person.id}">
             <p><a href="<c:url value='/belongs/new'/>">新しいグループに参加する</a>
             <p><a href="<c:url value='/groups/new'/>">新しくグループを作成する</a>
         </c:if>
         <c:choose>
-        <c:when test="${sessionScope.group_id == null}">
-            <p><a href="<c:url value='/toppage/index'/>">トップページに戻る</a></p>
+        <c:when test="${sessionScope.group == null}">
+            <p><a href="<c:url value='/toppage/index'/>">task一覧に戻る</a></p>
         </c:when>
         <c:otherwise>
-            <p><a href="<c:url value='/groups/toppage?id=${account.id}'/>">${account.name}のtask一覧に戻る</a></p>
+            <p><a href="<c:url value='/groups/member?id=${account.id}'/>">${account.name}のtask一覧に戻る</a></p>
         </c:otherwise>
         </c:choose>
     </c:param>

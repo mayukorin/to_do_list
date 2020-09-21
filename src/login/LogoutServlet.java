@@ -34,6 +34,12 @@ public class LogoutServlet extends HttpServlet {
             request.getSession().setAttribute("flush", "ログアウトしました。");
         }
 
+        if (request.getSession().getAttribute("group") != null) {
+            //groupのtask一覧から戻ってきた時
+            request.getSession().removeAttribute("group");
+        }
+
+
         response.sendRedirect(request.getContextPath()+"/login");
     }
 

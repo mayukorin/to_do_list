@@ -1,4 +1,4 @@
-package controllers.group;
+package controllers.person;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,22 +11,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controllers.account.AccountToppageServlet;
 import models.Account;
 import models.Group;
 import models.Task;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class GroupMemberTaskIndexServlet
+ * Servlet implementation class PersonToppageServlet
  */
-@WebServlet("/groups/member")
-public class GroupMemberTaskIndexServlet extends HttpServlet {
+@WebServlet("/persons/toppage")
+public class PersonToppageServlet extends AccountToppageServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GroupMemberTaskIndexServlet() {
+    public PersonToppageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,6 +37,8 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+
+        ////////////////////13///////////////////////////////////////////////////////////////////////////
         EntityManager em = DBUtil.createEntityManager();
         Account a;
 
@@ -65,10 +68,11 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/taskIndex.jsp");
         rd.forward(request, response);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
     }
-
-
 
 }

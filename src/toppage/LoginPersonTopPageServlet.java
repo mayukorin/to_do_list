@@ -17,16 +17,16 @@ import models.Task;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class TopPageIndexServlet
+ * Servlet implementation class LoginPersonToppageServlet
  */
 @WebServlet("/toppage/index")
-public class TopPageIndexServlet extends HttpServlet {
+public class LoginPersonToppageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TopPageIndexServlet() {
+    public LoginPersonToppageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,13 +46,18 @@ public class TopPageIndexServlet extends HttpServlet {
             request.getSession().removeAttribute("group");
         }
 
+        if (request.getSession().getAttribute("account") != null) {
+            request.getSession().removeAttribute("account");
+        }
+
         EntityManager em = DBUtil.createEntityManager();
 
         Person p = (Person) request.getSession().getAttribute("login_person");//ログインしている人
 
-        List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();//ログインしている人のTask
+       //ログインしている人のTask（公開しているのものも、していないものも全て）
+        List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();
 
-      //ログインしている人が所属しているグループ
+       //ログインしている人が所属しているグループ
         List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
 
         em.close();

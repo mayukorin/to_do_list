@@ -137,16 +137,12 @@ public class TaskUpdateServlet extends HttpServlet {
 
                     em.close();
 
-                    request.getSession().setAttribute("flush", "taskの登録が完了しました。");
+                    request.getSession().removeAttribute("acount");
+                    request.getSession().setAttribute("flush", "taskの更新が完了しました。");
 
-                    if (request.getSession().getAttribute("group") == null) {
-                        //グループ画面からtaskを追加していない時
-                        response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
-                    } else {
-                        //グループ画面からtaskを追加した時
-                        response.sendRedirect(request.getContextPath()+"/groups/member");//taskを追加したメンバーのtask一覧画面に戻る
 
-                    }
+                    response.sendRedirect(request.getContextPath()+"/toppage/index");
+
                 }
             } else {
                 //groupのtaskを編集しようとしている時
@@ -221,21 +217,17 @@ public class TaskUpdateServlet extends HttpServlet {
 
                     em.close();
 
-                    request.getSession().setAttribute("flush", "taskの登録が完了しました。");
+                    request.getSession().setAttribute("flush", "taskの更新が完了しました。");
 
-                    if (request.getSession().getAttribute("group") == null) {
-                        //グループ画面からtaskを追加していない時
-                        response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
-                    } else {
-                        //グループ画面からtaskを追加した時
-                        response.sendRedirect(request.getContextPath()+"/groups/member");//taskを追加したメンバーのtask一覧画面に戻る
 
-                    }
 
+                    //グループ画面からtaskを追加した時
+                    response.sendRedirect(request.getContextPath()+"/groups/member");//taskを追加したメンバーのtask一覧画面に戻る
                 }
             }
         }
     }
 }
+
 
 

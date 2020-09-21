@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Account;
 import models.Group;
 import models.Person;
 import models.Task;
@@ -42,6 +43,14 @@ public class TaskShowServlet extends HttpServlet {
 
 
         Task task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
+
+        if (request.getSession().getAttribute("account") == null) {
+            //①ホーム画面からtask詳細に来た場合
+            //②メンバーのtask一覧からtask詳細に来た場合
+
+            Account a = task.getAccount();
+            request.getSession().setAttribute("account", a);
+        }
 
         if ( task.getAccount().getId() == p.getId()) {
             //自分のtaskを見ている時のみ、公開しているgroupを表示する

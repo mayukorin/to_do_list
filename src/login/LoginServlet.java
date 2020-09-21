@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controllers.account.AccountLoginServlet;
 import models.Account;
 import models.Person;
 import utils.DBUtil;
@@ -20,7 +21,7 @@ import utils.EncryptUtil;
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends AccountLoginServlet {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -36,12 +37,8 @@ public class LoginServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        request.setAttribute("_token", request.getSession().getId());
-        request.setAttribute("hasError", false);
-        if (request.getSession().getAttribute("flush") != null) {
-            request.setAttribute("flush", request.getSession().getAttribute("flush"));
-            request.getSession().removeAttribute("flush");
-        }
+
+        super.doGet(request, response);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/login/login.jsp");
         rd.forward(request, response);

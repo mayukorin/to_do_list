@@ -18,16 +18,16 @@ import models.Task;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class GroupToppageServlet
+ * Servlet implementation class GroupMemberToppageServlet
  */
 @WebServlet("/groups/toppage")
-public class GroupToppageServlet extends HttpServlet {
+public class GroupMemberToppageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GroupToppageServlet() {
+    public GroupMemberToppageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -47,23 +47,34 @@ public class GroupToppageServlet extends HttpServlet {
 
         if (request.getParameter("id") != null) {
             //groupのログインから来ていない時
+
+            //今から見ようとしているグループ
             group = em.find(Group.class, Integer.parseInt(request.getParameter("id")));
+            //ログインしている本人
             Person p = (Person) request.getSession().getAttribute("login_person");
 
-            Belong b = em.createNamedQuery("getGroupB",Belong.class).setParameter("person",p).setParameter("group",group).getSingleResult();
+            //グループと本人をつなぐbelong
+            Belong b = em.createNamedQuery("getGroupPersonBelong",Belong.class).setParameter("person",p).setParameter("group",group).getSingleResult();
 
 
             if (b.getUpdated_at().before(group.getUpdated_at())) {
                 //groupが後に更新されていたら、グループのログインページにリダイレクト
+
                 String message = group.getName()+"の情報が変更されています。グループへのログインをし直してください";
+
                 request.getSession().setAttribute("flush", message);
                 request.getSession().setAttribute("group",group);
+
                 response.sendRedirect(request.getContextPath() + "/groups/login");
             } else {
-                //groupのログインからきている時
-                List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
+                //groupがbelongの更新より前の時、groups/toppage.jspへ
+
+                //そのgroupで公開されているメンバー全員のtask
+                List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();
+
                 request.setAttribute("tasks", tasks);
                 request.getSession().setAttribute("group",group);
+
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
                 rd.forward(request, response);
 
@@ -71,12 +82,14 @@ public class GroupToppageServlet extends HttpServlet {
 
 
         } else {
-            //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)・group詳細ページから戻ってきた時
+            //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)・groupメンバーページなどから戻ってきた時
+
             group = (Group)request.getSession().getAttribute("group");
-            List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();//そのGroupのShowを取り出す
+
+            //そのgroupで公開されているメンバー全員のtask
+            List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();
 
             request.setAttribute("tasks", tasks);
-
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
             rd.forward(request, response);

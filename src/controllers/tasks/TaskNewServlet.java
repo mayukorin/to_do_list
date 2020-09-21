@@ -44,7 +44,20 @@ public class TaskNewServlet extends HttpServlet {
 
         Person p = (Person)request.getSession().getAttribute("login_person");
 
-        Account a =em.find(Account.class, Integer.parseInt(request.getParameter("id")));//新しく作るtaskのaccount_idにしようとしているaccount
+        Account a;
+
+        if (request.getSession().getAttribute("account") == null) {
+            //ホーム画面からtask新規作成に来た場合
+            a =  em.find(Account.class, Integer.parseInt(request.getParameter("id")));//詳細を見ようとしているaccount
+            request.getSession().setAttribute("account",a);
+        } else {
+            //groups/taskIndex.jspからtask新規作成に来た場合
+
+            a = (Account) request.getSession().getAttribute("account");
+        }
+
+
+
 
         //ログインしている人が所属しているグループ
         if (a instanceof Person) {
@@ -53,13 +66,11 @@ public class TaskNewServlet extends HttpServlet {
             request.setAttribute("groups", groups);
         }
 
-        request.getSession().setAttribute("account", a);
+
 
         Task task = new Task();
-        System.out.println("beautilful"+task.getId());
-        System.out.println(task.getCreated_at());
-        request.setAttribute("task", task);
 
+        request.setAttribute("task", task);
 
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/new.jsp");

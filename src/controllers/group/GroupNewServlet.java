@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Group;
+
 /**
  * Servlet implementation class GroupNewServlet
  */
@@ -30,6 +32,8 @@ public class GroupNewServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         request.setAttribute("_token", request.getSession().getId());
+
+        request.setAttribute("account", new Group());
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/new.jsp");
         rd.forward(request, response);

@@ -26,7 +26,7 @@
         </tbody>
 
     </table>
-    <p><a href="<c:url value='/groups/toppage?id=${sessionScope.group.id}'/>">${sessionScope.group.name}のメンバーのTask一覧に戻る</a></p>
+    <p><a href="<c:url value='/groups/toppage?id=${sessionScope.group.id}'/>">${sessionScope.group.name}のメンバーのtask一覧に戻る</a></p>
     </c:param>
 
 </c:import>

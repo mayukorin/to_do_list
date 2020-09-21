@@ -5,7 +5,7 @@
     <c:param name="content">
         <c:choose>
             <c:when test="${task != null}">
-                <h2>Task 詳細ページ</h2>
+                <h2>task 詳細ページ</h2>
 
                 <table>
                     <tbody>
@@ -45,7 +45,7 @@
                 あいう
                 </c:if>
                 <c:if test="${sessionScope.login_person.id == task.account.id||sessionScope.group.id == task.account.id}">
-                    <p><a href="<c:url value='/tasks/edit?id=${task.id}'/>">このTaskを編集する</a></p>
+                    <p><a href="<c:url value='/tasks/edit?id=${task.id}'/>">このtaskを編集する</a></p>
                 </c:if>
             </c:when>
             <c:otherwise>
@@ -54,7 +54,7 @@
         </c:choose>
         <c:choose>
         <c:when test="${sessionScope.group == null}">
-        <p><a href="<c:url value="/toppage/index"/>">ホーム画面に戻る</a></p>
+        <p><a href="<c:url value="/toppage/index"/>">task一覧画面に戻る</a></p>
         </c:when>
         <c:otherwise>
         <p><a href="<c:url value="/groups/toppage"/>">${sessionScope.group.name}のメンバーのtask一覧画面に戻る</a></p>

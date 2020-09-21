@@ -4,7 +4,7 @@
     <c:param name="content">
         <c:choose>
             <c:when test="${task != null}">
-                <h2>Task 編集ページ</h2>
+                <h2>task 編集ページ</h2>
                 <form method="POST" action="<c:url value='/tasks/update' />">
                     <c:import url="_form.jsp" />
                 </form>
@@ -14,13 +14,16 @@
             </c:otherwise>
         </c:choose>
 
-        <p><a href="<c:url value='/toppage/index' />">ホーム画面に戻る</a></p>
-        <c:if test="${sessionScope.group!= null}">
-            <p><a href="<c:url value='/groups/toppage'/>">${sessionScope.group.name}のメンバーのtask一覧に戻る</a>
-        </c:if>
-
+        <c:choose>
+        <c:when test="${sessionScope.group!= null}">
+            <p><a href="<c:url value='/groups/member'/>">${sessionScope.account.name}のtask一覧に戻る</a>
+        </c:when>
+        <c:otherwise>
+            <p><a href="<c:url value='/toppage/index'/>">task一覧に戻る</a></p>
+        </c:otherwise>
+        </c:choose>
         <c:if test="${task.task_leader.id == sessionScope.login_person.id }">
-            <p><a href="#" onclick="confirmDestroy();">このTaskを削除する</a></p>
+            <p><a href="#" onclick="confirmDestroy();">このtaskを削除する</a></p>
         </c:if>
         <form method="POST" action="${pageContext.request.contextPath}/destroy">
             <input type="hidden" name="_token" value="${_token}" />

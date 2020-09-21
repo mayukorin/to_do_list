@@ -10,7 +10,7 @@
                     <button type="submit">投稿</button>
                     <br/><br/>
                 </form>
-        <p><a href="<c:url value='/toppage/index' />">ホームページに戻る</a></p>
+        <p><a href="<c:url value='/toppage/index' />">task一覧に戻る</a></p>
 
     </c:param>
 </c:import>
