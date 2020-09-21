@@ -63,6 +63,8 @@ public class GroupLoginServlet extends HttpServlet {
 
             String code = request.getParameter("code");
             String plain_pass = request.getParameter("password");
+            Group origin_group = (Group) request.getSession().getAttribute("group");
+
 
             Group g = null;
             EntityManager em = DBUtil.createEntityManager();
@@ -86,7 +88,15 @@ public class GroupLoginServlet extends HttpServlet {
 
 
                 if(g != null) {
-                    check_result = true;
+
+
+                    if (!g.getCode().equals(origin_group.getCode())) {//本来loginしたいgroupと別のgroupの情報を入れてしまっていた時
+                        check_result = false;
+                    } else {
+                        check_result = true;
+                    }
+
+
                 }
             }
 
@@ -98,14 +108,16 @@ public class GroupLoginServlet extends HttpServlet {
                 request.setAttribute("code", code);
 
 
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/login.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/login/group_login.jsp");
                 rd.forward(request, response);
             } else {
                 //認証に成功した時
 
                 Person p = (Person) request.getSession().getAttribute("login_person");
 
-                Belong b = em.createNamedQuery("getGroupB",Belong.class).setParameter("person",p).setParameter("group",g).getSingleResult();
+
+
+                Belong b = em.createNamedQuery("getGroupPersonBelong",Belong.class).setParameter("person",p).setParameter("group",g).getSingleResult();
 
                 Timestamp currentTime = new Timestamp(System.currentTimeMillis());
                 b.setUpdated_at(currentTime);//belongの時間を更新
@@ -119,6 +131,9 @@ public class GroupLoginServlet extends HttpServlet {
                 String message = g.getName()+"にログインし直しました";
                 request.getSession().setAttribute("flush", message);
                 response.sendRedirect(request.getContextPath() + "/groups/toppage");
+
+
+
             }
         }
     }

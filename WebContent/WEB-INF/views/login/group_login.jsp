@@ -6,6 +6,7 @@
         <form method="POST" action="<c:url value='/groups/login'/>">
              <c:import url="login_form.jsp" />
         </form>
+        <p><a href="<c:url value='/toppage/index'/>">task一覧に戻る</a></p>
 
     </c:param>
 </c:import>

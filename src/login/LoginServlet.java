@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import controllers.account.AccountLoginServlet;
 import models.Account;
 import models.Person;
 import utils.DBUtil;
@@ -21,7 +20,7 @@ import utils.EncryptUtil;
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/login")
-public class LoginServlet extends AccountLoginServlet {
+public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -38,7 +37,12 @@ public class LoginServlet extends AccountLoginServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
 
-        super.doGet(request, response);
+        request.setAttribute("_token", request.getSession().getId());
+        request.setAttribute("hasError", false);
+        if (request.getSession().getAttribute("flush") != null) {
+            request.setAttribute("flush", request.getSession().getAttribute("flush"));
+            request.getSession().removeAttribute("flush");
+        }
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/login/login.jsp");
         rd.forward(request, response);
@@ -49,7 +53,9 @@ public class LoginServlet extends AccountLoginServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-     // 認証結果を格納する変数
+
+
+        // 認証結果を格納する変数
         Boolean check_result = false;
 
         String code = request.getParameter("code");
@@ -74,11 +80,8 @@ public class LoginServlet extends AccountLoginServlet {
                       .getSingleResult();
             } catch(NoResultException ex) {}
 
-
-
-            if(p != null) {
-                check_result = true;
-            }
+        if(p != null) {
+            check_result = true;
         }
 
         if(!check_result) {
@@ -99,6 +102,7 @@ public class LoginServlet extends AccountLoginServlet {
             request.getSession().setAttribute("flush", "ログインしました。");
             response.sendRedirect(request.getContextPath() + "/toppage/index");
         }
+        }
     }
-
 }
+

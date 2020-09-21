@@ -46,7 +46,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
         Group group;
 
         if (request.getParameter("id") != null) {
-            //groupのログインから来ていない時
+            //そのgroupを始めて見る時
 
             //今から見ようとしているグループ
             group = em.find(Group.class, Integer.parseInt(request.getParameter("id")));
@@ -58,7 +58,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
 
             if (b.getUpdated_at().before(group.getUpdated_at())) {
-                //groupが後に更新されていたら、グループのログインページにリダイレクト
+                //groupがbelongより後に更新されていたら、GroupLoginSerevletにリダイレクト
 
                 String message = group.getName()+"の情報が変更されています。グループへのログインをし直してください";
 
@@ -67,7 +67,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
                 response.sendRedirect(request.getContextPath() + "/groups/login");
             } else {
-                //groupがbelongの更新より前の時、groups/toppage.jspへ
+                //groupがbelongの更新より前の時、⑪の画面へ
 
                 //そのgroupで公開されているメンバー全員のtask
                 List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();
@@ -82,7 +82,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
 
         } else {
-            //groupに新しくログインし直した時（groupの情報が変わったので、ログインし直した時)・groupメンバーページなどから戻ってきた時
+            //⑫の画面・GroupLoginSerevletから来た時
 
             group = (Group)request.getSession().getAttribute("group");
 
