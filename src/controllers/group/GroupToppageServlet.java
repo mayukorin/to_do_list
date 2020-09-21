@@ -17,16 +17,16 @@ import models.Task;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class GroupMemberTaskIndexServlet
+ * Servlet implementation class GroupToppageServlet
  */
-@WebServlet("/groups/member")
-public class GroupMemberTaskIndexServlet extends HttpServlet {
+@WebServlet("/group/toppage")
+public class GroupToppageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GroupMemberTaskIndexServlet() {
+    public GroupToppageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -49,6 +49,7 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
 
         if (request.getParameter("id") != null) {
             a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
+
             request.getSession().setAttribute("account", a);
 
         }
@@ -62,13 +63,10 @@ public class GroupMemberTaskIndexServlet extends HttpServlet {
         request.setAttribute("tasks", tasks);
 
 
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/taskIndex.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
         rd.forward(request, response);
 
 
     }
-
-
 
 }

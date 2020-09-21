@@ -1,4 +1,4 @@
-package controllers.person;
+package controllers.group_member;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,23 +11,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import controllers.account.AccountToppageServlet;
 import models.Account;
 import models.Group;
 import models.Task;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class PersonToppageServlet
+ * Servlet implementation class MemberToppageServlet
  */
-@WebServlet("/persons/toppage")
-public class PersonToppageServlet extends AccountToppageServlet {
+@WebServlet("/members/toppage")
+public class MemberToppageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PersonToppageServlet() {
+    public MemberToppageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,7 +37,6 @@ public class PersonToppageServlet extends AccountToppageServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
 
-        ////////////////////13///////////////////////////////////////////////////////////////////////////
         EntityManager em = DBUtil.createEntityManager();
         Account a;
 
@@ -52,6 +50,7 @@ public class PersonToppageServlet extends AccountToppageServlet {
 
         if (request.getParameter("id") != null) {
             a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
+
             request.getSession().setAttribute("account", a);
 
         }
@@ -65,11 +64,8 @@ public class PersonToppageServlet extends AccountToppageServlet {
         request.setAttribute("tasks", tasks);
 
 
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/taskIndex.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/members/toppage.jsp");
         rd.forward(request, response);
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 

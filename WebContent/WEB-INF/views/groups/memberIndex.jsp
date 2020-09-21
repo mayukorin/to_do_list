@@ -14,13 +14,13 @@
             <tr>
                 <td><c:out value="${sessionScope.group.code}"/></td>
                 <td><c:out value="${sessionScope.group.name}"/></td>
-                <td><a href="<c:url value='/groups/member?id=${sessionScope.group.id}'/>">詳細を見る</a></td>
+                <td><a href="<c:url value='/group/toppage?id=${sessionScope.group.id}'/>">詳細を見る</a></td>
             </tr>
             <c:forEach var="person" items = "${persons}">
             <tr>
                 <td><c:out value="${person.code}"/></td>
                 <td><c:out value="${person.name}"/></td>
-                <td><a href="<c:url value='/groups/member?id=${person.id }'/>">詳細を見る</a></td>
+                <td><a href="<c:url value='/members/toppage?id=${person.id }'/>">詳細を見る</a></td>
             </tr>
             </c:forEach>
         </tbody>
