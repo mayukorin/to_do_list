@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import models.Account;
 import models.Group;
 import models.Person;
+import models.Task;
 import utils.DBUtil;
 
 /**
@@ -53,6 +54,11 @@ public class TaskNewServlet extends HttpServlet {
         }
 
         request.getSession().setAttribute("account", a);
+
+        Task task = new Task();
+        System.out.println("beautilful"+task.getId());
+        System.out.println(task.getCreated_at());
+        request.setAttribute("task", task);
 
 
 

@@ -28,22 +28,37 @@
 <br /><br />
 
 <c:choose>
-<c:when test="${groups != null }">
-<p>公開範囲</p>
-    <c:forEach var="group" items="${groups}">
-        <input type="checkbox" name="${group.id}" value="${group.id}"  >${group.name}
-    </c:forEach>
-<c:if test="${shows_group != null }">
-    <c:forEach var="group" items = "${shows_group}">
-        <input type="checkbox" name="${group.id}" value="${group.id}" checked>${group.name}
-    </c:forEach>
-</c:if>
-</c:when>
-<c:otherwise>
-<label for="task_leader">タスクリーダー</label><br/>
-<input type="text" name="task_leader" value="${task.task_leader.code}"/>
-</c:otherwise>
+    <c:when test="${groups != null }">
+    <p>公開範囲</p>
+        <c:forEach var="group" items="${groups}">
+            <input type="checkbox" name="${group.id}" value="${group.id}"  >${group.name}
+        </c:forEach>
+    <c:if test="${shows_group != null }">
+        <c:forEach var="group" items = "${shows_group}">
+            <input type="checkbox" name="${group.id}" value="${group.id}" checked>${group.name}
+        </c:forEach>
+    </c:if>
+    </c:when>
+    <c:otherwise>
+    <label for="task_leader">タスクリーダー</label><br/>
+    <c:choose>
+        <c:when test="${task.id == null }">
+            <input type="text" name="task_leader" value="${task.task_leader.code}" />
+        </c:when>
+        <c:otherwise>
+            <c:choose>
+                <c:when test="${ task.task_leader.id == sessionScope.login_person.id}">
+                    <input type="text" name="task_leader" value="${task.task_leader.code}" />
+                </c:when>
+                <c:otherwise>
+                    <input type="text" name="task_leader" value="${task.task_leader.code}" readonly/>
+                </c:otherwise>
+            </c:choose>
+        </c:otherwise>
+    </c:choose>
+    </c:otherwise>
 </c:choose>
+
 <br/><br/>
 
 <input type="hidden" name="_token" value="${_token}"/>
