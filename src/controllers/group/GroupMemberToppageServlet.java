@@ -82,7 +82,13 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
 
         } else {
-            //⑫の画面・GroupLoginSerevletから来た時
+            //⑫の画面・⑤の画面・⑥の画面・GroupLoginSerevletから来た時
+
+            if (request.getSession().getAttribute("account") != null) {
+                //⑤⑥からきている場合
+
+                request.getSession().removeAttribute("account");
+            }
 
             group = (Group)request.getSession().getAttribute("group");
 

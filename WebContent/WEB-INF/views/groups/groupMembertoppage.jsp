@@ -15,7 +15,17 @@
                     <tr>
                      <td><c:out value="${task.title}"/></td>
                      <td><fmt:formatDate value="${task.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
-                     <td><a href="<c:url value='/tasks/show?id=${task.id}'/>">詳細</a></td>
+                     <c:choose>
+                        <c:when test="${sessionScope.login_person.id == task.account.id && sessionScope.group == null}">
+                            <td><a href="<c:url value='/tasks/persons/show?id=${task.id}'/>">詳細</a></td>
+                        </c:when>
+                        <c:when test="${ task.account.id == task.task_leader.id  }">
+                            <td><a href="<c:url value='/members/tasks/show?id=${task.id}'/>">詳細</a></td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><a href="<c:url value='/groups/tasks/show?id=${task.id}'/>">詳細</a></td>
+                        </c:otherwise>
+                     </c:choose>
                     </tr>
                 </c:forEach>
             </tbody>

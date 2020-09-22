@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:import url="/WEB-INF/views/layout/app.jsp">
-    <c:param name="content">
+
         <c:choose>
             <c:when test="${task != null}">
                 <h2>task 詳細ページ</h2>
@@ -44,21 +43,8 @@
                 <c:if test="${tasks_history != null }">
                 あいう
                 </c:if>
-                <c:if test="${sessionScope.login_person.id == task.account.id||sessionScope.group.id == task.account.id}">
-                    <p><a href="<c:url value='/tasks/edit?id=${task.id}'/>">このtaskを編集する</a></p>
-                </c:if>
             </c:when>
             <c:otherwise>
                 <h2>お探しのデータは見つかりませんでした。</h2>
             </c:otherwise>
         </c:choose>
-        <c:choose>
-        <c:when test="${sessionScope.group == null}">
-        <p><a href="<c:url value="/toppage/index"/>">task一覧画面に戻る</a></p>
-        </c:when>
-        <c:otherwise>
-        <p><a href="<c:url value="/groups/toppage"/>">${sessionScope.group.name}のメンバーのtask一覧画面に戻る</a></p>
-        </c:otherwise>
-        </c:choose>
-    </c:param>
-</c:import>

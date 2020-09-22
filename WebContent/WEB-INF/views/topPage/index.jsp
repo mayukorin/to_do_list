@@ -9,7 +9,18 @@
             </div>
         </c:if>
         <h2>task一覧</h2>
-        <c:import url="../layout/tasksIndex.jsp" />
+        <table id = "task_list">
+            <tbody>
+                <c:forEach var="task" items = "${tasks}">
+                    <tr>
+                     <td><c:out value="${task.title}"/></td>
+                     <td><fmt:formatDate value="${task.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
+                     <td><a href="<c:url value='/tasks/persons/show?id=${task.id}'/>">詳細</a></td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+
+        </table>
         <p><a href="<c:url value='/persons/show?id=${sessionScope.login_person.id}'/>">アカウント情報詳細を見る</a></p>
         <p><a href="<c:url value='/tasks/new?id=${sessionScope.login_person.id}'/>">Taskを新規追加する</a></p>
         <div>
