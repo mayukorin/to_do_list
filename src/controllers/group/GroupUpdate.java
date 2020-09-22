@@ -48,7 +48,7 @@ public class GroupUpdate extends HttpServlet {
 
             List<String> errors;
 
-            Group g = em.find(Group.class, ((Group)request.getSession().getAttribute("group")).getId());
+            Group g = em.find(Group.class, ((Group)request.getSession().getAttribute("account")).getId());
 
           //現在の値と異なるアカウント番号が入力されていたら
             //重複チェックを行う指定をする
@@ -100,7 +100,7 @@ public class GroupUpdate extends HttpServlet {
                 em.close();
 
                 request.setAttribute("_token", request.getSession().getId());
-                request.setAttribute("account", g);
+                request.setAttribute("group", g);
                 request.setAttribute("errors", errors);
 
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/edit.jsp");
@@ -119,10 +119,11 @@ public class GroupUpdate extends HttpServlet {
                 em.getTransaction().commit();
                 em.close();
 
-                request.getSession().removeAttribute("group_id");
-                request.getSession().setAttribute("flush", "アカウント情報の更新が完了しました。");
+                String message = g.getName()+"のアカウント情報の更新が完了しました。";
+                request.getSession().setAttribute("flush", message);
 
-                response.sendRedirect(request.getContextPath()+"/logout");
+
+                response.sendRedirect(request.getContextPath() + "/toppage/index");
             }
 
 

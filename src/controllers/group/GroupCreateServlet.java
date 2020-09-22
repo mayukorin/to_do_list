@@ -66,7 +66,7 @@ public class GroupCreateServlet extends HttpServlet {
                 em.close();
 
                 request.setAttribute("_token", request.getSession().getId());
-                request.setAttribute("account", g);
+                request.setAttribute("group", g);
                 request.setAttribute("errors", errors);
 
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/new.jsp");

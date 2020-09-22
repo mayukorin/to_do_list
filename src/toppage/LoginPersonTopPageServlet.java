@@ -42,11 +42,13 @@ public class LoginPersonToppageServlet extends HttpServlet {
         }
 
         if (request.getSession().getAttribute("group") != null) {
-            //⑪・GroupLoginServletから戻ってきた時
+            //⑪・⑰の更新後・GroupLoginServletから戻ってきた時
             request.getSession().removeAttribute("group");
         }
 
         if (request.getSession().getAttribute("account") != null) {
+            //⑰の更新後から戻ってきた時
+
             request.getSession().removeAttribute("account");
         }
 

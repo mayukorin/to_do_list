@@ -40,7 +40,9 @@ public class PersonUpdate extends HttpServlet {
         if (_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
-            Person p = em.find(Person.class, ((Person)(request.getSession().getAttribute("login_person"))).getId());//ログインしている人
+            //ログインしている人
+            //DBからとってこないと、変更が反映されない
+            Person p = em.find(Person.class, ((Person)(request.getSession().getAttribute("login_person"))).getId());
 
             //現在の値と異なるアカウント番号が入力されていたら
             //重複チェックを行う指定をする
@@ -75,7 +77,7 @@ public class PersonUpdate extends HttpServlet {
                 em.close();
 
                 request.setAttribute("_token", request.getSession().getId());
-                request.setAttribute("account", p);
+                request.setAttribute("person", p);
                 request.setAttribute("errors", errors);
 
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/edit.jsp");
