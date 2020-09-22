@@ -10,7 +10,7 @@
         </c:if>
     <h2>${sessionScope.account.name}のtask一覧</h2>
     <c:import url="../layout/tasksIndex.jsp" />
-    <p><a href="<c:url value='/persons/show?id=${sessionScope.account.id}'/>">アカウント情報詳細を見る</a></p>
+    <p><a href="<c:url value='/group/show?id=${sessionScope.account.id}'/>">アカウント情報詳細を見る</a></p>
 
     <p><a href="<c:url value='/tasks/new?id=${sessionScope.account.id}'/>">Taskを新規追加する</a></p>
 

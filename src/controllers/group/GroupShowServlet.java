@@ -1,4 +1,4 @@
-package controllers.person;
+package controllers.group;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,16 +16,16 @@ import models.Person;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class PersonShowServlet
+ * Servlet implementation class GroupShowServlet
  */
-@WebServlet("/persons/show")
-public class PersonShowServlet extends HttpServlet {
+@WebServlet("/group/show")
+public class GroupShowServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PersonShowServlet() {
+    public GroupShowServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,25 +36,18 @@ public class PersonShowServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
 
-
         EntityManager em = DBUtil.createEntityManager();
 
 
         //詳細を見ようとしているアカウント
-        Person login_person = (Person) request.getSession().getAttribute("login_person");
-
-
-        //Personインスタンスが所属しているグループ
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",login_person).getResultList();
-        request.setAttribute("groups", groups);
-
+        Group g = (Group) request.getSession().getAttribute("account");
+        List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",g).getResultList();//そのgroupに属している人
+        request.setAttribute("persons", persons);
 
         em.close();
 
 
-
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/show.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/show.jsp");
         rd.forward(request, response);
 
     }

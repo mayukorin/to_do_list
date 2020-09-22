@@ -48,6 +48,7 @@ public class GroupToppageServlet extends HttpServlet {
 
 
         if (request.getParameter("id") != null) {
+            //⑫からきた場合
             a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
 
             request.getSession().setAttribute("account", a);
