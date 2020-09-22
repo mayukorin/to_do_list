@@ -24,7 +24,7 @@
             <p><a href="#" onclick="confirmDestroy();">このtaskを削除する</a></p>
         </c:if>
 
-        <form method="POST" action="${pageContext.request.contextPath}/destroy">
+        <form method="POST" action="${pageContext.request.contextPath}/tasks/groups/destroy">
             <input type="hidden" name="_token" value="${_token}" />
         </form>
         <script>
