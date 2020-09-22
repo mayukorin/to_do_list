@@ -22,7 +22,7 @@
 
         </table>
         <p><a href="<c:url value='/persons/show?id=${sessionScope.login_person.id}'/>">アカウント情報詳細を見る</a></p>
-        <p><a href="<c:url value='/tasks/new?id=${sessionScope.login_person.id}'/>">Taskを新規追加する</a></p>
+        <p><a href="<c:url value='/tasks/persons/new?id=${sessionScope.login_person.id}'/>">Taskを新規追加する</a></p>
         <div>
             <c:if test="${groups != null}">
                 <c:forEach var="group" items="${groups}">

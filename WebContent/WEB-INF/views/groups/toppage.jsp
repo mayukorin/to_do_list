@@ -23,7 +23,7 @@
     </table>
     <p><a href="<c:url value='/group/show?id=${sessionScope.account.id}'/>">アカウント情報詳細を見る</a></p>
 
-    <p><a href="<c:url value='/tasks/new?id=${sessionScope.account.id}'/>">Taskを新規追加する</a></p>
+    <p><a href="<c:url value='/tasks/groups/new?id=${sessionScope.account.id}'/>">Taskを新規追加する</a></p>
 
     <p><a href="<c:url value='/groups/show'/>">${sessionScope.group.name}のメンバー一覧ページに戻る</a>
     </c:param>
