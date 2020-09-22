@@ -4,7 +4,7 @@
     <c:param name="content">
                 <h2>グループ 新規作成ページ</h2>
                 <form method="POST" action="<c:url value='/groups/create' />">
-                    <c:import url="../persons/_form.jsp" />
+                    <c:import url="../groups/_form.jsp" />
 
                     <input type="hidden" name="_token" value="${_token}"/>
                     <button type="submit">投稿</button>

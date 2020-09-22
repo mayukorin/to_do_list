@@ -33,7 +33,7 @@ public class PersonNewServlet extends HttpServlet {
         // TODO Auto-generated method stub
         request.setAttribute("_token", request.getSession().getId());
 
-        request.setAttribute("account", new Person());
+        request.setAttribute("person", new Person());
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/new.jsp");
         rd.forward(request,response);

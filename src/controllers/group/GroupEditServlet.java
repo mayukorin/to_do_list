@@ -1,4 +1,4 @@
-package controllers.person;
+package controllers.group;
 
 import java.io.IOException;
 
@@ -9,19 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Person;
+import models.Group;
 
 /**
- * Servlet implementation class PersonEditServlet
+ * Servlet implementation class GroupEditServlet
  */
-@WebServlet("/persons/edit")
-public class PersonEditServlet extends HttpServlet {
+@WebServlet("/group/edit")
+public class GroupEditServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PersonEditServlet() {
+    public GroupEditServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,15 +31,17 @@ public class PersonEditServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+
+        Group g = (Group) request.getSession().getAttribute("account");
+
         request.setAttribute("_token", request.getSession().getId());
+        request.setAttribute("group", g);
 
 
-        //personを編集しようとしている時
-         RequestDispatcher   rd = request.getRequestDispatcher("/WEB-INF/views/persons/edit.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/edit.jsp");
 
-         request.setAttribute("person", (Person)request.getSession().getAttribute("login_person"));
 
-        rd.forward(request, response);
+         rd.forward(request, response);
 
     }
 

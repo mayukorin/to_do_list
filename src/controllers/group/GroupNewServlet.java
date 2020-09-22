@@ -33,7 +33,7 @@ public class GroupNewServlet extends HttpServlet {
         // TODO Auto-generated method stub
         request.setAttribute("_token", request.getSession().getId());
 
-        request.setAttribute("account", new Group());
+        request.setAttribute("group", new Group());
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/new.jsp");
         rd.forward(request, response);
