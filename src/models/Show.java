@@ -22,7 +22,13 @@ import javax.persistence.Table;
                 query = "select s.group from Show as s where s.task = :task"),
         @NamedQuery(
                 name = "getShows",
-                query = "select s from Show as s where s.task = :task")
+                query = "select s from Show as s where s.task = :task"),
+        @NamedQuery(
+                name = "getShowLeader",
+                query = "select s from Show as s , Task as t where s.task = t and t.account = :group and t.task_leader = :person"),
+        @NamedQuery(
+                name = "getShowOpenGroup",
+                query = "select s from Show as s where s.group = :group and s.task.account = :person"),
 
 })
 @Entity

@@ -3,6 +3,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
+        <c:if test="${flush != null}">
+            <div id="flush_success">
+                <c:out value="${flush}"></c:out>
+            </div>
+        </c:if>
         <h2>${sessionScope.login_person.name}のアカウント情報 詳細ページ</h2>
         <table>
             <tbody>
@@ -21,7 +26,7 @@
                     <td>
                         <ul>
                             <c:forEach var="group" items = "${groups}">
-                                <li><c:out value="${group.name}"></c:out></li>
+                                <li><a href="<c:url value='/belongs/show?id=${group.id }'/>"><c:out value="${group.name}"/></a></li>
                             </c:forEach>
                         </ul>
                     </td>

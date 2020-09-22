@@ -1,7 +1,6 @@
-package controllers.person;
+package controllers.belong;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -11,21 +10,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Belong;
 import models.Group;
 import models.Person;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class PersonShowServlet
+ * Servlet implementation class BelongShowServlet
  */
-@WebServlet("/persons/show")
-public class PersonShowServlet extends HttpServlet {
+@WebServlet("/belongs/show")
+public class BelongShowServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PersonShowServlet() {
+    public BelongShowServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,32 +35,23 @@ public class PersonShowServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-
-
         EntityManager em = DBUtil.createEntityManager();
 
-        if (request.getSession().getAttribute("flush") != null) {
-            request.setAttribute("flush", request.getSession().getAttribute("flush"));
-            request.getSession().removeAttribute("flush");
-        }
 
 
-        //詳細を見ようとしているアカウント
-        Person login_person = (Person) request.getSession().getAttribute("login_person");
+        Person p = (Person)request.getSession().getAttribute("login_person");
+        Group g = em.find(Group.class,Integer.parseInt(request.getParameter("id")));
 
+        Belong b = em.createNamedQuery("getGroupPersonBelong",Belong.class).setParameter("group",g).setParameter("person",p).getSingleResult();
 
-        //Personインスタンスが所属しているグループ
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",login_person).getResultList();
-        request.setAttribute("groups", groups);
+        request.setAttribute("belong", b);
+        request.getSession().setAttribute("belong_id", b.getId());
 
+        request.setAttribute("_token", request.getSession().getId());
 
-        em.close();
-
-
-
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/show.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/belongs/show.jsp");
         rd.forward(request, response);
+
 
     }
 

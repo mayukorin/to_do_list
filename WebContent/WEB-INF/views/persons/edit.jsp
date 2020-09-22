@@ -10,7 +10,7 @@
                     <input type="hidden" name="_token" value="${_token}"/>
                     <button type="submit">投稿</button>
                 </form>
-        <p><a href="<c:url value='/persons/show?id=${sessionScope.account.id}' />">アカウント情報詳細に戻る</a></p>
+        <p><a href="<c:url value='/persons/show?id=${sessionScope.login_person.id}' />">アカウント情報詳細に戻る</a></p>
 
     </c:param>
 </c:import>
