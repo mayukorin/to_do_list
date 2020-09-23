@@ -82,7 +82,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
 
         } else {
-            //⑫の画面・⑤の画面・⑥の画面・person_tasks/edit.jspの「戻る」リンク・GroupLoginSerevletから来た時
+            //⑫の画面・⑤の画面・⑥の画面・person_tasks/edit.jspの「戻る」リンク・PersonTaskUpdateServlet・GroupLoginSerevletから来た時
 
             if (request.getSession().getAttribute("account") != null) {
                 //⑤⑥からきている場合

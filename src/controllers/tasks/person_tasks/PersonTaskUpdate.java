@@ -138,8 +138,19 @@ public class PersonTaskUpdate extends HttpServlet {
                 request.getSession().setAttribute("flush", "taskの更新が完了しました。");
                 request.getSession().removeAttribute("task_id");
 
+                if (request.getSession().getAttribute("group") == null) {
+                    //自身のホームページから編集しにきた時
 
-                response.sendRedirect(request.getContextPath()+"/toppage/index");
+                    response.sendRedirect(request.getContextPath()+"/toppage/index");
+                } else if (request.getSession().getAttribute("account") == null) {
+                    //グループメンバー全員のtask一覧ページからtaskをクリックして編集しにきた時
+
+                    response.sendRedirect(request.getContextPath()+"/groups/toppage");
+                } else {
+                    //メンバー個人のtask一覧ページからtaskをクリックして編集しにきた時
+
+                    response.sendRedirect(request.getContextPath()+"/members/toppage");
+                }
 
             }
         }
