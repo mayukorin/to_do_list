@@ -50,6 +50,7 @@ public class MemberToppageServlet extends HttpServlet {
 
         if (request.getParameter("id") != null) {
             //⑫からきた場合
+            //person_tasks/editの「戻る」リンクで戻ってきた場合
             a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
 
             request.getSession().setAttribute("account", a);
