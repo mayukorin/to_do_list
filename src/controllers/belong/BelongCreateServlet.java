@@ -2,6 +2,7 @@ package controllers.belong;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -115,7 +116,18 @@ public class BelongCreateServlet extends HttpServlet {
                     em.getTransaction().commit();
 
                     String message = g.getName()+"に新しく参加しました";
+
+
+                    //セッションスコープのGroupBelongも更新/////////////
+                    //Personインスタンスが所属しているグループ
+                    List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
+                    request.getSession().setAttribute("GroupBelong", groups);
+                    //////////////////////////////////////////////
+
                     em.close();
+
+
+
                     request.getSession().setAttribute("flush", message);
                     response.sendRedirect(request.getContextPath() + "/toppage/index");
                 }

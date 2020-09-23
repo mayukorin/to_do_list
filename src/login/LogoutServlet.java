@@ -29,6 +29,7 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         request.getSession().removeAttribute("login_person");
+        request.getSession().removeAttribute("GroupBelong");
 
         if (request.getSession().getAttribute("flush") == null) {
             request.getSession().setAttribute("flush", "ログアウトしました。");

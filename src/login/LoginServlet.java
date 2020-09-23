@@ -1,6 +1,7 @@
 package login;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Account;
+import models.Group;
 import models.Person;
 import utils.DBUtil;
 import utils.EncryptUtil;
@@ -96,6 +98,10 @@ public class LoginServlet extends HttpServlet {
         } else {
             // 認証できたらログイン状態にしてトップページへリダイレクト
             request.getSession().setAttribute("login_person", p);
+
+            //Personインスタンスが所属しているグループ
+            List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
+            request.getSession().setAttribute("GroupBelong", groups);
 
 
             em.close();

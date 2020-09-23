@@ -3,7 +3,6 @@ package controllers.tasks.person_tasks;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Group;
-import models.Person;
 import models.Task;
-import utils.DBUtil;
 
 /**
  * Servlet implementation class PersonTaskNewServlet
@@ -36,17 +33,15 @@ public class PersonTaskNewServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        EntityManager em = DBUtil.createEntityManager();
 
         request.setAttribute("_token", request.getSession().getId());
-
-        Person p = (Person)request.getSession().getAttribute("login_person");
 
 
         //ログインしている人が所属しているグループ
 
 
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+        @SuppressWarnings("unchecked")
+        List<Group> groups = (List<Group>) request.getSession().getAttribute("GroupBelong");
         request.setAttribute("groups", groups);
 
 

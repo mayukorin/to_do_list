@@ -1,7 +1,6 @@
 package controllers.person;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -11,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Group;
-import models.Person;
 import utils.DBUtil;
 
 /**
@@ -44,20 +41,7 @@ public class PersonShowServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
-
-        //詳細を見ようとしているアカウント
-        Person login_person = (Person) request.getSession().getAttribute("login_person");
-
-
-        //Personインスタンスが所属しているグループ
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",login_person).getResultList();
-        request.setAttribute("groups", groups);
-
-
         em.close();
-
-
-
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/show.jsp");
         rd.forward(request, response);

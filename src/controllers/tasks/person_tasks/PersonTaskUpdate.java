@@ -44,18 +44,15 @@ public class PersonTaskUpdate extends HttpServlet {
         if(_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
-            List<Group> groups;
+            Person p = (Person)request.getSession().getAttribute("login_person");
+            //ログインしている人が所属しているグループ
+             List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
             List<String> errors;
             Boolean leader_check_flag = false;
 
 
             Task t = em.find(Task.class, (Integer)(request.getSession().getAttribute("task_id")));//変更しようとしているtask
-            Person p = (Person)request.getSession().getAttribute("login_person");//loginしている人
 
-
-
-            //ログインしている人が所属しているグループ
-            groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
 
             t.setTitle(request.getParameter("title"));
             t.setMemo(request.getParameter("memo"));

@@ -40,10 +40,15 @@ public class PersonTaskCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
 
+
         String _token = (String)request.getParameter("_token");
         if (_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
-            List<Group> groups;
+
+            //ログインしている人物が所属しているグループ
+            @SuppressWarnings("unchecked")
+            List<Group> groups = (List<Group>) request.getSession().getAttribute("GroupBelong");
+
 
 
             Person p = (Person)request.getSession().getAttribute("login_person");
@@ -77,8 +82,8 @@ public class PersonTaskCreateServlet extends HttpServlet {
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("errors", errors);
 
-                //その人が所属しているグループ
-                groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+
+
                 request.setAttribute("groups", groups);
 
                 em.close();
@@ -99,8 +104,7 @@ public class PersonTaskCreateServlet extends HttpServlet {
                 em.persist(t);
                 em.getTransaction().commit();
 
-                //taskの公開範囲を設定
-                groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+
                 for(Group group:groups) {
                     String id = (group.getId()).toString();
 

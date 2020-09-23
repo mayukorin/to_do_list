@@ -24,8 +24,8 @@
         <p><a href="<c:url value='/persons/show?id=${sessionScope.login_person.id}'/>">アカウント情報詳細を見る</a></p>
         <p><a href="<c:url value='/tasks/persons/new?id=${sessionScope.login_person.id}'/>">Taskを新規追加する</a></p>
         <div>
-            <c:if test="${groups != null}">
-                <c:forEach var="group" items="${groups}">
+            <c:if test="${sessionScope.GroupBelong != null}">
+                <c:forEach var="group" items="${sessionScope.GroupBelong}">
                     <p><a href="<c:url value='/groups/toppage?id=${group.id}'/>">${group.name}</a></p>
                 </c:forEach>
             </c:if>

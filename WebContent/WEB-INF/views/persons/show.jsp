@@ -19,13 +19,13 @@
                     <th>アカウント番号</th>
                     <td><c:out value="${sessionScope.login_person.code}"/></td>
                 </tr>
-                <c:if test="${groups != null }">
+                <c:if test="${sessionScope.GroupBelong != null }">
                 <tr>
 
                     <th>所属しているグループ</th>
                     <td>
                         <ul>
-                            <c:forEach var="group" items = "${groups}">
+                            <c:forEach var="group" items = "${sessionScope.GroupBelong}">
                                 <li><a href="<c:url value='/belongs/show?id=${group.id }'/>"><c:out value="${group.name}"/></a></li>
                             </c:forEach>
                         </ul>

@@ -60,12 +60,17 @@ public class LoginPersonToppageServlet extends HttpServlet {
         List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();
 
        //ログインしている人が所属しているグループ
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
+
+        @SuppressWarnings("unchecked")
+        List<Group> gs = (List<Group>) request.getSession().getAttribute("GroupBelong");
+        for (Group g :gs) {
+            System.out.println(g.getName());
+        }
 
         em.close();
 
         request.setAttribute("tasks", tasks);
-        request.setAttribute("groups", groups);
+
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
         rd.forward(request, response);

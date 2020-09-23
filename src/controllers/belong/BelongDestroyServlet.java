@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import models.Belong;
 import models.Group;
+import models.Person;
 import models.Show;
 import utils.DBUtil;
 
@@ -56,7 +57,7 @@ public class BelongDestroyServlet extends HttpServlet {
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("error", error);
                 request.setAttribute("belong", b);
-                System.out.println("あいうあいうあいう");
+
 
                 em.close();
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/belongs/show.jsp");
@@ -75,7 +76,7 @@ public class BelongDestroyServlet extends HttpServlet {
                     request.setAttribute("error", error);
                     request.setAttribute("belong", b);
 
-                    System.out.println("母");
+
                     em.close();
                     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/belongs/show.jsp");
                     rd.forward(request, response);
@@ -99,7 +100,17 @@ public class BelongDestroyServlet extends HttpServlet {
                     em.remove(b);
                     em.getTransaction().commit();
 
-                    System.out.println("きら");
+                    //セッションスコープのGroupBelongも更新/////////////
+                    Person p = (Person) request.getSession().getAttribute("login_person");
+
+                    //Personインスタンスが所属しているグループ
+                    List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
+                    request.getSession().setAttribute("GroupBelong", groups);
+                    ///////////////////////////////////////////////////
+
+                    em.close();
+
+
                     String message = b.getGroup().getName()+"の退会が完了しました。";
                     request.getSession().setAttribute("flush", message);
 
