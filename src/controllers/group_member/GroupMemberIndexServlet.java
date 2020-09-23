@@ -52,7 +52,7 @@ public class GroupMemberIndexServlet extends HttpServlet {
         request.setAttribute("persons", persons);
 
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/memberIndex.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/group_member/memberIndex.jsp");
         rd.forward(request, response);
 
     }

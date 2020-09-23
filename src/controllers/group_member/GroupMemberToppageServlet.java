@@ -75,7 +75,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
                 request.setAttribute("tasks", tasks);
                 request.getSession().setAttribute("group",group);
 
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/groupMembertoppage.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/group_member/groupMembertoppage.jsp");
                 rd.forward(request, response);
 
             }
@@ -97,7 +97,7 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
             request.setAttribute("tasks", tasks);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/groupMembertoppage.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/group_member/groupMembertoppage.jsp");
             rd.forward(request, response);
 
         }
