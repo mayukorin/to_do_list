@@ -1,4 +1,4 @@
-package controllers.group;
+package controllers.member;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,16 +16,16 @@ import models.Person;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class GroupMemberIndexServlet
+ * Servlet implementation class MemberShowServlet
  */
-@WebServlet("/groups/show")
-public class GroupMemberIndexServlet extends HttpServlet {
+@WebServlet("/members/show")
+public class MemberShowServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GroupMemberIndexServlet() {
+    public MemberShowServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,26 +35,23 @@ public class GroupMemberIndexServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+
         EntityManager em = DBUtil.createEntityManager();
 
 
-        Group group = (Group)request.getSession().getAttribute("group");//今見ようとしているgroup情報
-        List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",group).getResultList();//そのgroupに属している人
+        //詳細を見ようとしているアカウント
+        Person p = (Person) request.getSession().getAttribute("account");
 
-        if (request.getSession().getAttribute("account") != null) {
-            //⑬、⑭からきている場合
+        //Personインスタンスが所属しているグループ
+        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
+        request.setAttribute("groups", groups);
 
-            request.getSession().removeAttribute("account");
-        }
+
 
         em.close();
 
-        request.setAttribute("persons", persons);
-
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/memberIndex.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/members/show.jsp");
         rd.forward(request, response);
-
     }
 
 }

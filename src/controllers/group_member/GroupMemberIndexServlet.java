@@ -16,16 +16,16 @@ import models.Person;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class MemberShowServlet
+ * Servlet implementation class GroupMemberIndexServlet
  */
-@WebServlet("/members/show")
-public class MemberShowServlet extends HttpServlet {
+@WebServlet("/groups/show")
+public class GroupMemberIndexServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemberShowServlet() {
+    public GroupMemberIndexServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,23 +35,26 @@ public class MemberShowServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-
         EntityManager em = DBUtil.createEntityManager();
 
 
-        //詳細を見ようとしているアカウント
-        Person p = (Person) request.getSession().getAttribute("account");
+        Group group = (Group)request.getSession().getAttribute("group");//今見ようとしているgroup情報
+        List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",group).getResultList();//そのgroupに属している人
 
-        //Personインスタンスが所属しているグループ
-        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
-        request.setAttribute("groups", groups);
+        if (request.getSession().getAttribute("account") != null) {
+            //⑬、⑭からきている場合
 
-
+            request.getSession().removeAttribute("account");
+        }
 
         em.close();
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/members/show.jsp");
+        request.setAttribute("persons", persons);
+
+
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/memberIndex.jsp");
         rd.forward(request, response);
+
     }
 
 }

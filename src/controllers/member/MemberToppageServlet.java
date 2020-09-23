@@ -1,4 +1,4 @@
-package controllers.group_member;
+package controllers.member;
 
 import java.io.IOException;
 import java.util.List;
