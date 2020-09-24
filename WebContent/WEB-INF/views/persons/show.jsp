@@ -41,9 +41,5 @@
 
         <p><a href="<c:url value='/belongs/new'/>">新しいグループに参加する</a>
         <p><a href="<c:url value='/groups/new'/>">新しくグループを作成する</a>
-
-
-        <p><a href="<c:url value='/toppage/index'/>">task一覧に戻る</a></p>
-
     </c:param>
 </c:import>

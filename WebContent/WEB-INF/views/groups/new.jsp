@@ -10,7 +10,7 @@
                     <button type="submit">投稿</button>
                     <br/><br/>
                 </form>
-        <p><a href="<c:url value='/toppage/index' />">task一覧に戻る</a></p>
+        <p><a href="<c:url value='/persons/show?id=${sessionScope.login_person.id}' />">アカウント情報詳細に戻る</a></p>
 
     </c:param>
 </c:import>
