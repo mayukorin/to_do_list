@@ -41,6 +41,15 @@ public class PersonShowServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
+        if (request.getSession().getAttribute("group") != null) {
+            request.getSession().removeAttribute("group");
+        }
+
+        if (request.getSession().getAttribute("account") != null) {
+            request.getSession().removeAttribute("account");
+        }
+
+
         em.close();
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/show.jsp");

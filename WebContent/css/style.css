@@ -9,6 +9,9 @@ body {
     width: 100%;
     height: 70px;
     background-color:#333333;
+    letter-spacing: -1em; /* 文字間を詰める */
+    white-space: nowrap; /* 自動で折り返ししない */
+
 }
 
 #content {
@@ -100,23 +103,37 @@ select {
 }
 
 #header_menu {
-    width: 57%;
-    padding-top: 17px;
-    padding-left: 3%;
+    width: 47%;
     display: inline-block;
+    padding-top:17px;
+    padding-left:3%;
+    letter-spacing: normal; /* 文字間を元に戻す */
+    white-space: normal; /* 自動で折り返し(元に戻す) */
 }
 
 #person_name {
-    color: #cccccc;
-    width: 36%;
-    padding-right: 3%;
-    text-align: right;
+
+    color: #FFFFFF;
+    width: 12%;
+    padding-right:3%;
+    text-align:right;
     display: inline-block;
+    letter-spacing: normal; /* 文字間を元に戻す */
+    white-space: normal; /* 自動で折り返し(元に戻す) */
 }
 
-#header a {
-    color: #eeeeee;
+#group_name {
+    color: #ffffff;
+    width: 34%;
+    padding-right:2%;
+    display: inline-block;
+    text-align:right;
+    letter-spacing: normal; /* 文字間を元に戻す */
+    white-space: normal; /* 自動で折り返し(元に戻す) */
+    position:relative;
 }
+
+
 
 h1 a {
     color: #eeeeee;
@@ -135,3 +152,65 @@ table#report_list td {
     width: 29%;
     padding: 10px 2%;
 }
+
+.dropdown_btn {
+  display: block;
+
+  background: none;
+
+}
+
+
+.dropdown_body {
+
+  width: 250px;
+  background: #fff;
+  box-shadow: 0 2px 6px 2px rgba(60,64,67,0.149), 0 1px 2px 0 rgba(60,64,67,0.302);
+  border-radius: 4px;
+  overflow: hidden;
+  position: absolute;
+  top: 32px;
+  right: 0;
+  display: none;
+
+}
+
+.dropdown_btn.is-open + .dropdown_body {
+  display: block;
+  z-index: 4;
+}
+.dropdown_list {
+  margin: 0;
+  padding: 0;
+}
+.dropdown_item {
+  display: block;
+}
+#header .dropdown_item-link {
+  display: block;
+  padding: 1em 1.2em;
+  font-size: 0.95em;
+  text-decoration: none;
+  color: #000000;
+}
+.dropdown_item-link:hover {
+  background: #fbfbfb;
+}
+
+#header a {
+    color: #eeeeee;
+}
+
+.dropdown__btn.is-open::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  cursor: default; /* カーソルはデフォルトに戻しておく */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+
+
+
