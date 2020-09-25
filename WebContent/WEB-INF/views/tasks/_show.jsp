@@ -84,9 +84,9 @@
                     <c:forEach var="comment" items="${comments}">
                         <tr>
                             <td><c:out value="${comment.comment_person.name}"/></td>
-                            <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy-MM-dd HH:mm" /></td>
+                            <td><fmt:formatDate value="${comment.updated_at}" pattern="yyyy-MM-dd HH:mm" /></td>
                             <td><pre><c:out value="${comment.content}"/></pre></td>
-                            <td><a href="<c:url value='/comments/show'/>">返信を見る</a></td>
+                            <td><a href="<c:url value='/comments/show?id=${comment.id}'/>">返信を見る</a></td>
                         </tr>
                     </c:forEach>
                 </table>
