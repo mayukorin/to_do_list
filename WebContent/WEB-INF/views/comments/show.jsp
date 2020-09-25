@@ -53,6 +53,7 @@
                         </tr>
                     </c:forEach>
                 </table>
+                <p><a href="<c:url value='/comments/new?task_id=${origin_comment.for_task.id}'/>">返信を追加する</a></p>
 
                 <c:choose>
         <c:when test="${sessionScope.group == null }">

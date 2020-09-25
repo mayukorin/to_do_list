@@ -50,7 +50,8 @@
                      </tbody>
                 </table>
 
-
+                <c:choose>
+                <c:when test="${sessionScope.origin_comment_id == null }">
                         <c:choose>
                         <c:when test="${sessionScope.group == null }">
                             <p><a href="<c:url value='/tasks/persons/show?id=${task.id}'/>">task詳細画面に戻る</a></p>
@@ -69,6 +70,11 @@
                             <p><a href="<c:url value='/members/tasks/show?id=${task.id}'/>">task詳細画面に戻る</a></p>
                         </c:otherwise>
                         </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <p><a href="<c:url value='/comments/show?id=${sessionScope.origin_comment_id}'/>">コメント詳細画面に戻る</a></p>
+                    </c:otherwise>
+                    </c:choose>
 
     </c:param>
 </c:import>
