@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Comment;
 import models.Person;
 import models.Task;
 import utils.DBUtil;
@@ -45,6 +46,10 @@ public class GroupTaskShowServlet extends HttpServlet {
         if (request.getSession().getAttribute("liked_task") != null) {
             task = (Task)request.getSession().getAttribute("liked_task");
             request.getSession().removeAttribute("liked_task");
+        } else if (request.getSession().getAttribute("commented_task") != null) {
+            //CommentCreateServletからきた場合
+            task = (Task)request.getSession().getAttribute("commented_task");
+            request.getSession().removeAttribute("commented_task");
         } else {
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
@@ -55,6 +60,11 @@ public class GroupTaskShowServlet extends HttpServlet {
         Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person",p).setParameter("task",task).getSingleResult();
 
         task_like.put(task, like_count);
+
+        //taskに対するコメントを表示する
+        List<Comment> comments = em.createNamedQuery("getComments",Comment.class).setParameter("task",task).getResultList();
+        request.setAttribute("comments", comments);
+
 
 
         if (task.getOrigin_task_id() != null) {

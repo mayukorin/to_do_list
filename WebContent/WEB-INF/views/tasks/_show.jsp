@@ -2,6 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+
+<c:if test="${flush != null}">
+            <div id="flush_success">
+                <c:out value="${flush}"></c:out>
+            </div>
+            </c:if>
         <c:choose>
             <c:when test="${task_like!= null}">
                 <h2>task 詳細ページ</h2>
@@ -66,6 +72,24 @@
                 あいう
                 </c:if>
                 <p><a href="<c:url value='/hearts/index?id=${tl.key.id}'/>">いいねした人一覧を見る</a></p>
+                <h2>コメント</h2>
+                <table id="comment_table">
+                    <tr>
+                        <th>名前</th>
+                        <th>日時</th>
+                        <th>コメント内容</th>
+                        <th>操作</th>
+
+                    </tr>
+                    <c:forEach var="comment" items="${comments}">
+                        <tr>
+                            <td><c:out value="${comment.comment_person.name}"/></td>
+                            <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy-MM-dd HH:mm" /></td>
+                            <td><pre><c:out value="${comment.content}"/></pre></td>
+                            <td><a href="<c:url value='/comments/show'/>">返信を見る</a></td>
+                        </tr>
+                    </c:forEach>
+                </table>
                 </c:forEach>
             </c:when>
             <c:otherwise>

@@ -3,11 +3,21 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:import url="../layout/app2.jsp">
     <c:param name="content2">
+
         <h2>task コメントページ</h2>
+        <c:if test="${errors != null}">
+        <div id="flush_error">
+        入力内容にエラーがあります。<br/>
+        <c:forEach var="error" items="${errors}">
+            <c:out value="${error}" /><br/>
+        </c:forEach>
+        </div>
+        </c:if>
         <form method="POST" action="<c:url value='/comments/create' />">
             <label for="content">コメント</label><br/>
             <textarea name="content" rows="10" cols="50">${comment.content}</textarea>
             <br/><br/>
+            <input type="hidden" name="id" value="${task.id}"/>
             <input type="hidden" name="_token" value="${_token}"/>
             <button type="submit">投稿</button>
         </form>

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Comment;
 import models.Group;
 import models.Person;
 import models.Task;
@@ -52,6 +53,11 @@ public class PersonTaskShowServlet extends HttpServlet {
         if (request.getSession().getAttribute("liked_task") != null) {
             task = (Task)request.getSession().getAttribute("liked_task");
             request.getSession().removeAttribute("liked_task");
+        } else if (request.getSession().getAttribute("commented_task") != null) {
+            //CommentCreateServletからきた場合
+            task = (Task)request.getSession().getAttribute("commented_task");
+            request.getSession().removeAttribute("commented_task");
+
         } else {
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
@@ -66,6 +72,10 @@ public class PersonTaskShowServlet extends HttpServlet {
         //taskを公開しているgroupを表示する
         List<Group> shows_group = em.createNamedQuery("getGroupShow",Group.class).setParameter("task",task).getResultList();
         request.setAttribute("shows_group", shows_group);
+
+        //taskに対するコメントを表示する
+        List<Comment> comments = em.createNamedQuery("getComments",Comment.class).setParameter("task",task).getResultList();
+        request.setAttribute("comments", comments);
 
 
 

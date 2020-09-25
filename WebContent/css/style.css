@@ -115,6 +115,25 @@ table#like_show {
     border: 1px solid #cccccc;
 }
 
+table#comment_table {
+    width: 100%;
+    table-layout: fixed;
+    border: 1px solid #cccccc;
+}
+
+#comment_table th {
+    width: 26%;
+    padding: 10px 2%;
+    border: 1px solid #cccccc;
+}
+
+#comment_table td {
+    width: 66%;
+    padding: 10px 2%;
+    border: 1px solid #cccccc;
+}
+
+
 button {
     font-size: 14px;
     padding: 5px 10px;
@@ -316,6 +335,9 @@ ul#member_list li#gm {
     display:inline-block;
 }
 
+pre {
+    white-space: pre-wrap ;
+}
 
 
 
