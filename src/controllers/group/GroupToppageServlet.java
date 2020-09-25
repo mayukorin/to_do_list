@@ -1,6 +1,7 @@
 package controllers.group;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import models.Account;
 import models.Group;
+import models.Person;
 import models.Task;
 import utils.DBUtil;
 
@@ -38,6 +40,12 @@ public class GroupToppageServlet extends HttpServlet {
         // TODO Auto-generated method stub
         EntityManager em = DBUtil.createEntityManager();
         Account a;
+      //taskとtaskに対していいねしているかを確認
+        LinkedHashMap<Task,Long> task_like = new LinkedHashMap<Task,Long>();
+
+      //ログインしている本人
+        Person p = (Person) request.getSession().getAttribute("login_person");
+
 
         if (request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
@@ -61,7 +69,12 @@ public class GroupToppageServlet extends HttpServlet {
 
         List<Task> tasks = em.createNamedQuery("openGroupTask",Task.class).setParameter("account",(Account)request.getSession().getAttribute("account")).setParameter("group",g).getResultList();//今見ようとしている人の、そのgroupで公開されているTask
 
-        request.setAttribute("tasks", tasks);
+        for (Task t:tasks) {
+            Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();
+            task_like.put(t, like_count);
+         }
+
+        request.setAttribute("task_like", task_like);
 
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");

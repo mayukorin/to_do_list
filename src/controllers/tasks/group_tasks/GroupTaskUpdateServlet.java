@@ -86,8 +86,7 @@ public class GroupTaskUpdateServlet extends HttpServlet {
             request.setAttribute("task", t);
             request.setAttribute("_token", request.getSession().getId());
             request.setAttribute("errors", errors);
-
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/edit.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/group_tasks/edit.jsp");
             rd.forward(request, response);
         } else {
             //入力内容にエラーがない時

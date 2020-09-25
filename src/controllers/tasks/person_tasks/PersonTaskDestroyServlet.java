@@ -67,8 +67,14 @@ public class PersonTaskDestroyServlet extends HttpServlet {
             request.getSession().setAttribute("flush", "taskの削除が完了しました。");
 
 
-            //グループ画面からtaskを追加していない時
-            response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
+            if (request.getSession().getAttribute("group") == null) {
+                //自身のホーム画面からtaskを編集した時
+                response.sendRedirect(request.getContextPath()+"/toppage/index");//ホーム画面に戻る
+            } else if (request.getSession().getAttribute("account") == null) {
+                response.sendRedirect(request.getContextPath()+"/groups/toppage");
+            } else {
+                response.sendRedirect(request.getContextPath()+"/members/toppage");
+            }
 
         }
     }

@@ -1,6 +1,7 @@
 package controllers.group_member;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -44,14 +45,15 @@ public class GroupMemberToppageServlet extends HttpServlet {
 
         EntityManager em = DBUtil.createEntityManager();
         Group group;
+       //ログインしている本人
+        Person p = (Person) request.getSession().getAttribute("login_person");
+
 
         if (request.getParameter("id") != null) {
             //そのgroupを始めて見る時
 
             //今から見ようとしているグループ
             group = em.find(Group.class, Integer.parseInt(request.getParameter("id")));
-            //ログインしている本人
-            Person p = (Person) request.getSession().getAttribute("login_person");
 
             //グループと本人をつなぐbelong
             Belong b = em.createNamedQuery("getGroupPersonBelong",Belong.class).setParameter("person",p).setParameter("group",group).getSingleResult();
@@ -69,11 +71,33 @@ public class GroupMemberToppageServlet extends HttpServlet {
             } else {
                 //belongの更新がgroupの更新より後の時、⑪の画面へ
 
+                //taskとtaskに対していいねしているかを確認
+                LinkedHashMap<Task,Long> task_like = new LinkedHashMap<Task,Long>();
+
                 //そのgroupで公開されているメンバー全員のtask
                 List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();
 
-                request.setAttribute("tasks", tasks);
+                for (Task t:tasks) {
+                    Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();
+                    task_like.put(t, like_count);
+                 }
+
+                if (request.getSession().getAttribute("account") != null) {
+                    //⑤⑥からきている場合
+
+                    request.getSession().removeAttribute("account");
+                }
+
+
+
+                //そのグループのメンバー
+                List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",group).getResultList();//そのgroupに属している人
+
+                request.setAttribute("task_like", task_like);
                 request.getSession().setAttribute("group",group);
+                request.getSession().setAttribute("ps", persons);
+
+
 
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/group_member/groupMembertoppage.jsp");
                 rd.forward(request, response);
@@ -91,12 +115,24 @@ public class GroupMemberToppageServlet extends HttpServlet {
             }
 
             group = (Group)request.getSession().getAttribute("group");
+            //そのグループのメンバー
+            List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",group).getResultList();//そのgroupに属している人
+
+            //そのgroupで公開されているメンバー全員のtask
+           //taskとtaskに対していいねしているかを確認
+            LinkedHashMap<Task,Long> task_like = new LinkedHashMap<Task,Long>();
 
             //そのgroupで公開されているメンバー全員のtask
             List<Task> tasks = em.createNamedQuery("GroupMemberAllTask",Task.class).setParameter("group",group).getResultList();
 
-            request.setAttribute("tasks", tasks);
+            for (Task t:tasks) {
+                Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();
+                task_like.put(t, like_count);
+             }
 
+
+            request.setAttribute("task_like", task_like);
+            request.getSession().setAttribute("ps", persons);
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/group_member/groupMembertoppage.jsp");
             rd.forward(request, response);
 

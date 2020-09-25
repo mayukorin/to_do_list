@@ -8,11 +8,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Table(name="likes")
+@NamedQueries ({
+    @NamedQuery  (
+            name = "task_like",
+            query = "select count(l) from Like as l where l.task = :task and l.person = :person"),
+    @NamedQuery  (
+            name = "get_like",
+            query = "select l from Like as l where l.task = :task and l.person = :person"),
+    @NamedQuery(
+            name = "get_likes",
+            query = "select l from Like as l where l.task = :task")
+
+
+})
 @Entity
 public class Like {
 
@@ -29,9 +43,6 @@ public class Like {
     @JoinColumn(name="task_id")
     private Task task;
 
-    @Lob
-    @Column(name="comment")
-    private String comment;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;
@@ -63,13 +74,6 @@ public class Like {
         this.task = task;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
     public Timestamp getCreated_at() {
         return created_at;

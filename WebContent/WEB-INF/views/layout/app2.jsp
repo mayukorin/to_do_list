@@ -39,8 +39,24 @@
                     </div>
                 </c:if>
             </div>
-            <div id="content">
-                ${param.content}
+            <div id = "wrapper2">
+                <div id="content2">
+                         ${param.content2}
+                </div>
+                <c:if test="${sessionScope.group != null }">
+                <aside>
+                    <ul id="member_list">
+                        <li id="gm">${sessionScope.group.name}のメンバー</li>
+                        <li data-href = "<c:url value='/group/toppage?id=${sessionScope.group.id}'/>">${sessionScope.group.name}</li>
+                        <c:if test="${sessionScope.ps != null }">
+                            <c:forEach var="p" items="${ps}">
+                                <li data-href = "<c:url value='/members/toppage?id=${p.id }'/>">${p.name}</li>
+                            </c:forEach>
+                        </c:if>
+                    </ul>
+
+                </aside>
+                </c:if>
             </div>
             <div id="footer">
                 by Mayuko inoue
@@ -60,6 +76,7 @@
 
         </script>
         <script>
+        //tasklistをクリックした時の処理
         jQuery(function($) {
 
               //data-hrefの属性を持つtrを選択しclassにclickableを付加
@@ -74,6 +91,26 @@
                     //その要素の先祖要素で一番近いtrの
                     //data-href属性の値に書かれているURLに遷移する
                     window.location = $(e.target).closest('tr').data('href');}
+              });
+            });
+
+        </script>
+        <script>
+        //フッターのmemberをクリックした時の処理
+        jQuery(function($) {
+
+              //data-hrefの属性を持つtrを選択しclassにclickableを付加
+              $('li[data-href]').addClass('clickable')
+
+                //クリックイベント
+                .click(function(e) {
+
+                  //e.targetはクリックした要素自体、それがa要素以外であれば
+                  if(!$(e.target).is('a')){
+
+                    //その要素の先祖要素で一番近いtrの
+                    //data-href属性の値に書かれているURLに遷移する
+                    window.location = $(e.target).closest('li').data('href');}
               });
             });
 

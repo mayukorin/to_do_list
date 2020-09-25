@@ -1,6 +1,7 @@
 package toppage;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -36,6 +37,10 @@ public class LoginPersonToppageServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
+
+        //taskとtaskに対していいねしているかを確認
+        LinkedHashMap<Task,Long> task_like = new LinkedHashMap<Task,Long>();
+
         if (request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
             request.getSession().removeAttribute("flush");
@@ -44,6 +49,11 @@ public class LoginPersonToppageServlet extends HttpServlet {
         if (request.getSession().getAttribute("group") != null) {
             //⑪・⑰の更新後・GroupLoginServletから戻ってきた時
             request.getSession().removeAttribute("group");
+        }
+
+        if (request.getSession().getAttribute("ps") != null) {
+            //⑪・⑰の更新後・GroupLoginServletから戻ってきた時
+            request.getSession().removeAttribute("ps");
         }
 
         if (request.getSession().getAttribute("account") != null) {
@@ -59,6 +69,12 @@ public class LoginPersonToppageServlet extends HttpServlet {
        //ログインしている人のTask（公開しているのものも、していないものも全て）
         List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();
 
+        for (Task t:tasks) {
+            System.out.println(t.getTitle());
+           Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();
+           task_like.put(t, like_count);
+        }
+
        //ログインしている人が所属しているグループ
 
         @SuppressWarnings("unchecked")
@@ -69,7 +85,7 @@ public class LoginPersonToppageServlet extends HttpServlet {
 
         em.close();
 
-        request.setAttribute("tasks", tasks);
+        request.setAttribute("task_like", task_like);
 
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");

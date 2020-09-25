@@ -1,6 +1,7 @@
 package controllers.tasks.member_tasks;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Person;
 import models.Task;
 import utils.DBUtil;
 
@@ -34,9 +36,17 @@ public class MemberTaskShowServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         EntityManager em = DBUtil.createEntityManager();
+        HashMap<Task,Long> task_like = new HashMap<Task,Long>();
+        Task task;
 
+        if (request.getSession().getAttribute("liked_task") != null) {
+            task = (Task)request.getSession().getAttribute("liked_task");
+            request.getSession().removeAttribute("liked_task");
+        } else {
+            task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
+        }
+        request.setAttribute("task",task);
 
-        Task task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
 /*
         if (request.getSession().getAttribute("account") == null) {
 
@@ -47,11 +57,17 @@ public class MemberTaskShowServlet extends HttpServlet {
         }
 */
 
+        Person p = (Person)request.getSession().getAttribute("login_person");
+
+        Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person",p).setParameter("task",task).getSingleResult();
+
+        task_like.put(task, like_count);
+
 
 
         em.close();
 
-        request.setAttribute("task", task);
+        request.setAttribute("task_like", task_like);
 
         request.setAttribute("_token", request.getSession().getId());
 

@@ -89,6 +89,7 @@ public class GroupTaskDestroyServlet extends HttpServlet {
             if (request.getSession().getAttribute("account") != null) {
                 response.sendRedirect(request.getContextPath()+"/group/toppage");
             } else {
+
                 response.sendRedirect(request.getContextPath()+"/groups/toppage");
             }
 

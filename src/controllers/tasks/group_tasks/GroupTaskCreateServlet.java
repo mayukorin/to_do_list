@@ -81,7 +81,7 @@ public class GroupTaskCreateServlet extends HttpServlet {
                 request.setAttribute("errors", errors);
 
                 em.close();
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/new.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/group_tasks/new.jsp");
                 rd.forward(request, response);
             } else {
                 //エラーがないとき

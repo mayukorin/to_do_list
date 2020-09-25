@@ -19,10 +19,10 @@ import javax.persistence.Table;
 @NamedQueries ({
     @NamedQuery(
             name = "getPersonsTask",
-            query = "select t from Task as t where t.account = :account"),
+            query = "select t from Task as t where t.account = :account order by t.deadline"),
     @NamedQuery(
             name = "openGroupTask",
-            query = "select t from Task as t,Show as s where t.account = :account and t = s.task and s.group = :group"),
+            query = "select t from Task as t,Show as s where t.account = :account and t = s.task and s.group = :group order by t.deadline"),
     @NamedQuery(
             name = "GroupMemberAllTask",
             query = "select t from Task as t,Show as s  where t = s.task and s.group = :group"),

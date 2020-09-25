@@ -1,6 +1,7 @@
 package controllers.member;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import models.Account;
 import models.Group;
+import models.Person;
 import models.Task;
 import utils.DBUtil;
 
@@ -39,6 +41,11 @@ public class MemberToppageServlet extends HttpServlet {
 
         EntityManager em = DBUtil.createEntityManager();
         Account a;
+        Group g;
+       //taskとtaskに対していいねしているかを確認
+        LinkedHashMap<Task,Long> task_like = new LinkedHashMap<Task,Long>();
+
+
 
         if (request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
@@ -57,13 +64,33 @@ public class MemberToppageServlet extends HttpServlet {
 
         }
 
-        Group g = (Group) request.getSession().getAttribute("group");
+      //詳細を見ようとしているアカウント
+        if (request.getParameter("account") != null && request.getParameter("group") != null) {
+            //いいねした人一覧画面からきた時
 
+            Person pp = em.find(Person.class,Integer.parseInt(request.getParameter("account")));
+            g = em.find(Group.class,Integer.parseInt(request.getParameter("group")));
+          //そのグループのメンバー
+            List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",g).getResultList();//そのgroupに属している人
+            request.getSession().setAttribute("account",pp);
+            request.getSession().setAttribute("group", g);
+            request.getSession().setAttribute("ps", persons);
+
+        } else {
+            g = (Group) request.getSession().getAttribute("group");
+        }
+
+      //ログインしている本人
+        Person p = (Person) request.getSession().getAttribute("login_person");
 
 
         List<Task> tasks = em.createNamedQuery("openGroupTask",Task.class).setParameter("account",(Account)request.getSession().getAttribute("account")).setParameter("group",g).getResultList();//今見ようとしている人の、そのgroupで公開されているTask
+        for (Task t:tasks) {
+            Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();
+            task_like.put(t, like_count);
+         }
 
-        request.setAttribute("tasks", tasks);
+        request.setAttribute("task_like", task_like);
 
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/members/toppage.jsp");

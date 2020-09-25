@@ -37,11 +37,12 @@ public class MemberShowServlet extends HttpServlet {
         // TODO Auto-generated method stub
 
         EntityManager em = DBUtil.createEntityManager();
+        Person p;
 
 
-        //詳細を見ようとしているアカウント
-        Person p = (Person) request.getSession().getAttribute("account");
 
+      //その人のトップページからきた時
+        p = (Person) request.getSession().getAttribute("account");
         //Personインスタンスが所属しているグループ
         List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
         request.setAttribute("groups", groups);

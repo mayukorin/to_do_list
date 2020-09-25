@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:import url="../layout/app.jsp">
-    <c:param name="content">
+<c:import url="../layout/app2.jsp">
+    <c:param name="content2">
         <c:if test="${flush != null}">
             <div id="flush_success">
                 <c:out value="${flush}"></c:out>
@@ -11,27 +11,57 @@
         <h2>${sessionScope.group.name}のメンバーのtask一覧</h2>
         <table id = "task_list">
             <tbody>
-                <c:forEach var="task" items = "${tasks}">
-                    <tr>
-                     <td><c:out value="${task.title}"/></td>
-                     <td><fmt:formatDate value="${task.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
-                     <c:choose>
-                        <c:when test="${sessionScope.login_person.id == task.account.id && sessionScope.group == null}">
-                            <td><a href="<c:url value='/tasks/persons/show?id=${task.id}'/>">詳細</a></td>
+                <c:forEach var="tl" items = "${task_like}">
+                    <c:choose>
+                        <c:when test="${sessionScope.login_person.id == tl.key.account.id && sessionScope.group == null}">
+                            <tr data-href="<c:url value='/tasks/persons/show?id=${tl.key.id}'/>">
+                            <td class="icon"><i class="fas fa-circle"></i></td>
+                            <td><c:out value="${tl.key.title}"/></td>
+                            <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
+                            <c:choose>
+                            <c:when test="${tl.value == 0 }">
+                                <td ><a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=0'/>"><i class="far fa-heart"></i></a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td ><a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=0'/>"><i class="fas fa-heart red_heart"></i></a></td>
+                            </c:otherwise>
+                            </c:choose>
+                            </tr>
                         </c:when>
-                        <c:when test="${ task.account.id == task.task_leader.id  }">
-                            <td><a href="<c:url value='/members/tasks/show?id=${task.id}'/>">詳細</a></td>
+                        <c:when test="${ tl.key.account.id == tl.key.task_leader.id  }">
+                            <tr data-href="<c:url value='/members/tasks/show?id=${tl.key.id}'/>">
+                            <td class="icon"><i class="fas fa-circle"></i></td>
+                            <td><c:out value="${tl.key.title}"/></td>
+                            <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
+                            <c:choose>
+                            <c:when test="${tl.value == 0 }">
+                                <td ><a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=0'/>"><i class="far fa-heart"></i></a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td ><a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=0'/>"><i class="fas fa-heart red_heart"></i></a></td>
+                            </c:otherwise>
+                            </c:choose>
+                            </tr>
                         </c:when>
                         <c:otherwise>
-                            <td><a href="<c:url value='/groups/tasks/show?id=${task.id}'/>">詳細</a></td>
+                            <tr data-href="<c:url value='/groups/tasks/show?id=${tl.key.id}'/>">
+                            <td class="icon"><i class="fas fa-circle"></i></td>
+                            <td><c:out value="${tl.key.title}"/></td>
+                            <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
+                            <c:choose>
+                            <c:when test="${tl.value == 0 }">
+                                <td ><a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=0'/>"><i class="far fa-heart"></i></a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td ><a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=0'/>"><i class="fas fa-heart red_heart"></i></a></td>
+                            </c:otherwise>
+                            </c:choose>
+                            </tr>
                         </c:otherwise>
-                     </c:choose>
-                    </tr>
+                    </c:choose>
                 </c:forEach>
             </tbody>
         </table>
-        <p><a href="<c:url value='/groups/show'/>">メンバー一覧を見る</a>
-        <p><a href="<c:url value='/toppage/index'/>">自分のtask一覧に戻る</a></p>
         <div>
             <c:if test="${groups != null}">
                 <c:forEach var="g" items="${groups}">
