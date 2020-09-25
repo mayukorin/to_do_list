@@ -51,14 +51,17 @@
 
                     </tbody>
                 </table>
+                <p>
                 <c:choose>
                 <c:when test="${tl.value == 0 }">
-                <p><a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=1'/>"><i class="far fa-heart"></i></a></p>
+                <a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=1'/>"><i class="far fa-heart"></i></a>
                 </c:when>
                 <c:otherwise>
-                <p><a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=1'/>"><i class="fas fa-heart red_heart"></i></a></p>
+                <a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=1'/>"><i class="fas fa-heart red_heart"></i></a>
                 </c:otherwise>
                 </c:choose>
+                <a href="<c:url value='/comments/new?task_id=${tl.key.id}'/>"><i class="far fa-comment comment"></i></a>
+                </p>
                 <c:if test="${tasks_history != null }">
                 あいう
                 </c:if>

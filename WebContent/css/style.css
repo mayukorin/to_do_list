@@ -306,6 +306,14 @@ ul#member_list li#gm {
 
 .red_heart {
     color:#e54747;
+    display:inline-block;
+}
+
+.white_heart {
+    display:inline-block;
+}
+.comment {
+    display:inline-block;
 }
 
 
