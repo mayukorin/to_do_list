@@ -9,6 +9,7 @@
             </div>
         </c:if>
     <h2>コメント詳細ページ</h2>
+
     <table id="comment_table">
                     <tr>
                         <th>名前</th>
@@ -17,8 +18,11 @@
                         <th>操作</th>
 
                     </tr>
+                    <c:choose>
+                     <c:when test="${origin_comment.delete_flag == 0 }">
 
                      <tr>
+
                          <td><c:out value="${origin_comment.comment_person.name}"/></td>
                          <td><fmt:formatDate value="${origin_comment.updated_at }" pattern="yyyy-MM-dd HH:mm" /></td>
                          <td><pre><c:out value="${origin_comment.content}"/></pre></td>
@@ -28,8 +32,13 @@
                             </c:if>
                          </td>
                      </tr>
+                     </c:when>
+                     <c:otherwise>
+                     <p>コメントは削除されました</p>
+                     </c:otherwise>
+                     </c:choose>
 
-                </table>
+      </table>
                 <br/><br/>
       <h2>返信一覧</h2>
       <table id="comment_table">

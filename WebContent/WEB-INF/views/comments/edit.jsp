@@ -17,6 +17,7 @@
             <c:import url="_form.jsp" />
         </form>
         <br/><br/>
+        <p><a href="#" onclick="confirmDestroy();">コメントを削除する</a></p>
         <c:choose>
             <c:when test="${comment.for_comment == null }">
                 <p><a href="<c:url value='/comments/show?id=${comment.id}'/>">コメント詳細画面に戻る</a></p>
@@ -25,5 +26,15 @@
                 <p><a href="<c:url value='/comments/show?id=${comment.for_comment.id}'/>">コメント詳細画面に戻る</a></p>
             </c:otherwise>
         </c:choose>
+        <form method="POST" action="${pageContext.request.contextPath}/comments/destroy">
+            <input type="hidden" name="_token" value="${_token}" />
+        </form>
+        <script>
+        function confirmDestroy() {
+            if(confirm("本当に削除してよろしいですか？")) {
+                document.forms[1].submit();
+            }
+        }
+        </script>
     </c:param>
 </c:import>

@@ -83,9 +83,37 @@
                     </tr>
                     <c:forEach var="comment" items="${comments}">
                         <tr>
-                            <td><c:out value="${comment.comment_person.name}"/></td>
-                            <td><fmt:formatDate value="${comment.updated_at}" pattern="yyyy-MM-dd HH:mm" /></td>
-                            <td><pre><c:out value="${comment.content}"/></pre></td>
+                            <td>
+                                <c:choose>
+                                <c:when test="${comment.delete_flag != 1}">
+                                    <c:out value="${comment.comment_person.name}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <i class="fas fa-trash-alt"></i>
+                                </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                <c:when test="${comment.delete_flag != 1}">
+                                        <fmt:formatDate value="${comment.updated_at}" pattern="yyyy-MM-dd HH:mm" />
+                                </c:when>
+                                <c:otherwise>
+                                    <i class="fas fa-trash-alt"></i>
+                                </c:otherwise>
+                                </c:choose>
+
+                            </td>
+                            <td>
+                                <c:choose>
+                                <c:when test="${comment.delete_flag != 1}">
+                                    <pre><c:out value="${comment.content}"/></pre>
+                                </c:when>
+                                <c:otherwise>
+                                    <i class="fas fa-trash-alt"></i>
+                                </c:otherwise>
+                                </c:choose>
+                            </td>
                             <td><a href="<c:url value='/comments/show?id=${comment.id}'/>">返信を見る</a></td>
                         </tr>
                     </c:forEach>
