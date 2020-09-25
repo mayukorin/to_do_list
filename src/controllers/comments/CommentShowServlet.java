@@ -57,7 +57,7 @@ public class CommentShowServlet extends HttpServlet {
         List<Comment> return_comments = em.createNamedQuery("getReturnComments",Comment.class).setParameter("comment", origin_comment).getResultList();
 
         request.setAttribute("origin_comment", origin_comment);
-        request.setAttribute("return_comment", return_comments);
+        request.setAttribute("return_comments", return_comments);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/comments/show.jsp");
         rd.forward(request, response);

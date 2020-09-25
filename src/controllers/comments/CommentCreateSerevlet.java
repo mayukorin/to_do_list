@@ -81,30 +81,48 @@ public class CommentCreateSerevlet extends HttpServlet {
 
                 c.setComment_person(login_person);
 
-                //コメントを保存
-                em.getTransaction().begin();
-                em.persist(c);
-                em.getTransaction().commit();
-
                 request.getSession().setAttribute("commented_task", t);
 
-                request.getSession().setAttribute("flush", "コメントの投稿が完了しました。");
+                if (request.getSession().getAttribute("origin_comment_id") != null) {
 
-                if (t.getAccount().getId().equals(login_person.getId())) {
-                    //自分自身のtaskについてのコメント
-                    response.sendRedirect(request.getContextPath()+"/tasks/persons/show");
-                } else if (t.getAccount().getId().equals(((Group)request.getSession().getAttribute("group")).getId())) {
-                    //groupのtaskについてのコメント
+                    //返信のコメントを追加しようとしている
 
-                    response.sendRedirect(request.getContextPath()+"/groups/tasks/show");
+                    Comment origin_comment = em.find(Comment.class, (Integer)request.getSession().getAttribute("origin_comment_id"));
+                    c.setFor_comment(origin_comment);
 
+                  //コメントを保存
+                    em.getTransaction().begin();
+                    em.persist(c);
+                    em.getTransaction().commit();
+
+                    request.getSession().setAttribute("flush", "返信の投稿が完了しました。");
+
+                    response.sendRedirect(request.getContextPath()+"/comments/show");
                 } else {
-                    //memberのtaskについてのコメント
 
-                    response.sendRedirect(request.getContextPath()+"/members/tasks/show");
+                  //コメントを保存
+                    em.getTransaction().begin();
+                    em.persist(c);
+                    em.getTransaction().commit();
+
+                    request.getSession().setAttribute("flush", "コメントの投稿が完了しました。");
+
+
+                    if (t.getAccount().getId().equals(login_person.getId())) {
+                        //自分自身のtaskについてのコメント
+                        response.sendRedirect(request.getContextPath()+"/tasks/persons/show");
+                    } else if (t.getAccount().getId().equals(((Group)request.getSession().getAttribute("group")).getId())) {
+                        //groupのtaskについてのコメント
+
+                        response.sendRedirect(request.getContextPath()+"/groups/tasks/show");
+
+                    } else {
+                        //memberのtaskについてのコメント
+
+                        response.sendRedirect(request.getContextPath()+"/members/tasks/show");
+                    }
+
                 }
-
-
 
             }
 
