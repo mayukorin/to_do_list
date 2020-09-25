@@ -35,9 +35,23 @@ public class CommentShowServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         EntityManager em = DBUtil.createEntityManager();
+        Comment origin_comment;
+
+        if (request.getSession().getAttribute("flush") != null) {
+            request.setAttribute("flush", request.getSession().getAttribute("flush"));
+            request.getSession().removeAttribute("flush");
+        }
 
         //元々のコメント
-        Comment origin_comment = em.find(Comment.class, Integer.parseInt(request.getParameter("id")));
+        if (request.getParameter("id") != null) {
+            //task詳細、comment/edit.jspからコメント詳細ページに来た時
+            origin_comment = em.find(Comment.class, Integer.parseInt(request.getParameter("id")));
+            request.getSession().setAttribute("origin_comment_id", origin_comment.getId());
+        } else {
+            //それ以外からコメント詳細ページに来た場合
+            origin_comment = em.find(Comment.class, (Integer)request.getSession().getAttribute("origin_comment_id"));
+
+        }
 
         //そのコメントに対して返信されたコメント
         List<Comment> return_comments = em.createNamedQuery("getReturnComments",Comment.class).setParameter("comment", origin_comment).getResultList();

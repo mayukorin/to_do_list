@@ -3,6 +3,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:import url="../layout/app2.jsp">
     <c:param name="content2">
+    <c:if test="${flush != null}">
+            <div id="flush_success">
+                <c:out value="${flush}"></c:out>
+            </div>
+        </c:if>
     <h2>コメント詳細ページ</h2>
     <table id="comment_table">
                     <tr>
@@ -17,7 +22,11 @@
                          <td><c:out value="${origin_comment.comment_person.name}"/></td>
                          <td><fmt:formatDate value="${origin_comment.updated_at }" pattern="yyyy-MM-dd HH:mm" /></td>
                          <td><pre><c:out value="${origin_comment.content}"/></pre></td>
-                         <td><a href="<c:url value='/comments/edit?id=${origin_comment.id}'/>">編集する</a></td>
+                         <td>
+                            <c:if test="${origin_comment.comment_person.id == sessionScope.login_person.id }">
+                                <a href="<c:url value='/comments/edit?id=${origin_comment.id}'/>">編集する</a>
+                            </c:if>
+                         </td>
                      </tr>
 
                 </table>
@@ -34,9 +43,13 @@
                     <c:forEach var="comment" items="${return_comments}">
                         <tr>
                             <td><c:out value="${comment.comment_person.name}"/></td>
-                            <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy-MM-dd HH:mm" /></td>
+                            <td><fmt:formatDate value="${origin_comment.updated_at }" pattern="yyyy-MM-dd HH:mm" /></td>
                             <td><pre><c:out value="${comment.content}"/></pre></td>
-                            <td><a href="<c:url value='/comments/show?id=${comment.id}'/>">返信を見る</a></td>
+                            <td>
+                                <c:if test="${origin_comment.comment_person.id == sessionScope.login_person.id }">
+                                    <a href="<c:url value='/comments/edit?id=${comment.id}'/>">編集する</a>
+                                </c:if>
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>

@@ -14,15 +14,10 @@
         </div>
         </c:if>
         <form method="POST" action="<c:url value='/comments/create' />">
-            <label for="content">コメント</label><br/>
-            <textarea name="content" rows="10" cols="50">${comment.content}</textarea>
-            <br/><br/>
-            <input type="hidden" name="id" value="${task.id}"/>
-            <input type="hidden" name="_token" value="${_token}"/>
-            <button type="submit">投稿</button>
+            <c:import url="_form.jsp" />
         </form>
         <br/><br/>
-                <table id = "task_show">
+        <table id = "task_show">
                     <tbody>
                         <tr>
                         <th>登録者</th>
@@ -54,6 +49,7 @@
                         </tr>
                      </tbody>
                 </table>
+
 
                         <c:choose>
                         <c:when test="${sessionScope.group == null }">
