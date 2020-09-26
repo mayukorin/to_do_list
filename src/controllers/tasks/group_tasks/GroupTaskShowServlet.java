@@ -1,6 +1,7 @@
 package controllers.tasks.group_tasks;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Comment;
+import models.Look;
 import models.Person;
 import models.Task;
 import utils.DBUtil;
@@ -40,8 +42,15 @@ public class GroupTaskShowServlet extends HttpServlet {
         EntityManager em = DBUtil.createEntityManager();
 
         HashMap<Task,Long> task_like = new HashMap<Task,Long>();
+        Long Look_count;
+        Look look;
 
         Task task;
+
+        if (request.getSession().getAttribute("origin_comment_id") != null) {
+            request.getSession().removeAttribute("origin_comment_id");
+        }
+
 
         if (request.getSession().getAttribute("liked_task") != null) {
             task = (Task)request.getSession().getAttribute("liked_task");
@@ -84,6 +93,8 @@ public class GroupTaskShowServlet extends HttpServlet {
 
         if (request.getSession().getAttribute("updated_task") == null) {
             //現在のtaskを詳細表示させようとしている時
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+
             if (task.getOrigin_task_id() != null) {
                 //過去に更新してきているtaskの時
                 //過去のtaskを全てとってくる
@@ -93,17 +104,68 @@ public class GroupTaskShowServlet extends HttpServlet {
                 if (tasks_history.size() != 0) {
                     request.setAttribute("tasks_history", 1);
                 }
+                //過去のtask
+                Task ot = em.find(Task.class, task.getOrigin_task_id());
+                Look_count = em.createNamedQuery("getLookCount",Long.class).setParameter("person", p).setParameter("task", ot).getSingleResult();
+
+                if (Look_count == 0) {
+                    //そのtaskを初めて見た時
+                    Look new_look = new Look();
+                    new_look.setLooked_task(ot);
+                    new_look.setPerson(p);
+
+                    new_look.setUpdated_at(currentTime);
+                    em.getTransaction().begin();
+                    em.persist(new_look);
+                    em.getTransaction().commit();
+                } else {
+                    //そのtaskを見たことがある時
+                    look = em.createNamedQuery("getLook",Look.class).setParameter("person", p).setParameter("task", ot).getSingleResult();
+
+                    Timestamp origin_time = look.getUpdated_at();
+                    Timestamp update_task_time = task.getUpdated_at();
+
+                    System.out.println("origin_time"+origin_time);
+                    System.out.println("update_Task_time"+update_task_time);
+
+                    if (origin_time.before(update_task_time)) {
+                        //そのtaskを見たのが、task更新前の時
+                        System.out.println("オッケー");
+                        request.setAttribute("flush", "taskが更新されています");
+                    }
+                    look.setUpdated_at(currentTime);
+                    em.getTransaction().begin();
+                    em.getTransaction().commit();
+                }
+            } else {
+                //過去に更新していないtaskの時
+                Look_count = em.createNamedQuery("getLookCount",Long.class).setParameter("person", p).setParameter("task", task).getSingleResult();
+
+                if (Look_count == 0) {
+                    //そのtaskを初めて見た時
+                    Look new_look = new Look();
+                    new_look.setLooked_task(task);
+                    new_look.setPerson(p);
+
+                    new_look.setUpdated_at(currentTime);
+                    em.getTransaction().begin();
+                    em.persist(new_look);
+                    em.getTransaction().commit();
+                } else {
+                    //そのtaskを過去に見たことがある時
+                    look = em.createNamedQuery("getLook",Look.class).setParameter("person", p).setParameter("task", task).getSingleResult();
+                    look.setUpdated_at(currentTime);
+                    em.getTransaction().begin();
+                    em.getTransaction().commit();
+                }
             }
+
+
         } else {
             //過去のtaskを詳細表示させようとしている時
             Task origin_task = em.find(Task.class, task.getOrigin_task_id());
             request.setAttribute("origin_task", origin_task);
         }
-
-        if (request.getSession().getAttribute("origin_comment_id") != null) {
-            request.getSession().removeAttribute("origin_comment_id");
-        }
-
 
 
         em.close();
