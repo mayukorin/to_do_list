@@ -57,19 +57,24 @@
 
                     </tbody>
                 </table>
-                <p>
-                <c:choose>
-                <c:when test="${tl.value == 0 }">
-                <a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=1'/>"><i class="far fa-heart"></i></a>
-                </c:when>
-                <c:otherwise>
-                <a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=1'/>"><i class="fas fa-heart red_heart"></i></a>
-                </c:otherwise>
-                </c:choose>
-                <a href="<c:url value='/comments/new?task_id=${tl.key.id}'/>"><i class="far fa-comment comment"></i></a>
-                </p>
-                <c:if test="${tasks_history != null }">
-                あいう
+
+                <c:if test="${sessionScope.updated_task  == null }">
+                    <p>
+                    <c:choose>
+                    <c:when test="${tl.value == 0 }">
+                    <a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=1'/>"><i class="far fa-heart"></i></a>
+                    </c:when>
+                    <c:otherwise>
+                    <a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=1'/>"><i class="fas fa-heart red_heart"></i></a>
+                    </c:otherwise>
+                    </c:choose>
+
+                    <a href="<c:url value='/comments/new?task_id=${tl.key.id}'/>"><i class="far fa-comment comment"></i></a>
+                    </p>
+                </c:if>
+
+                <c:if test="${tasks_history ==1 }">
+                    <p><a href="<c:url value='/tasks/groups/history?id=${tl.key.id}'/>">更新履歴を全て見る</a></p>
                 </c:if>
                 <p><a href="<c:url value='/hearts/index?id=${tl.key.id}'/>">いいねした人一覧を見る</a></p>
                 <h2>コメント</h2>

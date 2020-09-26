@@ -80,6 +80,11 @@ public class MemberToppageServlet extends HttpServlet {
             g = (Group) request.getSession().getAttribute("group");
         }
 
+        if (request.getSession().getAttribute("updated_task") != null) {
+            //過去のtask更新履歴のいいねからきた場合
+            request.getSession().removeAttribute("updated_task");
+        }
+
       //ログインしている本人
         Person p = (Person) request.getSession().getAttribute("login_person");
 

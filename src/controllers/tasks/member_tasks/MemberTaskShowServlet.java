@@ -73,6 +73,10 @@ public class MemberTaskShowServlet extends HttpServlet {
         List<Comment> comments = em.createNamedQuery("getComments",Comment.class).setParameter("task",task).getResultList();
         request.setAttribute("comments", comments);
 
+        if (request.getSession().getAttribute("origin_comment_id") != null) {
+            request.getSession().removeAttribute("origin_comment_id");
+        }
+
 
 
 

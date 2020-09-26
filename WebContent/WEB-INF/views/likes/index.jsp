@@ -45,16 +45,44 @@
         </c:when>
         <c:when test="${sessionScope.account == null }">
             <c:choose>
-                <c:when test="${sessionScope.account.id == liked_task.account.id }">
+                <c:when test="${sessionScope.login_person.id == liked_task.account.id }">
                     <p><a href="<c:url value='/tasks/persons/show?id=${liked_task.id}'/>">task詳細画面に戻る</a></p>
                 </c:when>
                 <c:otherwise>
-                    <p><a href="<c:url value='/members/tasks/show?id=${liked_task.id}'/>">task詳細画面に戻る</a></p>
+                    <c:choose>
+                        <c:when test="${group_flag == null }">
+                            <p><a href="<c:url value='/members/tasks/show?id=${liked_task.id}'/>">task詳細画面に戻る</a></p>
+                        </c:when>
+                        <c:otherwise>
+                        <c:choose>
+                            <c:when test="${sessionScope.updated_task == null }">
+                                <p><a href="<c:url value='/groups/tasks/show?id=${liked_task.id}'/>">task詳細画面に戻る</a></p>
+                            </c:when>
+                            <c:otherwise>
+                                <p><a href="<c:url value='/groups/tasks/show?id=${liked_task.id}&iid=1'/>">task詳細画面に戻る</a></p>
+                            </c:otherwise>
+                        </c:choose>
+                        </c:otherwise>
+                    </c:choose>
                 </c:otherwise>
             </c:choose>
         </c:when>
         <c:otherwise>
-            <p><a href="<c:url value='/members/tasks/show?id=${liked_task.id}'/>">task詳細画面に戻る</a></p>
+            <c:choose>
+                        <c:when test="${group_flag == null }">
+                            <p><a href="<c:url value='/members/tasks/show?id=${liked_task.id}'/>">task詳細画面に戻る</a></p>
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                            <c:when test="${sessionScope.updated_task == null }">
+                                <p><a href="<c:url value='/groups/tasks/show?id=${liked_task.id}'/>">task詳細画面に戻る</a></p>
+                            </c:when>
+                            <c:otherwise>
+                                <p><a href="<c:url value='/groups/tasks/show?id=${liked_task.id}&iid=1'/>">task詳細画面に戻る</a></p>
+                            </c:otherwise>
+                        </c:choose>
+                        </c:otherwise>
+                    </c:choose>
         </c:otherwise>
     </c:choose>
 

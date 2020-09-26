@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Comment;
+import models.Group;
 import utils.DBUtil;
 
 /**
@@ -51,6 +52,11 @@ public class CommentShowServlet extends HttpServlet {
             //それ以外からコメント詳細ページに来た場合
             origin_comment = em.find(Comment.class, (Integer)request.getSession().getAttribute("origin_comment_id"));
 
+        }
+
+
+        if (origin_comment.getFor_task().getAccount() instanceof Group) {
+            request.setAttribute("group_flag", 1);
         }
 
         //そのコメントに対して返信されたコメント

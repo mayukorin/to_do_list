@@ -5,13 +5,15 @@
     <c:param name="content2">
     <c:import url="../_show.jsp" />
 
-    <p><a href="<c:url value="/groups/toppage"/>">${sessionScope.group.name}のメンバーのtask一覧画面に戻る</a></p>
-    <c:if test="${sessionScope.account != null }">
-        <p><a href="<c:url value="/members/toppage"/>">${sessionScope.account.name}のtask一覧画面に戻る</a></p>
-    </c:if>
-    <c:if test="${sessionScope.login_person.id == task.account.id}">
-        <p><a href="<c:url value="/tasks/persons/edit?id=${task.id}"/>">taskを編集する</a></p>
-    </c:if>
+            <p><a href="<c:url value="/groups/toppage"/>">${sessionScope.group.name}のメンバーのtask一覧画面に戻る</a></p>
+            <c:if test="${sessionScope.account != null }">
+                <p><a href="<c:url value="/members/toppage"/>">${sessionScope.account.name}のtask一覧画面に戻る</a></p>
+            </c:if>
+            <c:if test="${sessionScope.login_person.id == task.account.id}">
+                <p><a href="<c:url value="/tasks/persons/edit?id=${task.id}"/>">taskを編集する</a></p>
+            </c:if>
+
+
     </c:param>
 
 </c:import>

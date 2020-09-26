@@ -53,7 +53,23 @@ public class GroupTaskShowServlet extends HttpServlet {
         } else {
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
+
+
+
         request.setAttribute("task",task);
+        if (request.getParameter("iid") == null) {
+            if (request.getSession().getAttribute("updated_task") != null) {
+                //task更新履歴ページから戻ってきた場合
+                //task更新履歴ページから昔のtaskを表示させたい場合はupdated_taskを残しておく
+
+                System.out.println("だよねー");
+
+                request.getSession().removeAttribute("updated_task");
+            }
+        } else {
+            System.out.println("あああああああああ");
+            System.out.println(((Task)request.getSession().getAttribute("updated_task")).getTitle());
+        }
 
         Person p = (Person)request.getSession().getAttribute("login_person");
 
@@ -66,14 +82,29 @@ public class GroupTaskShowServlet extends HttpServlet {
         request.setAttribute("comments", comments);
 
 
-
-        if (task.getOrigin_task_id() != null) {
-            //過去に更新してきているtaskの時
-            //過去のtaskを全てとってくる
-            List<Task> tasks_history = em.createNamedQuery("GetTaskHistroy",Task.class).setParameter("origin_task_id",task.getOrigin_task_id()).getResultList();
-            tasks_history.remove(tasks_history.size()-1);//最新のtaskだけ省く（最新のtaskは変数taskに格納ずみ）
-            request.setAttribute("tasks_history", tasks_history);
+        if (request.getSession().getAttribute("updated_task") == null) {
+            //現在のtaskを詳細表示させようとしている時
+            if (task.getOrigin_task_id() != null) {
+                //過去に更新してきているtaskの時
+                //過去のtaskを全てとってくる
+                List<Task> tasks_history = em.createNamedQuery("GetTaskHistroy",Task.class).setParameter("origin_task_id",task.getOrigin_task_id()).getResultList();
+                tasks_history.remove(tasks_history.size()-1);//最新のtaskだけ省く（最新のtaskは変数taskに格納ずみ）
+                System.out.println(tasks_history.size());
+                if (tasks_history.size() != 0) {
+                    request.setAttribute("tasks_history", 1);
+                }
+            }
+        } else {
+            //過去のtaskを詳細表示させようとしている時
+            Task origin_task = em.find(Task.class, task.getOrigin_task_id());
+            request.setAttribute("origin_task", origin_task);
         }
+
+        if (request.getSession().getAttribute("origin_comment_id") != null) {
+            request.getSession().removeAttribute("origin_comment_id");
+        }
+
+
 
         em.close();
 

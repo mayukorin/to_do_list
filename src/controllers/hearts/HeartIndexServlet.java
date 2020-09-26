@@ -61,6 +61,10 @@ public class HeartIndexServlet extends HttpServlet {
             l_p_g.put(l, like_persons_group);
         }
 
+        if (t.getAccount() instanceof Group) {
+            request.setAttribute("group_flag", 1);
+        }
+
         request.setAttribute("l_p_g", l_p_g);
         request.setAttribute("liked_task", t);
 
