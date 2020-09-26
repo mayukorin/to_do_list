@@ -12,10 +12,21 @@
         <table id = "task_list">
             <tbody>
                 <c:forEach var="tl" items = "${task_like}">
+
                     <c:choose>
                         <c:when test="${sessionScope.login_person.id == tl.key.account.id && sessionScope.group == null}">
                             <tr data-href="<c:url value='/tasks/persons/show?id=${tl.key.id}'/>">
-                            <td class="icon"><i class="fas fa-circle circle${tl.value % 3 }"></i></td>
+                            <td class="icon">
+                                    <c:choose>
+                                        <c:when test="${tl.key.finish_flag == 0}">
+                                            <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="far fa-check-circle check"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                            </td>
+
                             <td><c:out value="${tl.key.title}"/></td>
                             <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
                             <c:choose>
@@ -30,7 +41,16 @@
                         </c:when>
                         <c:when test="${ tl.key.account.id == tl.key.task_leader.id  }">
                             <tr data-href="<c:url value='/members/tasks/show?id=${tl.key.id}'/>">
-                            <td class="icon"><i class="fas fa-circle circle${tl.value % 3 }"></i></td>
+                            <td class="icon">
+                                <c:choose>
+                                        <c:when test="${tl.key.finish_flag == 0}">
+                                            <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="far fa-check-circle check"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                            </td>
                             <td><c:out value="${tl.key.title}"/></td>
                             <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
                             <c:choose>
@@ -45,7 +65,16 @@
                         </c:when>
                         <c:otherwise>
                             <tr data-href="<c:url value='/groups/tasks/show?id=${tl.key.id}'/>">
-                            <td class="icon"><i class="fas fa-circle circle${tl.value % 3 }"></i></td>
+                            <td class="icon">
+                                <c:choose>
+                                        <c:when test="${tl.key.finish_flag == 0}">
+                                            <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="far fa-check-circle check"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                            </td>
                             <td><c:out value="${tl.key.title}"/></td>
                             <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
                             <c:choose>

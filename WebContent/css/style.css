@@ -470,3 +470,7 @@ table.account_show{
     padding: 10px 2%;
     border: 1px solid #cccccc;
 }
+
+.check {
+    color:#78FF94;
+}

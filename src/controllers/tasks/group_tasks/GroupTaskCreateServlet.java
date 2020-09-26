@@ -60,6 +60,8 @@ public class GroupTaskCreateServlet extends HttpServlet {
             t.setCreated_at(currentTime);
             t.setUpdated_at(currentTime);
 
+            t.setFinish_flag(0);
+
 
             String date = request.getParameter("deadline");
 

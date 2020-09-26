@@ -13,7 +13,16 @@
             <tbody>
                 <c:forEach var="tl" items = "${task_like}">
                     <tr data-href="<c:url value='/tasks/persons/show?id=${tl.key.id}'/>">
-                        <td class="icon"><i class="fas fa-circle circle${tl.value % 3 }"></i></td>
+                        <td class="icon">
+                            <c:choose>
+                                <c:when test="${tl.key.finish_flag == 0}">
+                                    <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                </c:when>
+                                <c:otherwise>
+                                    <i class="far fa-check-circle check"></i>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                          <td class="title"><c:out value="${tl.key.title}"/></td>
                          <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
                          <c:choose>

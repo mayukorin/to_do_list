@@ -59,6 +59,10 @@ public class GroupTaskShowServlet extends HttpServlet {
             //CommentCreateServletからきた場合
             task = (Task)request.getSession().getAttribute("commented_task");
             request.getSession().removeAttribute("commented_task");
+        } else if (request.getSession().getAttribute("finish_task") != null){
+            //TaskFinishServletからきた場合
+            task = (Task)request.getSession().getAttribute("finish_task");
+            request.getSession().removeAttribute("finish_task");
         } else {
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
@@ -71,12 +75,11 @@ public class GroupTaskShowServlet extends HttpServlet {
                 //task更新履歴ページから戻ってきた場合
                 //task更新履歴ページから昔のtaskを表示させたい場合はupdated_taskを残しておく
 
-                System.out.println("だよねー");
 
                 request.getSession().removeAttribute("updated_task");
             }
         } else {
-            System.out.println("あああああああああ");
+
             System.out.println(((Task)request.getSession().getAttribute("updated_task")).getTitle());
         }
 
@@ -130,7 +133,7 @@ public class GroupTaskShowServlet extends HttpServlet {
 
                     if (origin_time.before(update_task_time)) {
                         //そのtaskを見たのが、task更新前の時
-                        System.out.println("オッケー");
+
                         request.setAttribute("flush", "taskが更新されています");
                     }
                     look.setUpdated_at(currentTime);

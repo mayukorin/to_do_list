@@ -41,6 +41,11 @@ public class MemberTaskShowServlet extends HttpServlet {
         HashMap<Task,Long> task_like = new HashMap<Task,Long>();
         Task task;
 
+        if (request.getSession().getAttribute("flush") != null) {
+            request.setAttribute("flush", request.getSession().getAttribute("flush"));
+            request.getSession().removeAttribute("flush");
+        }
+
         if (request.getSession().getAttribute("liked_task") != null) {
             task = (Task)request.getSession().getAttribute("liked_task");
             request.getSession().removeAttribute("liked_task");
@@ -48,7 +53,12 @@ public class MemberTaskShowServlet extends HttpServlet {
             //CommentCreateServletからきた場合
             task = (Task)request.getSession().getAttribute("commented_task");
             request.getSession().removeAttribute("commented_task");
+        } else if (request.getSession().getAttribute("finish_task") != null){
+            //TaskFinishServletからきた場合
+            task = (Task)request.getSession().getAttribute("finish_task");
+            request.getSession().removeAttribute("finish_task");
         } else {
+
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
         request.setAttribute("task",task);

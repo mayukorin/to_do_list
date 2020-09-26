@@ -71,6 +71,9 @@ public class Task {
     @JoinColumn(name="task_leader_id")
     private Person task_leader;
 
+    @Column(name="finish_flag")
+    private Integer finish_flag;
+
 
 
 
@@ -154,6 +157,14 @@ public class Task {
 
     public void setOrigin_task_id(Integer origin_task_id) {
         this.origin_task_id = origin_task_id;
+    }
+
+    public Integer getFinish_flag() {
+        return finish_flag;
+    }
+
+    public void setFinish_flag(Integer finish_flag) {
+        this.finish_flag = finish_flag;
     }
 
 

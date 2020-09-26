@@ -58,6 +58,10 @@ public class PersonTaskShowServlet extends HttpServlet {
             task = (Task)request.getSession().getAttribute("commented_task");
             request.getSession().removeAttribute("commented_task");
 
+        } else if (request.getSession().getAttribute("finish_task") != null){
+            //TaskFinishServletからきた場合
+            task = (Task)request.getSession().getAttribute("finish_task");
+            request.getSession().removeAttribute("finish_task");
         } else {
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
