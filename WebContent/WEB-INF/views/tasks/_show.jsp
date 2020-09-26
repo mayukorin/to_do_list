@@ -72,7 +72,9 @@
                     <a href="<c:url value='/comments/new?task_id=${tl.key.id}'/>"><i class="far fa-comment comment"></i></a>
                     </p>
                 </c:if>
-
+                <c:if test="${sessionScope.updated_task == null &&  tl.key.task_leader.id == sessionScope.login_person.id }">
+                    <p><a href="<c:url value='/tasks/finish'/>">taskを完了済にする</a></p>
+                </c:if>
                 <c:if test="${tasks_history ==1 }">
                     <p><a href="<c:url value='/tasks/groups/history?id=${tl.key.id}'/>">更新履歴を全て見る</a></p>
                 </c:if>

@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
         <h2>${sessionScope.account.name}のアカウント情報 詳細ページ</h2>
-        <table>
+        <table class="account_show">
             <tbody>
                 <tr>
                     <th>名前</th>

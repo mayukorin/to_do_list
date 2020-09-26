@@ -25,7 +25,7 @@ import javax.persistence.Table;
             query = "select t from Task as t,Show as s where t.account = :account and t = s.task and s.group = :group order by t.deadline"),
     @NamedQuery(
             name = "GroupMemberAllTask",
-            query = "select t from Task as t,Show as s  where t = s.task and s.group = :group"),
+            query = "select t from Task as t,Show as s  where t = s.task and s.group = :group order by t.deadline"),
     @NamedQuery(
             name = "GetTaskHistroy",
             query = "select t from Task as t where t.origin_task_id = :origin_task_id")

@@ -13,11 +13,11 @@
             <tbody>
                 <c:forEach var="tl" items = "${task_like}">
                      <tr data-href="<c:url value='/groups/tasks/show?id=${tl.key.id}'/>">
-                     <td class="icon"><i class="fas fa-circle"></i></td>
+                     <td class="icon"><i class="fas fa-circle circle${tl.value % 3 }"></i></td>
                      <td><c:out value="${tl.key.title}"/></td>
                      <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
                      <c:choose>
-                            <c:when test="${tl.value == 0 }">
+                            <c:when test="${tl.value % 2 == 1 }">
                                 <td ><a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=0'/>"><i class="far fa-heart"></i></a></td>
                             </c:when>
                             <c:otherwise>

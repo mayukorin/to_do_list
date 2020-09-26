@@ -1,6 +1,7 @@
 package toppage;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class LoginPersonToppageServlet extends HttpServlet {
         // TODO Auto-generated method stub
 
         //taskとtaskに対していいねしているかを確認
-        LinkedHashMap<Task,Long> task_like = new LinkedHashMap<Task,Long>();
+        LinkedHashMap<Task,Integer> task_like = new LinkedHashMap<Task,Integer>();
 
         if (request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
@@ -63,6 +64,7 @@ public class LoginPersonToppageServlet extends HttpServlet {
         }
 
         EntityManager em = DBUtil.createEntityManager();
+        Date today = new Date();
 
         Person p = (Person) request.getSession().getAttribute("login_person");//ログインしている人
 
@@ -70,9 +72,32 @@ public class LoginPersonToppageServlet extends HttpServlet {
         List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();
 
         for (Task t:tasks) {
-            System.out.println(t.getTitle());
-           Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();
-           task_like.put(t, like_count);
+           Date deadline = t.getDeadline();
+           long day_diff = (deadline.getTime()-today.getTime())/(1000 * 60 * 60 * 24 );//今日との差
+
+
+           Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();//そのtaskに対して自分がいいねをしているか
+
+           if (like_count == 1 && day_diff <2) {
+               //自分がいいねをしていて、かつ期限が1日以内
+               task_like.put(t, 4);
+           } else if (like_count == 0 && day_diff < 2) {
+               //自分がいいねをしていなくて、かつ期限が1日以内
+               task_like.put(t, 1);
+           } else if (like_count == 1 && day_diff < 8) {
+               //自分がいいねをしていて、期限が7日以内
+               task_like.put(t, 2);
+           } else if (like_count == 0 && day_diff <8) {
+               //自分がいいねをしていなくて、期限が７日以内
+               task_like.put(t, 5);
+           } else if (like_count == 1 && day_diff > 7) {
+               //自分がいいねをしていて、期限が7日以上
+               task_like.put(t, 6);
+           } else if (like_count == 0 && day_diff > 7) {
+               //自分がいいねをしていなくて、期限が７日以上
+               task_like.put(t, 3);
+           }
+
         }
 
        //ログインしている人が所属しているグループ
