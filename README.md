@@ -35,6 +35,7 @@ https://servlet-todo-list-1120.herokuapp.com/login
 ⚫︎MySQL Community Server  
 ⚫︎JDBCドライバ  
 ⚫︎Java  
+（⚫︎Eclipse 4.6 Neon)  
 
 # Usage
 基本的な使い方を、Todo_list_diagram.xlsx（2シートあります）に載せてあります。
