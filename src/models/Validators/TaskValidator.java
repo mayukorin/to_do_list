@@ -45,6 +45,7 @@ public class TaskValidator {
         return errors;
     }
 
+    //task名の必須入力チェック
     private static String _validateTitle(String title) {
         if(title == null || title.equals("")) {
             return "Task名を入力してください。";
@@ -53,6 +54,7 @@ public class TaskValidator {
         return "";
     }
 
+    //締め切り日の必須入力チェック
     private static String _validateDate(Task t,String date) {
 
         try {
@@ -69,6 +71,7 @@ public class TaskValidator {
         return "";
     }
 
+    //taskのリーダーが正しいかチェック
     private static String _validateLeader(Group group,String leader_code,Boolean leader_check_flag) {
         if (leader_check_flag == true) {
             if (leader_code == null || leader_code.equals("")) {

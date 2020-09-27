@@ -51,40 +51,44 @@ public class GroupTaskShowServlet extends HttpServlet {
             request.getSession().removeAttribute("origin_comment_id");
         }
 
-
+        ///詳細を見たいtaskを取り出す/////////////////////////////////////////////////////////
         if (request.getSession().getAttribute("liked_task") != null) {
+            //HeartCreateServlet・HeartDestroyServletからきた場合
+
             task = (Task)request.getSession().getAttribute("liked_task");
             request.getSession().removeAttribute("liked_task");
+
         } else if (request.getSession().getAttribute("commented_task") != null) {
             //CommentCreateServletからきた場合
+
             task = (Task)request.getSession().getAttribute("commented_task");
             request.getSession().removeAttribute("commented_task");
+
         } else if (request.getSession().getAttribute("finish_task") != null){
             //TaskFinishServletからきた場合
+
             task = (Task)request.getSession().getAttribute("finish_task");
             request.getSession().removeAttribute("finish_task");
+
         } else {
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
 
-
-
         request.setAttribute("task",task);
+        ///////////////////////////////////////////////////////////////////////////////
+
         if (request.getParameter("iid") == null) {
             if (request.getSession().getAttribute("updated_task") != null) {
                 //task更新履歴ページから戻ってきた場合
-                //task更新履歴ページから昔のtaskを表示させたい場合はupdated_taskを残しておく
-
 
                 request.getSession().removeAttribute("updated_task");
             }
-        } else {
-
-            System.out.println(((Task)request.getSession().getAttribute("updated_task")).getTitle());
         }
 
+        //ログインしている人
         Person p = (Person)request.getSession().getAttribute("login_person");
 
+        //詳細を見ようとしているtaskに対していいねをしているか
         Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person",p).setParameter("task",task).getSingleResult();
 
         task_like.put(task, like_count);
@@ -103,12 +107,13 @@ public class GroupTaskShowServlet extends HttpServlet {
                 //過去のtaskを全てとってくる
                 List<Task> tasks_history = em.createNamedQuery("GetTaskHistroy",Task.class).setParameter("origin_task_id",task.getOrigin_task_id()).getResultList();
                 tasks_history.remove(tasks_history.size()-1);//最新のtaskだけ省く（最新のtaskは変数taskに格納ずみ）
-                System.out.println(tasks_history.size());
+
                 if (tasks_history.size() != 0) {
                     request.setAttribute("tasks_history", 1);
                 }
-                //過去のtask
+                //大元のtask
                 Task ot = em.find(Task.class, task.getOrigin_task_id());
+                //そのtaskを過去に見たことがあるか
                 Look_count = em.createNamedQuery("getLookCount",Long.class).setParameter("person", p).setParameter("task", ot).getSingleResult();
 
                 if (Look_count == 0) {
@@ -128,11 +133,10 @@ public class GroupTaskShowServlet extends HttpServlet {
                     Timestamp origin_time = look.getUpdated_at();
                     Timestamp update_task_time = task.getUpdated_at();
 
-                    System.out.println("origin_time"+origin_time);
-                    System.out.println("update_Task_time"+update_task_time);
 
                     if (origin_time.before(update_task_time)) {
                         //そのtaskを見たのが、task更新前の時
+                        //「taskが更新されている」というflushメッセージを流す
 
                         request.setAttribute("flush", "taskが更新されています");
                     }

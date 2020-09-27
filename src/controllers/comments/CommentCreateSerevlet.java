@@ -42,6 +42,7 @@ public class CommentCreateSerevlet extends HttpServlet {
 
 
         String _token = (String)request.getParameter("_token");
+
         if (_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
@@ -49,6 +50,7 @@ public class CommentCreateSerevlet extends HttpServlet {
 
             Comment c = new Comment();
 
+            //入力欄から入力されたコメント
             String content = request.getParameter("content");
 
             if (content == null || content.equals("")) {
@@ -85,8 +87,9 @@ public class CommentCreateSerevlet extends HttpServlet {
 
                 if (request.getSession().getAttribute("origin_comment_id") != null) {
 
-                    //返信のコメントを追加しようとしている
+                    //返信のコメントを追加しようとしている時
 
+                    //返信元のコメント
                     Comment origin_comment = em.find(Comment.class, (Integer)request.getSession().getAttribute("origin_comment_id"));
                     c.setFor_comment(origin_comment);
 
@@ -108,8 +111,8 @@ public class CommentCreateSerevlet extends HttpServlet {
                     request.getSession().setAttribute("flush", "コメントの投稿が完了しました。");
 
 
-                    if (t.getAccount().getId().equals(login_person.getId())) {
-                        //自分自身のtaskについてのコメント
+                    if (request.getSession().getAttribute("group") == null) {
+                        //ホーム画面のtask一覧からtaskを選んでコメントした時
                         response.sendRedirect(request.getContextPath()+"/tasks/persons/show");
                     } else if (t.getAccount().getId().equals(((Group)request.getSession().getAttribute("group")).getId())) {
                         //groupのtaskについてのコメント

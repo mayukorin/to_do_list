@@ -46,35 +46,40 @@ public class MemberTaskShowServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
+
+        if (request.getSession().getAttribute("origin_comment_id") != null) {
+            request.getSession().removeAttribute("origin_comment_id");
+        }
+
+        //詳細を見たいtaskを取り出す///////////////////////////////////////////////////////
         if (request.getSession().getAttribute("liked_task") != null) {
+            //HeartDestroyServlet・HeartCreateServletからきた場合
+
             task = (Task)request.getSession().getAttribute("liked_task");
             request.getSession().removeAttribute("liked_task");
+
         } else if (request.getSession().getAttribute("commented_task") != null) {
             //CommentCreateServletからきた場合
+
             task = (Task)request.getSession().getAttribute("commented_task");
             request.getSession().removeAttribute("commented_task");
+
         } else if (request.getSession().getAttribute("finish_task") != null){
             //TaskFinishServletからきた場合
+
             task = (Task)request.getSession().getAttribute("finish_task");
             request.getSession().removeAttribute("finish_task");
+
         } else {
 
             task = em.find(Task.class,Integer.parseInt(request.getParameter("id")));//クエリパラメーターから選択したtaskを取り出す
         }
         request.setAttribute("task",task);
+        //////////////////////////////////////////////////////////////////////////////////////////
 
-/*
-        if (request.getSession().getAttribute("account") == null) {
-
-            //②メンバーのtask一覧からtask詳細に来た場合
-
-            Account a = task.getAccount();
-            request.getSession().setAttribute("account", a);
-        }
-*/
-
+        //ログインしている人
         Person p = (Person)request.getSession().getAttribute("login_person");
-
+        //そのtaskに対していいねをしているか
         Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person",p).setParameter("task",task).getSingleResult();
 
         task_like.put(task, like_count);
@@ -82,13 +87,6 @@ public class MemberTaskShowServlet extends HttpServlet {
         //taskに対するコメントを表示する
         List<Comment> comments = em.createNamedQuery("getComments",Comment.class).setParameter("task",task).getResultList();
         request.setAttribute("comments", comments);
-
-        if (request.getSession().getAttribute("origin_comment_id") != null) {
-            request.getSession().removeAttribute("origin_comment_id");
-        }
-
-
-
 
         em.close();
 

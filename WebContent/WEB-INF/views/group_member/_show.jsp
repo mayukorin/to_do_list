@@ -13,6 +13,10 @@
                     <th>アカウント番号</th>
                     <td><c:out value="${sessionScope.account.code}"/></td>
                 </tr>
+                <tr>
+                    <th>ポジション</th>
+                    <td><c:out value="${b.position}"/></td>
+                </tr>
                 <c:if test="${groups != null }">
                 <tr>
 
@@ -28,7 +32,7 @@
                  </c:if>
              </tbody>
         </table>
-
+        <br/><br/>
         <c:if test="${persons != null }">
         <table id="person_list">
         <tbody>

@@ -7,7 +7,7 @@
         <form method="POST" action="<c:url value='/persons/create'/>">
             <c:import url="_form.jsp"/>
             <input type="hidden" name="_token" value="${_token}"/>
-            <button type="submit">投稿</button>
+            <button type="submit">登録</button>
         </form>
 
 

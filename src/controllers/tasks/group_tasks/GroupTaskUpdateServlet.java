@@ -41,6 +41,7 @@ public class GroupTaskUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         String _token = (String)request.getParameter("_token");
+
         if(_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
@@ -52,91 +53,92 @@ public class GroupTaskUpdateServlet extends HttpServlet {
             Task t = em.find(Task.class, (Integer)(request.getSession().getAttribute("task_id")));//変更しようとしているtask
             Person p = (Person)request.getSession().getAttribute("login_person");//loginしている人
 
-      //①新たにtaskインスタンスを生成する
-        //②taskインスタンスのorigin_task_idに、元々のtaskのidを設定する
-        //③showインスタンスを①で更新したtaskに設定
+            //①新たにtaskインスタンスを生成する
+            //②taskインスタンスのorigin_task_idに、元々のtaskのidを設定する
+            //③showインスタンスを①で更新したtaskに設定
 
-        //①新たにtaskインスタンスを生成する/////////////////////////////
-        Task tt = new Task();
+            //①新たにtaskインスタンスを生成する/////////////////////////////
+            Task tt = new Task();
 
-        tt.setTitle(request.getParameter("title"));
-        tt.setMemo(request.getParameter("memo"));
+            tt.setTitle(request.getParameter("title"));
+            tt.setMemo(request.getParameter("memo"));
 
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        tt.setCreated_at(currentTime);
-        tt.setUpdated_at(currentTime);
-        tt.setUpdate_person(p);
-        tt.setAccount(t.getAccount());
-
-
-        String date = request.getParameter("deadline");
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+            tt.setCreated_at(currentTime);
+            tt.setUpdated_at(currentTime);
+            tt.setUpdate_person(p);
+            tt.setAccount(t.getAccount());
 
 
-        String task_leader_code = request.getParameter("task_leader");
+            String date = request.getParameter("deadline");
 
 
-        //入力内容エラーチェック（リーダーもチェック）
-        errors = TaskValidator.validate(tt, date, (Group)t.getAccount(), task_leader_code, leader_check_flag);
-        //////////////////////////////////////////////////////////////////
-
-        if (errors.size() > 0) {
-            //入力内容にエラーがある時
-            em.close();
-
-            request.setAttribute("task", t);
-            request.setAttribute("_token", request.getSession().getId());
-            request.setAttribute("errors", errors);
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/group_tasks/edit.jsp");
-            rd.forward(request, response);
-        } else {
-            //入力内容にエラーがない時
-
-            //②taskインスタンスのorigin_task_idに、元々のtaskのidを設定する///////////////////////////////////////////////
-
-            if (t.getOrigin_task_id() == null) {
-                //始めての更新の時
-                //origin_task_idに、自身のtaskのidを設定する
-                t.setOrigin_task_id(t.getId());
-
-            }
-            //taskインスタンスのorigin_task_idに、元々のtaskのid（更新前のtaskのorigin_task_idの値)を設定する///////
-            tt.setOrigin_task_id(t.getOrigin_task_id());
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            //taskのleaderを設定
-            task_leader = (Person) em.createNamedQuery("getAccount",Account.class).setParameter("code",task_leader_code).getSingleResult();
-            tt.setTask_leader(task_leader);
-
-           //taskを保存する。
-            em.getTransaction().begin();
-            em.persist(tt);
-            em.getTransaction().commit();
-
-           //③showインスタンスを①で更新したtaskに設定//////////////////////////////////////////////////////////
-            Show show = em.createNamedQuery("getShowGroupTask",Show.class).setParameter("task", t).setParameter("group", (Group)tt.getAccount()).getSingleResult();
-            show.setTask(tt);
-
-            em.getTransaction().begin();
-
-            em.getTransaction().commit();
-
-            em.close();
-
-            request.getSession().setAttribute("flush", "taskの更新が完了しました。");
-            request.getSession().removeAttribute("task_id");
+            String task_leader_code = request.getParameter("task_leader");
 
 
-            if (request.getSession().getAttribute("account") == null) {
-                //⑪の画面に戻る
-                response.sendRedirect(request.getContextPath()+"/groups/toppage");
+            //入力内容エラーチェック（リーダーもチェック）
+            errors = TaskValidator.validate(tt, date, (Group)t.getAccount(), task_leader_code, leader_check_flag);
+            //////////////////////////////////////////////////////////////////
+
+            if (errors.size() > 0) {
+                //入力内容にエラーがある時
+                //task編集画面にリダイレクト
+                em.close();
+
+                request.setAttribute("task", t);
+                request.setAttribute("_token", request.getSession().getId());
+                request.setAttribute("errors", errors);
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/group_tasks/edit.jsp");
+                rd.forward(request, response);
             } else {
-                //⑭の画面に戻る
-                response.sendRedirect(request.getContextPath()+"/group/toppage");
+                //入力内容にエラーがない時
+
+                //②taskインスタンスのorigin_task_idに、元々のtaskのidを設定する///////////////////////////////////////////////
+
+                if (t.getOrigin_task_id() == null) {
+                    //始めての更新の時
+                    //origin_task_idに、自身のtaskのidを設定する
+                    t.setOrigin_task_id(t.getId());
+
+                }
+                //新しく生成したtaskインスタンスのorigin_task_idに、元々のtaskのid（更新前のtaskのorigin_task_idの値)を設定する///////
+                tt.setOrigin_task_id(t.getOrigin_task_id());
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                //taskのleaderを設定
+                task_leader = (Person) em.createNamedQuery("getAccount",Account.class).setParameter("code",task_leader_code).getSingleResult();
+                tt.setTask_leader(task_leader);
+
+                //taskを保存する。
+                em.getTransaction().begin();
+                em.persist(tt);
+                em.getTransaction().commit();
+
+                //③showインスタンスを①で更新したtaskに設定//////////////////////////////////////////////////////////
+                Show show = em.createNamedQuery("getShowGroupTask",Show.class).setParameter("task", t).setParameter("group", (Group)tt.getAccount()).getSingleResult();
+                show.setTask(tt);
+
+                em.getTransaction().begin();
+
+                em.getTransaction().commit();
+
+                em.close();
+
+                request.getSession().setAttribute("flush", "taskの更新が完了しました。");
+                request.getSession().removeAttribute("task_id");
+
+
+                if (request.getSession().getAttribute("account") == null) {
+                    //groupmemberのトップページへ
+                    response.sendRedirect(request.getContextPath()+"/groups/toppage");
+                } else {
+                    //groupのトップページへ
+                    response.sendRedirect(request.getContextPath()+"/group/toppage");
+                }
+
+
             }
-
-
-        }
         }
     }
 }

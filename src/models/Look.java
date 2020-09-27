@@ -23,6 +23,9 @@ import javax.persistence.Table;
             name = "getLook",
             query = "select l from Look as l where l.person = :person and l.looked_task = :task"
             ),
+    @NamedQuery(
+            name = "getAllLooks",
+            query = "select l from Look as l where l.looked_task = :task")
 
 
 })

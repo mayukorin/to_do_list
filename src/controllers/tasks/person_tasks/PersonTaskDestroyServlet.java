@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Comment;
 import models.Show;
 import models.Task;
 import utils.DBUtil;
@@ -39,9 +40,10 @@ public class PersonTaskDestroyServlet extends HttpServlet {
         if(_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
+            ////削除しようとしているtask
             Task t = em.find(Task.class, (Integer)request.getSession().getAttribute("task_id"));
 
-            //そのtaskを公開しているshowを取り出す
+            //そのtaskを公開しているshow
             List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("task", t).getResultList();
 
             if (shows != null) {
@@ -53,13 +55,30 @@ public class PersonTaskDestroyServlet extends HttpServlet {
                     em.remove(show);
                     em.getTransaction().commit();
                 }
-
-                //taskを削除する
-                em.getTransaction().begin();
-                em.remove(t);
-                em.getTransaction().commit();
-
             }
+
+            //そのtaskに対するコメント
+            List<Comment> comments = em.createNamedQuery("AllComments",Comment.class).setParameter("task",t).getResultList();
+
+            if (comments != null) {
+                //そのtaskを公開しているcommentがあれば
+                //そのcommentを一つずつ削除する
+
+                for (Comment comment:comments) {
+                    em.getTransaction().begin();
+                    em.remove(comment);
+                    em.getTransaction().commit();
+                }
+            }
+
+
+            //taskを削除する
+            em.getTransaction().begin();
+            em.remove(t);
+            em.getTransaction().commit();
+
+
+
 
             em.close();
             request.getSession().removeAttribute("task_id");

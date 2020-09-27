@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Look;
 import models.Show;
 import models.Task;
 import utils.DBUtil;
@@ -45,7 +46,7 @@ public class GroupTaskDestroyServlet extends HttpServlet {
             List<Show> shows = em.createNamedQuery("getShows",Show.class).setParameter("task", t).getResultList();
 
 
-            //groupのtaskを削除しようとしている時
+
             //①showを削除する
             if (shows != null) {
                 //そのtaskを公開しているshowがあれば
@@ -58,10 +59,27 @@ public class GroupTaskDestroyServlet extends HttpServlet {
                 }
             }
 
-            //②過去のtask履歴を全て削除する/////////////////////////////////////////////////////////////
+
+
+            //②Lookと過去のtask履歴を全て削除する/////////////////////////////////////////////////////////////
             if (t.getOrigin_task_id() != null) {
                 //Groupのtaskかつ過去に更新してきているtaskの時
-                //過去のtaskを全てとってくる
+
+                Task origin_task = em.find(Task.class, t.getOrigin_task_id());
+                //Lookを全て取ってきて、削除する///////////////////////////////////////////////////
+
+                List<Look> looks = em.createNamedQuery("getAllLooks",Look.class).setParameter("task",origin_task).getResultList();
+
+                if (looks.size() != 0) {
+                    for (Look look:looks) {
+                        em.getTransaction().begin();
+                        em.remove(look);
+                        em.getTransaction().commit();
+                    }
+                }
+                ////////////////////////////////////////////////////////////////////////////////
+
+                //過去のtaskを全てとってきて、削除する//////////////////////////////////////////////////
                 List<Task> tasks_history = em.createNamedQuery("GetTaskHistroy",Task.class).setParameter("origin_task_id",t.getOrigin_task_id()).getResultList();
 
                 //task履歴を全て削除
@@ -70,8 +88,21 @@ public class GroupTaskDestroyServlet extends HttpServlet {
                     em.remove(task);
                     em.getTransaction().commit();
                 }
+                ///////////////////////////////////////////////////////////////////////////////
             } else {
                 //過去のtask履歴は存在しない時
+
+                //Lookを全て取ってきて、削除する///////////////////////////////////////////////////
+
+                List<Look> looks = em.createNamedQuery("getAllLooks",Look.class).setParameter("task",t).getResultList();
+
+                if (looks.size() != 0) {
+                    for (Look look:looks) {
+                        em.getTransaction().begin();
+                        em.remove(look);
+                        em.getTransaction().commit();
+                    }
+                }
                 em.getTransaction().begin();
                 em.remove(t);
                 em.getTransaction().commit();

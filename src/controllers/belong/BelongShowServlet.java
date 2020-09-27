@@ -39,9 +39,11 @@ public class BelongShowServlet extends HttpServlet {
 
 
 
+        //ログインしている人
         Person p = (Person)request.getSession().getAttribute("login_person");
+        //所属しているgroup
         Group g = em.find(Group.class,Integer.parseInt(request.getParameter("id")));
-
+        //その人と、groupを結びつけているbelongインスタンス
         Belong b = em.createNamedQuery("getGroupPersonBelong",Belong.class).setParameter("group",g).setParameter("person",p).getSingleResult();
 
         request.setAttribute("belong", b);

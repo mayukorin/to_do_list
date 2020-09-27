@@ -14,19 +14,18 @@
                 <c:forEach var="tl" items = "${task_like}">
 
                     <c:choose>
-                        <c:when test="${sessionScope.login_person.id == tl.key.account.id && sessionScope.group == null}">
-                            <tr data-href="<c:url value='/tasks/persons/show?id=${tl.key.id}'/>">
+                        <c:when test="${sessionScope.group.id == tl.key.account.id }">
+                            <tr data-href="<c:url value='/groups/tasks/show?id=${tl.key.id}'/>">
                             <td class="icon">
-                                    <c:choose>
+                                <c:choose>
                                         <c:when test="${tl.key.finish_flag == 0}">
-                                            <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                            <i class="far fa-circle circle${tl.value % 3 }"></i>
                                         </c:when>
                                         <c:otherwise>
                                             <i class="far fa-check-circle check"></i>
                                         </c:otherwise>
                                     </c:choose>
                             </td>
-
                             <td><c:out value="${tl.key.title}"/></td>
                             <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
                             <c:choose>
@@ -39,12 +38,12 @@
                             </c:choose>
                             </tr>
                         </c:when>
-                        <c:when test="${ tl.key.account.id == tl.key.task_leader.id  }">
+                        <c:otherwise>
                             <tr data-href="<c:url value='/members/tasks/show?id=${tl.key.id}'/>">
                             <td class="icon">
                                 <c:choose>
                                         <c:when test="${tl.key.finish_flag == 0}">
-                                            <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                            <i class="far fa-circle circle${tl.value % 3 }"></i>
                                         </c:when>
                                         <c:otherwise>
                                             <i class="far fa-check-circle check"></i>
@@ -62,41 +61,10 @@
                             </c:otherwise>
                             </c:choose>
                             </tr>
-                        </c:when>
-                        <c:otherwise>
-                            <tr data-href="<c:url value='/groups/tasks/show?id=${tl.key.id}'/>">
-                            <td class="icon">
-                                <c:choose>
-                                        <c:when test="${tl.key.finish_flag == 0}">
-                                            <i class="fas fa-circle circle${tl.value % 3 }"></i>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <i class="far fa-check-circle check"></i>
-                                        </c:otherwise>
-                                    </c:choose>
-                            </td>
-                            <td><c:out value="${tl.key.title}"/></td>
-                            <td><fmt:formatDate value="${tl.key.deadline}" pattern="yyyy/MM/dd HH:mm" /></td>
-                            <c:choose>
-                            <c:when test="${tl.value % 2 == 1 }">
-                                <td ><a href="<c:url value='/hearts/create?id=${tl.key.id}&flag=0'/>"><i class="far fa-heart"></i></a></td>
-                            </c:when>
-                            <c:otherwise>
-                                <td ><a href="<c:url value='/hearts/destroy?id=${tl.key.id }&flag=0'/>"><i class="fas fa-heart red_heart"></i></a></td>
-                            </c:otherwise>
-                            </c:choose>
-                            </tr>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
             </tbody>
         </table>
-        <div>
-            <c:if test="${groups != null}">
-                <c:forEach var="g" items="${groups}">
-                    <p><a href="<c:url value='/groups/toppage?id=${g.id}'/>">${g.name}</a></p>
-                </c:forEach>
-            </c:if>
-        </div>
     </c:param>
 </c:import>

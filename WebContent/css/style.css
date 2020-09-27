@@ -397,7 +397,7 @@ ul#member_list li#gm {
     color:red;
 }
 
-.circle2 {
+.circle2{
     color:orange;
 }
 
@@ -417,6 +417,11 @@ pre {
     margin-top:3px;
     border-bottom: 2px solid #DDDDDD;
 }
+
+#gmm:hover{
+  background-color: #d4f0fd;
+}
+
 
 #group_member {
     border: 2px solid #DDDDDD;
@@ -473,4 +478,36 @@ table.account_show{
 
 .check {
     color:#78FF94;
+}
+
+table#person_list{
+    width: 100%;
+    table-layout: fixed;
+    border: 1px solid #cccccc;
+}
+
+#person_list th {
+    width: 26%;
+    padding: 10px 2%;
+    border: 1px solid #cccccc;
+}
+
+#person_list td {
+    width: 66%;
+    padding: 10px 2%;
+    border: 1px solid #cccccc;
+}
+
+#origin_task {
+    border: 2px solid #DDDDDD;
+    border-radius :3px;
+    width:80%;
+    margin:auto;
+    background-color:white;
+    text-align:center;
+    margin-top:10px;
+}
+
+#origin_task:hover {
+    background-color:#d4f0fd
 }

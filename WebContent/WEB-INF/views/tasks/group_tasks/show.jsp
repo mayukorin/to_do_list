@@ -7,10 +7,14 @@
     <c:choose>
         <c:when test="${sessionScope.updated_task == null}">
             <p><a href="<c:url value='/tasks/groups/edit?id=${task.id}'/>">このtaskを編集する</a></p>
-            <p><a href="<c:url value="/groups/toppage"/>">${sessionScope.group.name}のメンバーのtask一覧画面に戻る</a></p>
-            <c:if test="${sessionScope.account != null }">
+            <c:choose>
+            <c:when test="${sessionScope.account != null }">
                 <p><a href="<c:url value="/group/toppage"/>">${sessionScope.account.name}のtask一覧画面に戻る</a></p>
-            </c:if>
+            </c:when>
+            <c:otherwise>
+                <p><a href="<c:url value="/groups/toppage"/>">${sessionScope.group.name}のメンバーのtask一覧画面に戻る</a>
+            </c:otherwise>
+            </c:choose>
         </c:when>
         <c:otherwise>
                 <p><a href="<c:url value="/tasks/groups/history?id=${origin_task.id }"/>">task更新履歴一覧に戻る</a></p>

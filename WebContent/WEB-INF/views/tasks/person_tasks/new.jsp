@@ -4,7 +4,7 @@
     <c:param name="content2">
         <c:choose>
             <c:when test="${task != null}">
-                <h2>task 編集ページ</h2>
+                <h2>task 作成ページ</h2>
                 <form method="POST" action="<c:url value='/tasks/persons/create' />">
                     <c:import url="../_form.jsp" />
                 </form>

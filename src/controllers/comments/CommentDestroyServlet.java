@@ -47,7 +47,6 @@ public class CommentDestroyServlet extends HttpServlet {
             request.getSession().removeAttribute("comment_id");
 
             request.getSession().setAttribute("flush", "コメントの削除が完了しました。");
-            System.out.println("どれみドレミどれ美空氏ど");
 
             response.sendRedirect(request.getContextPath()+"/comments/show");
 

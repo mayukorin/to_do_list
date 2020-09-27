@@ -58,7 +58,7 @@
                 <aside class="right">
                     <c:if test="${sessionScope.group != null }">
                     <div id="group_member">
-                        <div id="gmm">${sessionScope.group.name}のメンバー</div>
+                        <div id="gmm" data-href="<c:url value='/groups/toppage?id=${sessionScope.group.id}'/>">${sessionScope.group.name}のメンバー</div>
                         <table id="members_list">
                             <tr align="center" data-href = "<c:url value='/group/toppage?id=${sessionScope.group.id}'/>">
 
@@ -67,7 +67,6 @@
                             <c:if test="${sessionScope.ps != null }">
                                 <c:forEach var="p" items="${ps}">
                                     <tr align="center" data-href = "<c:url value='/members/toppage?id=${p.id }'/>">
-
                                         <td >${p.name}</td>
                                     </tr>
                                 </c:forEach>
@@ -75,6 +74,10 @@
                         </table>
                         </div>
                     </c:if>
+                    <c:if test="${sessionScope.updated_task != null }">
+                        <div id="origin_task" data-href = "<c:url value='/groups/tasks/show?id=${sessionScope.updated_task.id}'/>">最新のtaskページ</div>
+
+                        </c:if>
                 </aside>
 
             </div>
@@ -111,6 +114,26 @@
                     //その要素の先祖要素で一番近いtrの
                     //data-href属性の値に書かれているURLに遷移する
                     window.location = $(e.target).closest('tr').data('href');}
+              });
+            });
+
+        </script>
+        <script>
+        //tasklistをクリックした時の処理
+        jQuery(function($) {
+
+              //data-hrefの属性を持つtrを選択しclassにclickableを付加
+              $('div[data-href]').addClass('clickable')
+
+                //クリックイベント
+                .click(function(e) {
+
+                  //e.targetはクリックした要素自体、それがa要素以外であれば
+                  if(!$(e.target).is('a')){
+
+                    //その要素の先祖要素で一番近いtrの
+                    //data-href属性の値に書かれているURLに遷移する
+                    window.location = $(e.target).closest('div').data('href');}
               });
             });
 

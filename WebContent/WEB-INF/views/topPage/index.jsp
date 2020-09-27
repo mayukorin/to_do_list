@@ -16,7 +16,7 @@
                         <td class="icon">
                             <c:choose>
                                 <c:when test="${tl.key.finish_flag == 0}">
-                                    <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                    <i class="far fa-circle circle${tl.value % 3 }"></i>
                                 </c:when>
                                 <c:otherwise>
                                     <i class="far fa-check-circle check"></i>

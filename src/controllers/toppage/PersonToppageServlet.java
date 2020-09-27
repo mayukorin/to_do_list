@@ -1,4 +1,4 @@
-package controllers.group;
+package controllers.toppage;
 
 import java.io.IOException;
 import java.util.Date;
@@ -13,23 +13,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Account;
-import models.Group;
 import models.Person;
 import models.Task;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class GroupToppageServlet
+ * Servlet implementation class PersonToppageServlet
  */
-@WebServlet("/group/toppage")
-public class GroupToppageServlet extends HttpServlet {
+@WebServlet("/toppage/index")
+public class PersonToppageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GroupToppageServlet() {
+    public PersonToppageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,13 +37,7 @@ public class GroupToppageServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        EntityManager em = DBUtil.createEntityManager();
-        Account a;
-      //taskとtaskに対していいねしているかを確認
-        LinkedHashMap<Task,Integer> task_like = new LinkedHashMap<Task,Integer>();
 
-      //ログインしている本人
-        Person p = (Person) request.getSession().getAttribute("login_person");
 
 
         if (request.getSession().getAttribute("flush") != null) {
@@ -53,30 +45,48 @@ public class GroupToppageServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
-
-
-
-        if (request.getParameter("id") != null) {
-
-            a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
-            //今からトップページを見ようとしているアカウントをセッションスコープに格納
-            request.getSession().setAttribute("account", a);
-
+        if (request.getSession().getAttribute("group") != null) {
+            //group・member系のページからPersonToppageServletに戻ってきた時
+            request.getSession().removeAttribute("group");
         }
 
-        Group g = (Group) request.getSession().getAttribute("group");
+        if (request.getSession().getAttribute("ps") != null) {
+            //group・member系のページからPersonToppageServletに戻ってきた時
+            request.getSession().removeAttribute("ps");
+        }
 
+        if (request.getSession().getAttribute("account") != null) {
+            //member系のページからPersonToppageServletに戻ってきた時
+            request.getSession().removeAttribute("account");
+        }
 
+        if (request.getSession().getAttribute("updated_task") != null) {
+            //Groupの過去のtaskページからPersonToppageServletに戻ってきた時
+            request.getSession().removeAttribute("updated_task");
+        }
 
-        List<Task> tasks = em.createNamedQuery("openGroupTask",Task.class).setParameter("account",(Account)request.getSession().getAttribute("account")).setParameter("group",g).getResultList();//今見ようとしている人の、そのgroupで公開されているTask
+        EntityManager em = DBUtil.createEntityManager();
+
+        //taskとそのtaskに対応する情報（いいねしてるか・期限までの日にち）を格納
+        LinkedHashMap<Task,Integer> task_like = new LinkedHashMap<Task,Integer>();
+
+        //今日の日付
         Date today = new Date();
-        for (Task t:tasks) {
-            //taskの締め切り日
-            Date deadline = t.getDeadline();
-            long day_diff = (deadline.getTime()-today.getTime())/(1000 * 60 * 60 * 24 );//締め切り日と今日との差
 
-            //そのtaskにいいねをしているか
-            Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();//そのtaskに対して自分がいいねをしているか
+        //ログインしている人
+        Person p = (Person) request.getSession().getAttribute("login_person");
+
+        //ログインしている人のTask（公開しているのものも、していないものも全て）
+        List<Task> tasks = em.createNamedQuery("getPersonsTask",Task.class).setParameter("account",p).getResultList();
+
+        for (Task t:tasks) {
+            //そのtaskの締め切り
+            Date deadline = t.getDeadline();
+            //締め切りー今日
+            long day_diff = (deadline.getTime()-today.getTime())/(1000 * 60 * 60 * 24 );
+
+            //そのtaskに対して自分がいいねをしていたら1、していなければ0
+            Long like_count = em.createNamedQuery("task_like",Long.class).setParameter("person", p).setParameter("task", t).getSingleResult();
 
             if (like_count == 1 && day_diff <2) {
                 //自分がいいねをしていて、かつ期限が1日以内
@@ -98,14 +108,14 @@ public class GroupToppageServlet extends HttpServlet {
                 task_like.put(t, 3);
             }
 
-         }
+        }
+
+        em.close();
 
         request.setAttribute("task_like", task_like);
 
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/toppage.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
         rd.forward(request, response);
-
 
     }
 

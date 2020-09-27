@@ -21,7 +21,11 @@ import javax.persistence.Table;
                 query = "select c from Comment as c where c.for_task = :task and c.for_comment = null order by c.updated_at"),
         @NamedQuery(
                 name ="getReturnComments",
-                query = "select c from Comment as c where c.for_comment = :comment and c.delete_flag = 0")
+                query = "select c from Comment as c where c.for_comment = :comment and c.delete_flag = 0"),
+        @NamedQuery(
+                name = "AllComments",
+                query = "select c from Comment as c where c.for_task = :task")
+
 })
 @Entity
 public class Comment {

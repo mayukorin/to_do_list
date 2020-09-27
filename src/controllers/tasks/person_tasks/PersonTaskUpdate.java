@@ -41,25 +41,31 @@ public class PersonTaskUpdate extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
         String _token = (String)request.getParameter("_token");
+
         if(_token != null && _token.equals(request.getSession().getId())) {
+
             EntityManager em = DBUtil.createEntityManager();
 
-            Person p = (Person)request.getSession().getAttribute("login_person");
-            //ログインしている人が所属しているグループ
-             List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
             List<String> errors;
             Boolean leader_check_flag = false;
+
+            //ログインしている人
+            Person p = (Person)request.getSession().getAttribute("login_person");
+            //ログインしている人が所属しているグループ
+            List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
 
 
             Task t = em.find(Task.class, (Integer)(request.getSession().getAttribute("task_id")));//変更しようとしているtask
 
-
             t.setTitle(request.getParameter("title"));
+
             t.setMemo(request.getParameter("memo"));
 
             Timestamp currentTime = new Timestamp(System.currentTimeMillis());
             t.setCreated_at(currentTime);
             t.setUpdated_at(currentTime);
+
+
             String date = request.getParameter("deadline");
 
 
@@ -68,8 +74,6 @@ public class PersonTaskUpdate extends HttpServlet {
 
             if (errors.size() > 0) {
                 //入力内容にエラーがある時、編集画面にリダイレクト
-
-
                 request.setAttribute("task", t);
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("errors", errors);
@@ -95,14 +99,16 @@ public class PersonTaskUpdate extends HttpServlet {
                 em.getTransaction().commit();
 
 
-                //taskの公開範囲を設定
+                //taskを所属groupに公開するためのshowインスタンスを作成する
                 for(Group group:groups) {
 
                     Show show_flag;
                     String id = (group.getId()).toString();
-                    //更新しようとしているtaskとgroupをつなくshowがあるか確認する
+
                     try {
+                        //更新しようとしているtaskとgroupをつなくshowがあるか確認する
                         show_flag = em.createNamedQuery("getShowGroupTask",Show.class).setParameter("group", group).setParameter("task", t).getSingleResult();
+
                         //更新しようとしているtaskとgroupをつなくshowがある(そのgroupは、元々taskを見ることができていた時)
 
                         if (request.getParameter(id) == null) {
@@ -117,7 +123,7 @@ public class PersonTaskUpdate extends HttpServlet {
                         //そのgroupはtaskを見ることができない時
                         if (request.getParameter(id) != null && request.getParameter(id).equals(id)) {
                             //チェックボックスにチェックがついている時、そのgroupとtaskに関するshowを登録する。
-                            //そのtaskをgroupが見れるようにする
+
                             Show show = new Show();
                             show.setTask(t);
                             show.setGroup(group);//そのグループは、task内容を見ることができる。
@@ -136,7 +142,7 @@ public class PersonTaskUpdate extends HttpServlet {
                 request.getSession().removeAttribute("task_id");
 
                 if (request.getSession().getAttribute("group") == null) {
-                    //自身のホームページから編集しにきた時
+                    //ホーム画面からtaskをクリックして編集しにきた時
 
                     response.sendRedirect(request.getContextPath()+"/toppage/index");
                 } else if (request.getSession().getAttribute("account") == null) {

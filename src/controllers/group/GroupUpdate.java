@@ -123,7 +123,7 @@ public class GroupUpdate extends HttpServlet {
                 request.getSession().setAttribute("flush", message);
 
 
-                response.sendRedirect(request.getContextPath() + "/toppage/index");
+                response.sendRedirect(request.getContextPath() + "/group/toppage");
             }
 
 

@@ -59,6 +59,7 @@ public class BelongUpdateServlet extends HttpServlet {
                 rd.forward(request, response);
 
             } else {
+                //ポジションが入力されていた時
                 b.setPosition(request.getParameter("position"));
 
                 em.getTransaction().begin();

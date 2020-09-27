@@ -41,6 +41,7 @@ public class GroupShowServlet extends HttpServlet {
 
         //詳細を見ようとしているアカウント
         Group g = (Group) request.getSession().getAttribute("account");
+
         List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",g).getResultList();//そのgroupに属している人
         request.setAttribute("persons", persons);
 

@@ -43,7 +43,7 @@ public class MemberToppageServlet extends HttpServlet {
         EntityManager em = DBUtil.createEntityManager();
         Account a;
         Group g;
-       //taskとtaskに対していいねしているかを確認
+        //taskとtaskに対していいねしているかを確認
         LinkedHashMap<Task,Integer> task_like = new LinkedHashMap<Task,Integer>();
 
 
@@ -57,22 +57,22 @@ public class MemberToppageServlet extends HttpServlet {
 
 
         if (request.getParameter("id") != null) {
-            //⑫からきた場合
-            //person_tasks/editの「戻る」リンクで戻ってきた場合
+
             a = (Account) em.find(Account.class, Integer.parseInt(request.getParameter("id")));//クエリパラメータから得たインスタンス
 
             request.getSession().setAttribute("account", a);
 
         }
 
-      //詳細を見ようとしているアカウント
+        //詳細を見ようとしているアカウント
         if (request.getParameter("account") != null && request.getParameter("group") != null) {
             //いいねした人一覧画面からきた時
 
             Person pp = em.find(Person.class,Integer.parseInt(request.getParameter("account")));
             g = em.find(Group.class,Integer.parseInt(request.getParameter("group")));
-          //そのグループのメンバー
+            //そのグループのメンバー
             List<Person> persons = em.createNamedQuery("getMembers",Person.class).setParameter("group",g).getResultList();//そのgroupに属している人
+
             request.getSession().setAttribute("account",pp);
             request.getSession().setAttribute("group", g);
             request.getSession().setAttribute("ps", persons);
@@ -86,7 +86,7 @@ public class MemberToppageServlet extends HttpServlet {
             request.getSession().removeAttribute("updated_task");
         }
 
-      //ログインしている本人
+        //ログインしている本人
         Person p = (Person) request.getSession().getAttribute("login_person");
 
         Date today = new Date();
@@ -118,7 +118,7 @@ public class MemberToppageServlet extends HttpServlet {
                 task_like.put(t, 3);
             }
 
-         }
+        }
 
         request.setAttribute("task_like", task_like);
 

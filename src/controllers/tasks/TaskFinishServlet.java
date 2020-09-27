@@ -45,18 +45,20 @@ public class TaskFinishServlet extends HttpServlet {
         em.getTransaction().begin();
         em.getTransaction().commit();
 
-        //セッションスコープに格納
+        //完了させたセッションスコープに格納
         request.getSession().setAttribute("finish_task", task);
 
         request.getSession().setAttribute("flush", "taskを完了済にしました");
 
         if (request.getSession().getAttribute("group") == null) {
-
-            response.sendRedirect(request.getContextPath()+"/tasks/persons/show");//ホーム画面に戻る
+            //ホーム画面のtask詳細ページから来た時
+            response.sendRedirect(request.getContextPath()+"/tasks/persons/show");
         } else if (task.getAccount() instanceof Group) {
-            response.sendRedirect(request.getContextPath()+"/groups/tasks/show");//ホーム画面に戻る
+            //groupのtask詳細ページからきた時
+            response.sendRedirect(request.getContextPath()+"/groups/tasks/show");
         } else {
-            response.sendRedirect(request.getContextPath()+"/members/tasks/show");//ホーム画面に戻る
+            //memberのtask詳細ページからきた時
+            response.sendRedirect(request.getContextPath()+"/members/tasks/show");
         }
 
 

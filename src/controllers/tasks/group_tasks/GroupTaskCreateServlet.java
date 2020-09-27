@@ -69,15 +69,17 @@ public class GroupTaskCreateServlet extends HttpServlet {
             List<String> errors;
 
 
-                    String task_leader_code = request.getParameter("task_leader");
-                    errors = TaskValidator.validate(t, date, (Group)a, task_leader_code, leader_check_flag);
+            String task_leader_code = request.getParameter("task_leader");
+
+            //入力内容にエラーがないか確認
+            errors = TaskValidator.validate(t, date, (Group)a, task_leader_code, leader_check_flag);
 
 
 
 
             if (errors.size() > 0) {
 
-
+                //エラーがあれば、新規作成画面へ
                 request.setAttribute("task", t);
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("errors", errors);
@@ -93,28 +95,26 @@ public class GroupTaskCreateServlet extends HttpServlet {
 
                 t.setUpdate_person(p);//今loginしている人がこのtaskを作った
 
+                task_leader = (Person) em.createNamedQuery("getAccount",Account.class).setParameter("code",request.getParameter("task_leader")).getSingleResult();
+                t.setTask_leader(task_leader);
+                //taskを保存する。
+                em.getTransaction().begin();
+                em.persist(t);
+                em.getTransaction().commit();
+                //groupのメンバー全員にtaskに公開するために、Showを設定
+                Show show = new Show();
+                show.setTask(t);
+                show.setGroup((Group)a);
+
+                em.getTransaction().begin();
+                em.persist(show);
+                em.getTransaction().commit();
+
+                em.close();
 
 
-                    task_leader = (Person) em.createNamedQuery("getAccount",Account.class).setParameter("code",request.getParameter("task_leader")).getSingleResult();
-                    t.setTask_leader(task_leader);
-                    //taskを保存する。
-                    em.getTransaction().begin();
-                    em.persist(t);
-                    em.getTransaction().commit();
-                    //groupのメンバー全員にtaskをに公開するために、Showを設定
-                    Show show = new Show();
-                    show.setTask(t);
-                    show.setGroup((Group)a);
-
-                    em.getTransaction().begin();
-                    em.persist(show);
-                    em.getTransaction().commit();
-
-                    em.close();
-
-
-                    request.getSession().setAttribute("flush", "taskの登録が完了しました。");
-                    response.sendRedirect(request.getContextPath()+"/group/toppage");
+                request.getSession().setAttribute("flush", "taskの登録が完了しました。");
+                response.sendRedirect(request.getContextPath()+"/group/toppage");
             }
         }
     }

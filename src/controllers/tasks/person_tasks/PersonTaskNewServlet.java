@@ -38,8 +38,6 @@ public class PersonTaskNewServlet extends HttpServlet {
 
 
         //ログインしている人が所属しているグループ
-
-
         @SuppressWarnings("unchecked")
         List<Group> groups = (List<Group>) request.getSession().getAttribute("GroupBelong");
         request.setAttribute("groups", groups);

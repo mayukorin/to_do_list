@@ -1,4 +1,4 @@
-package login;
+package controllers.login;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -42,6 +42,7 @@ public class GroupLoginServlet extends HttpServlet {
 
         request.setAttribute("_token", request.getSession().getId());
         request.setAttribute("hasError", false);
+
         if (request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
             request.getSession().removeAttribute("flush");
@@ -61,9 +62,12 @@ public class GroupLoginServlet extends HttpServlet {
         if(_token != null && _token.equals(request.getSession().getId())) {
             Boolean check_result = false;
 
+            //入力された情報
             String code = request.getParameter("code");
             String plain_pass = request.getParameter("password");
-            Group origin_group = (Group) request.getSession().getAttribute("group");
+
+            //ログインしたいgroup
+            Group origin_group = (Group) request.getSession().getAttribute("origin_group");
 
 
             Group g = null;
@@ -115,6 +119,7 @@ public class GroupLoginServlet extends HttpServlet {
 
                 Person p = (Person) request.getSession().getAttribute("login_person");
 
+                request.getSession().removeAttribute("origin_group");
 
 
                 Belong b = em.createNamedQuery("getGroupPersonBelong",Belong.class).setParameter("person",p).setParameter("group",g).getSingleResult();

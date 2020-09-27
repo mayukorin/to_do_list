@@ -51,12 +51,14 @@ public class TaskNoFinishServlet extends HttpServlet {
         request.getSession().setAttribute("flush", "taskを未完了にしました");
 
         if (request.getSession().getAttribute("group") == null) {
-
-            response.sendRedirect(request.getContextPath()+"/tasks/persons/show");//ホーム画面に戻る
+            //ホーム画面のtask詳細ページから来た時
+            response.sendRedirect(request.getContextPath()+"/tasks/persons/show");
         } else if (task.getAccount() instanceof Group) {
-            response.sendRedirect(request.getContextPath()+"/groups/tasks/show");//ホーム画面に戻る
+            //groupのtask詳細ページから来た時
+            response.sendRedirect(request.getContextPath()+"/groups/tasks/show");
         } else {
-            response.sendRedirect(request.getContextPath()+"/members/tasks/show");//ホーム画面に戻る
+            //memberのtask詳細ページから来た時
+            response.sendRedirect(request.getContextPath()+"/members/tasks/show");
         }
 
     }

@@ -34,7 +34,7 @@ public class PersonEditServlet extends HttpServlet {
         request.setAttribute("_token", request.getSession().getId());
 
 
-        //personを編集しようとしている時
+
          RequestDispatcher   rd = request.getRequestDispatcher("/WEB-INF/views/persons/edit.jsp");
 
          request.setAttribute("person", (Person)request.getSession().getAttribute("login_person"));

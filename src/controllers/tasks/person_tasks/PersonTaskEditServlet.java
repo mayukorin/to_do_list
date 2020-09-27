@@ -38,32 +38,17 @@ public class PersonTaskEditServlet extends HttpServlet {
         // TODO Auto-generated method stub
         EntityManager em = DBUtil.createEntityManager();
 
+        //編集しようとしているtask
+        Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
 
+        //ログインしている人が所属しているグループ
+        List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", (Person)request.getSession().getAttribute("login_person")).getResultList();
 
-
-        Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));//編集しようとしているtask
-
-
-        Person p = (Person)request.getSession().getAttribute("login_person");
-      //ログインしている人が所属しているグループ
-       List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person", p).getResultList();
-        for (Group g :groups) {
-            System.out.println(g.getName());
-        }
         //その仕事を公開しているグループ
         List<Group> shows_group = em.createNamedQuery("getGroupShow",Group.class).setParameter("task",t).getResultList();
-        System.out.println("--------------公開グループ------------------------");
-        for (Group g :shows_group) {
-            System.out.println(g.getName());
-        }
+
 
         groups.removeAll(shows_group);//所属しているグループから、公開しているグループを引く
-        System.out.println("--------------------引いた後--------------------");
-        for (Group g :groups) {
-            System.out.println(g.getName());
-        }
-
-
 
         if (t!= null) {
             request.setAttribute("task", t);

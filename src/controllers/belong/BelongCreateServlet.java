@@ -43,6 +43,7 @@ public class BelongCreateServlet extends HttpServlet {
         // TODO Auto-generated method stub
 
         String _token = (String)request.getParameter("_token");
+
         if(_token != null && _token.equals(request.getSession().getId())) {
             // 認証結果を格納する変数
             Boolean check_result = false;
@@ -94,12 +95,14 @@ public class BelongCreateServlet extends HttpServlet {
 
                 if (!belong_error.equals("")) {
                     //すでにそのgroupに属している時
+                    //フラッシュメッセージを流してトップページへ
 
                     em.close();
                     request.getSession().setAttribute("flush", belong_error);
                     response.sendRedirect(request.getContextPath() + "/toppage/index");
                 } else {
                     //新しくそのgroupに属する時
+                    //Belongインスタンスを新しく作成して保存
                     Belong b = new Belong();
                     b.setGroup(g);
                     b.setPerson(p);

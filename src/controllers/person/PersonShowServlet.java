@@ -49,6 +49,22 @@ public class PersonShowServlet extends HttpServlet {
             request.getSession().removeAttribute("account");
         }
 
+        if (request.getSession().getAttribute("ps") != null) {
+
+            request.getSession().removeAttribute("ps");
+        }
+
+        if (request.getSession().getAttribute("account") != null) {
+
+            request.getSession().removeAttribute("account");
+        }
+
+        if (request.getSession().getAttribute("updated_task") != null) {
+
+            request.getSession().removeAttribute("updated_task");
+        }
+
+
 
         em.close();
 

@@ -60,9 +60,12 @@ public class GroupCreateServlet extends HttpServlet {
             Boolean code_duplicate_check_flag = true;
             Boolean password_check_flag = true;
             Boolean leader_check_flag = false;
+            //入力内容にエラーがないか、確認
             List<String> errors = GroupValidator.validate(g, leader_code, code_duplicate_check_flag, password_check_flag, leader_check_flag);
 
             if (errors.size() > 0) {
+                //入力内容にエラーがあった場合
+                //編集画面にリダイレクト
                 em.close();
 
                 request.setAttribute("_token", request.getSession().getId());
@@ -72,17 +75,21 @@ public class GroupCreateServlet extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/groups/new.jsp");
                 rd.forward(request, response);
             } else {
+
+                //ログインしている人
                 Person p = (Person)request.getSession().getAttribute("login_person");
 
-
+                ///groupの新規登録/////////////////////////////////////
                 Timestamp currentTime = new Timestamp(System.currentTimeMillis());
                 g.setUpdated_at(currentTime);
 
                 g.setLeader(p);//新しく作るgroupのリーダーを、loginしてる人（groupを新規作成した人）にする。
+
                 em.getTransaction().begin();
                 em.persist(g);
                 em.getTransaction().commit();
                 /////////////////////////////////////
+
                 ////belongの新規登録////////////////////
                 Belong b = new Belong();
                 b.setGroup(g);
@@ -95,6 +102,12 @@ public class GroupCreateServlet extends HttpServlet {
                 em.persist(b);
                 em.getTransaction().commit();
                 //////////////////////////////////////
+
+                //セッションスコープのGroupBelongも更新/////////////
+                //Personインスタンスが所属しているグループ
+                List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
+                request.getSession().setAttribute("GroupBelong", groups);
+                //////////////////////////////////////////////
 
                 em.close();
 

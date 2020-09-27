@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Belong;
 import models.Group;
 import models.Person;
 import utils.DBUtil;
@@ -41,11 +42,16 @@ public class MemberShowServlet extends HttpServlet {
 
 
 
-      //その人のトップページからきた時
+        //詳細を見ようとしているpersonインスタンス
         p = (Person) request.getSession().getAttribute("account");
+
         //Personインスタンスが所属しているグループ
         List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
         request.setAttribute("groups", groups);
+
+        Belong b = em.createNamedQuery("getGroupPersonBelong",Belong.class).setParameter("person",p).setParameter("group",(Group)request.getSession().getAttribute("group")).getSingleResult();
+
+        request.setAttribute("belong", b);
 
 
 

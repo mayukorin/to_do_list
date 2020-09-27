@@ -36,11 +36,7 @@ public class GroupTaskEditServlet extends HttpServlet {
         EntityManager em = DBUtil.createEntityManager();
 
 
-
-
         Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));//編集しようとしているtask
-
-
 
         if (t!= null) {
             request.setAttribute("task", t);

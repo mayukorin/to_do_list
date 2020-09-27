@@ -39,14 +39,12 @@ public class CommentNewServlet extends HttpServlet {
         request.setAttribute("_token", request.getSession().getId());
         EntityManager em = DBUtil.createEntityManager();
 
-        Comment c = new Comment();
-
 
         //コメントしようとしているtask
         Task t = em.find(Task.class,Integer.parseInt(request.getParameter("task_id")));
 
         request.setAttribute("task", t);
-        request.setAttribute("comment", c);
+        request.setAttribute("comment", new Comment());
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/comments/new.jsp");
         rd.forward(request,response);

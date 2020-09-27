@@ -41,6 +41,7 @@ public class CommentUpdateServlet extends HttpServlet {
 
         String _token = (String)request.getParameter("_token");
         if (_token != null && _token.equals(request.getSession().getId())) {
+
             EntityManager em = DBUtil.createEntityManager();
 
             Person login_person = (Person)request.getSession().getAttribute("login_person");

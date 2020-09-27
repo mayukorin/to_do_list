@@ -38,12 +38,12 @@ public class PersonValidator {
             return "アカウント番号を入力してください。";
         }
 
-     // すでに登録されているアカウント番号との重複チェック
+        // すでに登録されているアカウント番号との重複チェック
         if(code_duplicate_check_flag) {
             EntityManager em = DBUtil.createEntityManager();
             long employees_count = (long)em.createNamedQuery("checkRegisteredCode", Long.class)
-                                           .setParameter("code", code)
-                                             .getSingleResult();
+                    .setParameter("code", code)
+                    .getSingleResult();
             em.close();
             if(employees_count > 0) {
                 return "入力されたアカウント番号の情報はすでに存在しています。";
@@ -62,7 +62,7 @@ public class PersonValidator {
         return "";
     }
 
- // パスワードの必須入力チェック
+    // パスワードの必須入力チェック
     private static String _validatePassword(String password, Boolean password_check_flag) {
         // パスワードを変更する場合のみ実行
         if(password_check_flag && (password == null || password.equals(""))) {

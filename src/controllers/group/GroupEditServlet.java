@@ -32,9 +32,11 @@ public class GroupEditServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
 
+        //編集しようとしているgroup
         Group g = (Group) request.getSession().getAttribute("account");
 
         request.setAttribute("_token", request.getSession().getId());
+
         request.setAttribute("group", g);
 
 

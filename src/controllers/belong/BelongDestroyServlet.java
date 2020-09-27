@@ -39,7 +39,7 @@ public class BelongDestroyServlet extends HttpServlet {
         // TODO Auto-generated method stub
 
         String _token = request.getParameter("_token");
-        System.out.println("奈々ななn");
+
         if(_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
@@ -68,7 +68,7 @@ public class BelongDestroyServlet extends HttpServlet {
                 List<Show> leader_task_flag = em.createNamedQuery("getShowLeader",Show.class).setParameter("group",g).setParameter("person",b.getPerson()).getResultList();
 
                 if (leader_task_flag.size() != 0) {
-                   //groupの仕事で、その人がリーダのものがあるか
+                   //その人がリーダーのグループの仕事があれば、退会できない
 
                     String error = "リーダーとなっているtaskがあるため、退会できません";
 
@@ -100,13 +100,13 @@ public class BelongDestroyServlet extends HttpServlet {
                     em.remove(b);
                     em.getTransaction().commit();
 
-                    //セッションスコープのGroupBelongも更新/////////////
+                    //セッションスコープのGroupBelongも更新/////////////////////////////////////////////////////////////////////////////////
                     Person p = (Person) request.getSession().getAttribute("login_person");
 
                     //Personインスタンスが所属しているグループ
                     List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",p).getResultList();
                     request.getSession().setAttribute("GroupBelong", groups);
-                    ///////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                     em.close();
 

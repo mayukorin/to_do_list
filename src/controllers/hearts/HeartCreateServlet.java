@@ -61,11 +61,15 @@ public class HeartCreateServlet extends HttpServlet {
 
 
         if (request.getSession().getAttribute("group") == null) {
-            //自身のホームページからlikeにきた時
+
             if (Integer.parseInt(request.getParameter("flag")) == 0) {
+              //自身のホームページのtask一覧からlikeにきた時
+
                 response.sendRedirect(request.getContextPath()+"/toppage/index");
+
             } else if ((Integer.parseInt(request.getParameter("flag"))) == 1) {
-                System.out.println("二宮和也");
+                //自身のホームページのtask一覧をクリックしたtask詳細画面からlikeしにきた時
+
                 request.getSession().setAttribute("liked_task", t);
                 response.sendRedirect(request.getContextPath()+"/tasks/persons/show");
             }

@@ -7,6 +7,5 @@
              <c:import url="login_form.jsp" />
         </form>
         <p><a href="<c:url value='/person/new'/>">アカウントを作成する</a></p>
-
     </c:param>
 </c:import>

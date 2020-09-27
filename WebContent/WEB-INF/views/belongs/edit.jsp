@@ -22,7 +22,7 @@
             <input type="hidden" name="_token" value="${_token}"/>
             <button type="submit">登録</button>
         </form>
-        <p><a href="<c:url value='/persons/show'/>">アカウント詳細へ戻る</a></p>
+        <p><a href="<c:url value='/persons/show'/>">アカウント情報詳細ページへ戻る</a></p>
     </c:param>
 
 </c:import>

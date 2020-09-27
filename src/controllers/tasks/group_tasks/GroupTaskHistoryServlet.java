@@ -47,6 +47,7 @@ public class GroupTaskHistoryServlet extends HttpServlet {
         em.close();
 
         request.setAttribute("task_history", tasks_history);
+        //最新のtaskをupdated_taskにセッションスコープで格納
         request.getSession().setAttribute("updated_task", task);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/group_tasks/history.jsp");

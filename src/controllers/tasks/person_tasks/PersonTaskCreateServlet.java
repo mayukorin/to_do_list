@@ -42,21 +42,19 @@ public class PersonTaskCreateServlet extends HttpServlet {
 
 
         String _token = (String)request.getParameter("_token");
+
         if (_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
             //ログインしている人物が所属しているグループ
             @SuppressWarnings("unchecked")
             List<Group> groups = (List<Group>) request.getSession().getAttribute("GroupBelong");
-
-
-
+            //ログインしている人
             Person p = (Person)request.getSession().getAttribute("login_person");
 
             Task t = new Task();
 
             t.setAccount(p);
-
             t.setTitle(request.getParameter("title"));
             t.setMemo(request.getParameter("memo"));
 
@@ -65,7 +63,6 @@ public class PersonTaskCreateServlet extends HttpServlet {
             t.setUpdated_at(currentTime);
 
             t.setFinish_flag(0);
-
 
             String date = request.getParameter("deadline");
 
@@ -78,14 +75,11 @@ public class PersonTaskCreateServlet extends HttpServlet {
 
 
             if (errors.size() > 0) {
-
+                //入力内容にエラーがある時
 
                 request.setAttribute("task", t);
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("errors", errors);
-
-
-
                 request.setAttribute("groups", groups);
 
                 em.close();
@@ -94,19 +88,17 @@ public class PersonTaskCreateServlet extends HttpServlet {
             } else {
                 //エラーがないとき
 
-
-
                 t.setUpdate_person(p);//今loginしている人がこのtaskを作った
 
-
-
                 t.setTask_leader(p);//自分自身がTask_leader
+
                 //taskを保存する。
                 em.getTransaction().begin();
                 em.persist(t);
                 em.getTransaction().commit();
 
 
+                //taskを所属groupに公開するためのshowインスタンスを作成する
                 for(Group group:groups) {
                     String id = (group.getId()).toString();
 

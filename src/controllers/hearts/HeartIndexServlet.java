@@ -39,30 +39,31 @@ public class HeartIndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
 
-        //そのtaskにいいねした人と、その人の属するグループと、そのグループにログインしている人が属しているのか
+        //そのtaskに関するLikeと、いいねをした人が属するGroupと、ログインしている人がそのGroupに属しているのか
         LinkedHashMap<Like,LinkedHashMap<Group,Long>> l_p_g = new LinkedHashMap<Like,LinkedHashMap<Group,Long>>();
+
+        //現在loginしている人
         Person login_person = (Person)request.getSession().getAttribute("login_person");
 
         EntityManager em = DBUtil.createEntityManager();
 
         Task t = em.find(Task.class,Integer.parseInt(request.getParameter("id")));
 
-        //そのtaskにいいねした人
+        //そのtaskに関するlike
         List<Like> likes = em.createNamedQuery("get_likes",Like.class).setParameter("task",t).getResultList();
+
         for (Like l:likes) {
             LinkedHashMap<Group,Long> like_persons_group = new LinkedHashMap<Group,Long>();
+            //そのlikeをした人が属するgroup
             List<Group> groups = em.createNamedQuery("getGroupsBelong",Group.class).setParameter("person",l.getPerson()).getResultList();
 
             for (Group g:groups) {
 
+                //そのgroupに、ログインしている人が属しているのか（属していれば1、属していなければ0)
                 Long belong_count = em.createNamedQuery("getGroupBelong",Long.class).setParameter("group",g).setParameter("person",login_person).getSingleResult();
                 like_persons_group.put(g, belong_count);
             }
             l_p_g.put(l, like_persons_group);
-        }
-
-        if (t.getAccount() instanceof Group) {
-            request.setAttribute("group_flag", 1);
         }
 
         request.setAttribute("l_p_g", l_p_g);

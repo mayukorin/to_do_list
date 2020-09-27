@@ -74,6 +74,8 @@ public class PersonUpdate extends HttpServlet {
 
             List<String> errors = PersonValidator.validate(p, code_duplicate_check_flag, password_check_flag);
             if (errors.size() > 0) {
+                //入力内容にエラーがあったら
+                //編集画面にリダイレクト
                 em.close();
 
                 request.setAttribute("_token", request.getSession().getId());
@@ -83,6 +85,8 @@ public class PersonUpdate extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/edit.jsp");
                 rd.forward(request, response);
             } else {
+                //更新されたら
+                //ログイン画面にリダイレクト
                 em.getTransaction().begin();
                 em.getTransaction().commit();
                 em.close();

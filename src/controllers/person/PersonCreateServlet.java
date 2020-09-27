@@ -42,7 +42,7 @@ public class PersonCreateServlet extends HttpServlet {
 
             Person p = new Person();
 
-
+            //入力された名前・アカウント番号・パスワード
             p.setName(request.getParameter("name"));
             p.setCode(request.getParameter("code"));
             p.setPassword(
@@ -53,10 +53,13 @@ public class PersonCreateServlet extends HttpServlet {
             Boolean code_duplicate_check_flag = true;
             Boolean password_check_flag = true;
 
+            //入力内容のエラーチェック
             List<String> errors = PersonValidator.validate(p, code_duplicate_check_flag, password_check_flag);
 
 
             if (errors.size() > 0) {
+                //もし入力内容にエラーがあったら
+                ///perwons/new.jspに戻る
                 em.close();
 
                 request.setAttribute("_token", request.getSession().getId());
@@ -66,6 +69,9 @@ public class PersonCreateServlet extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/persons/new.jsp");
                 rd.forward(request, response);
             } else {
+                //入力内容にエラーがなければ
+                //personインスタンスを保存し
+                //ログイン画面に戻る
                 em.getTransaction().begin();
                 em.persist(p);
                 em.getTransaction().commit();

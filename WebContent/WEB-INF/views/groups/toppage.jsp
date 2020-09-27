@@ -16,7 +16,7 @@
                         <td class="icon">
                         <c:choose>
                                 <c:when test="${tl.key.finish_flag == 0}">
-                                    <i class="fas fa-circle circle${tl.value % 3 }"></i>
+                                    <i class="far fa-circle circle${tl.value % 3 }"></i>
                                 </c:when>
                                 <c:otherwise>
                                     <i class="far fa-check-circle check"></i>
@@ -42,7 +42,5 @@
     <p><a href="<c:url value='/group/show?id=${sessionScope.account.id}'/>">アカウント情報詳細を見る</a></p>
 
     <p><a href="<c:url value='/tasks/groups/new?id=${sessionScope.account.id}'/>">Taskを新規追加する</a></p>
-
-    <p><a href="<c:url value='/groups/show'/>">${sessionScope.group.name}のメンバー一覧ページに戻る</a>
     </c:param>
 </c:import>
