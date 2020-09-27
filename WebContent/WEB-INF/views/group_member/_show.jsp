@@ -13,10 +13,20 @@
                     <th>アカウント番号</th>
                     <td><c:out value="${sessionScope.account.code}"/></td>
                 </tr>
-                <tr>
-                    <th>ポジション</th>
-                    <td><c:out value="${b.position}"/></td>
-                </tr>
+                <c:choose>
+                    <c:when test="${sessionScope.account.id != sessionScope.group.id }">
+                        <tr>
+                            <th>ポジション</th>
+                            <td><c:out value="${b.position}"/></td>
+                        </tr>
+                    </c:when>
+                    <c:otherwise>
+                         <tr>
+                              <th>リーダー</th>
+                              <td><c:out value="${sessionScope.account.leader.name}"/></td>
+                         </tr>
+                    </c:otherwise>
+                </c:choose>
                 <c:if test="${groups != null }">
                 <tr>
 
