@@ -1,4 +1,4 @@
-#Name
+# Name
 Todoアプリ
  
 # DEMO
@@ -36,7 +36,8 @@ https://servlet-todo-list-1120.herokuapp.com/login
 ⚫︎JDBCドライバ  
 ⚫︎Java  
 
-
+# Usage
+基本的な使い方を、Todo_list_diagram.xlsx（2シートあります）に載せてあります。
  
 # Note
  
