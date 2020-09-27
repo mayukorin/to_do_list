@@ -1,11 +1,11 @@
-#name
+#Name
 Todoアプリ
  
 # DEMO
 
 以下のURLにアクセスをお願いいたします。
 
-https://servlet-todo-list-1120.herokuapp.com/login
+https://servlet-todo-list-1120.herokuapp.com/login  
  
 
 アカウント番号「a1」パスワード「hp5f9jom」で「太郎」としてログインすることができます。
